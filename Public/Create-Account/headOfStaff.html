@@ -1,12 +1,34 @@
-<!DOCTYPE html>
+
+            <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Head Staff Portal</title>
+    <title>Head Staff Portal - ALMA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
     <style>
+        /* Wine and Cream Color Palette */
+        :root {
+            --wine-primary: #722F37;
+            --wine-secondary: #8A3A43;
+            --wine-light: #9E4A54;
+            --wine-accent: #5A2329;
+            --cream-primary: #F7F3E3;
+            --cream-secondary: #F5F0E1;
+            --cream-dark: #E8E2D0;
+            --cream-light: #FDFBF5;
+            --text-dark: #333333;
+            --text-medium: #5A5A5A;
+            --text-light: #777777;
+            --success: #7a9d7e;
+            --warning: #d4a574;
+            --danger: #d47b7b;
+            --shadow-light: rgba(114, 47, 55, 0.1);
+            --shadow-medium: rgba(114, 47, 55, 0.15);
+            --shadow-dark: rgba(114, 47, 55, 0.2);
+        }
+
+        /* Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -14,10 +36,9 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-     
         body {
-            background-color: #f5f5f0;
-            color: #333;
+            background-color: var(--cream-primary);
+            color: var(--text-dark);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -43,34 +64,42 @@
             opacity: 0.4;
         }
         
+        /* Main Container */
         .container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1100px;
             display: flex;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-            border-radius: 16px;
+            box-shadow: 0 15px 40px var(--shadow-dark);
+            border-radius: 18px;
             overflow: hidden;
             position: relative;
             z-index: 1;
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(5px);
+            background-color: var(--cream-light);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(114, 47, 55, 0.1);
         }
         
+        /* Left Panel */
         .left-panel {
             flex: 1;
-            background: linear-gradient(145deg, #f8f8f8 0%, #e8e8e8 100%);
-            color: #555;
-            padding: 50px 40px;
+            background: linear-gradient(145deg, var(--cream-secondary) 0%, var(--cream-dark) 100%);
+            color: var(--text-medium);
+            padding: 60px 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            border-right: 1px solid rgba(114, 47, 55, 0.1);
+            position: relative;
         }
         
-        .right-panel {
-            flex: 1.5;
-            background-color: #fefefa;
-            padding: 50px 40px;
+        .left-panel::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--wine-accent), var(--wine-light));
         }
         
         .logo {
@@ -80,34 +109,35 @@
         }
         
         .logo-icon {
-            background-color: #d8d8d8;
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+            background: linear-gradient(135deg, var(--wine-primary), var(--wine-secondary));
+            width: 60px;
+            height: 60px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 15px;
-            color: #777;
+            color: white;
+            box-shadow: 0 4px 12px var(--shadow-medium);
         }
         
         .logo-text {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 700;
-            color: #666;
+            color: var(--wine-primary);
         }
         
         .left-panel h2 {
-            font-size: 28px;
+            font-size: 32px;
             margin-bottom: 20px;
             line-height: 1.3;
-            color: #555;
+            color: var(--wine-primary);
         }
         
         .left-panel p {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #777;
+            font-size: 17px;
+            line-height: 1.7;
+            color: var(--wine-light);
             margin-bottom: 30px;
         }
         
@@ -117,46 +147,78 @@
         }
         
         .features li {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
-            color: #666;
+            color: var(--wine-light);
+            font-size: 16px;
         }
         
         .features i {
-            background-color: #e0e0e0;
-            width: 30px;
-            height: 30px;
+            background-color: rgba(114, 47, 55, 0.1);
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 12px;
-            color: #777;
+            margin-right: 15px;
+            color: var(--wine-primary);
+        }
+        
+        /* Right Panel */
+        .right-panel {
+            flex: 1.5;
+            background-color: var(--cream-light);
+            padding: 60px 40px;
+            position: relative;
         }
         
         .right-panel h1 {
-            color: #555;
-            font-size: 32px;
+            color: var(--wine-primary);
+            font-size: 34px;
             margin-bottom: 10px;
-            font-weight: 700;
+            font-weight: 800;
+        }
+        
+        .note-box {
+            background-color: rgba(114, 47, 55, 0.08);
+            border-left: 4px solid var(--wine-primary);
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .note-box h3 {
+            color: var(--wine-primary);
+            font-size: 16px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .note-box h3 i {
+            color: var(--wine-secondary);
         }
         
         .right-panel .subtitle {
-            color: #888;
-            margin-bottom: 30px;
-            font-size: 16px;
+            color: var(--wine-light);
+            margin-bottom: 35px;
+            font-size: 17px;
         }
         
+        /* Form Styles */
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
         
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 600;
-            color: #666;
+            color: var(--wine-primary);
+            font-size: 16px;
         }
         
         .input-with-icon {
@@ -165,30 +227,97 @@
         
         .input-with-icon i {
             position: absolute;
-            left: 15px;
+            left: 18px;
             top: 50%;
             transform: translateY(-50%);
-            color: #999;
+            color: var(--wine-light);
+            z-index: 1;
         }
         
         input, select {
             width: 100%;
-            padding: 15px 15px 15px 45px;
-            border: 2px solid #ddd;
+            padding: 16px 18px 16px 50px;
+            border: 2px solid var(--cream-dark);
             border-radius: 10px;
             font-size: 16px;
             transition: all 0.3s;
-            background-color: #f9f9f9;
-            color: #555;
+            background-color: var(--cream-secondary);
+            color: var(--text-medium);
+            position: relative;
+            z-index: 0;
         }
         
         input:focus, select:focus {
             outline: none;
-            border-color: #aaa;
-            box-shadow: 0 0 0 3px rgba(170, 170, 170, 0.2);
-            background-color: #fff;
+            border-color: var(--wine-light);
+            box-shadow: 0 0 0 3px rgba(114, 47, 55, 0.15);
+            background-color: var(--cream-light);
         }
         
+        /* Profile Picture Upload */
+        .profile-upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px dashed var(--wine-light);
+            background-color: var(--cream-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--wine-light);
+            font-size: 14px;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-preview:hover {
+            border-color: var(--wine-primary);
+            transform: scale(1.03);
+        }
+        
+        .profile-preview i {
+            font-size: 40px;
+        }
+        
+        .profile-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-input {
+            display: none;
+        }
+        
+        .profile-label {
+            background-color: var(--wine-primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-label:hover {
+            background-color: var(--wine-secondary);
+            transform: translateY(-2px);
+        }
+        
+        /* Status Options (if needed in the future) */
         .status-options {
             display: flex;
             gap: 15px;
@@ -208,14 +337,14 @@
             flex-direction: column;
             align-items: center;
             padding: 15px;
-            border: 2px solid #ddd;
+            border: 2px solid var(--cream-dark);
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
             font-weight: normal;
             margin: 0;
-            background-color: #f9f9f9;
+            background-color: var(--cream-secondary);
         }
         
         .status-option label i {
@@ -224,88 +353,100 @@
         }
         
         .status-option input:checked + label {
-            border-color: #999;
-            background-color: rgba(170, 170, 170, 0.1);
-            color: #555;
+            border-color: var(--wine-primary);
+            background-color: rgba(114, 47, 55, 0.1);
+            color: var(--wine-primary);
             font-weight: 600;
         }
         
-        .status-option label i.fa-check-circle {
-            color: #7a9d7e;
-        }
-        
-        .status-option label i.fa-pause-circle {
-            color: #d4a574;
-        }
-        
-        .status-option label i.fa-clock {
-            color: #8a8a8a;
-        }
-        
+        /* Submit Button */
         .submit-btn {
-            background: linear-gradient(to right, #aaa, #888);
+            background: linear-gradient(135deg, var(--wine-primary), var(--wine-secondary));
             color: white;
             border: none;
-            padding: 16px;
+            padding: 18px;
             font-size: 18px;
-            font-weight: 600;
+            font-weight: 700;
             border-radius: 10px;
             cursor: pointer;
             width: 100%;
             transition: all 0.3s;
-            margin-top: 10px;
+            margin-top: 20px;
             letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px var(--shadow-medium);
         }
         
         .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(136, 136, 136, 0.3);
-            background: linear-gradient(to right, #999, #777);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px var(--shadow-dark);
+            background: linear-gradient(135deg, var(--wine-secondary), var(--wine-primary));
         }
         
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        /* Form Footer */
         .form-footer {
             text-align: center;
             margin-top: 25px;
-            color: #888;
+            color: var(--wine-light);
             font-size: 14px;
+            padding-top: 20px;
+            border-top: 1px solid var(--cream-dark);
         }
         
         .form-footer a {
-            color: #777;
+            color: var(--wine-primary);
             text-decoration: none;
             font-weight: 600;
-            border-bottom: 1px dotted #aaa;
+            border-bottom: 1px dotted var(--wine-light);
+            transition: all 0.3s;
         }
         
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                max-width: 500px;
-            }
-            
-            .left-panel, .right-panel {
-                padding: 30px 25px;
-            }
-            
-            .left-panel {
-                text-align: center;
-            }
-            
-            .features li {
-                justify-content: center;
-            }
-            
-            .status-options {
-                flex-direction: column;
-            }
+        .form-footer a:hover {
+            color: var(--wine-accent);
+            border-bottom: 1px solid var(--wine-primary);
+        }
+        
+        /* Validation styles */
+        .error {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+            padding-left: 5px;
+        }
+        
+        input:invalid, select:invalid {
+            border-color: var(--warning);
+        }
+        
+        input:valid, select:valid {
+            border-color: var(--success);
+        }
+        
+        /* Custom styling for date input */
+        input[type="date"] {
+            color: var(--text-medium);
+        }
+        
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.4);
+            cursor: pointer;
         }
         
         /* Decorative elements */
         .decorative-circle {
             position: absolute;
             border-radius: 50%;
-            background-color: rgba(248, 248, 248, 0.3);
+            background-color: rgba(114, 47, 55, 0.05);
             z-index: -1;
+            border: 1px solid rgba(114, 47, 55, 0.1);
         }
         
         .circle-1 {
@@ -322,56 +463,128 @@
             left: -60px;
         }
         
-        /* Validation styles */
-        .error {
-            color: #b76e6e;
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
+        .circle-3 {
+            width: 100px;
+            height: 100px;
+            top: 30%;
+            left: -40px;
         }
         
-        input:invalid, select:invalid {
-            border-color: #d4a574;
-        }
-        
-        input:valid, select:valid {
-            border-color: #7a9d7e;
-        }
-        
-        /* Custom styling for date input */
-        input[type="date"] {
-            color: #777;
-        }
-        
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(0.5);
+        /* Password toggle */
+        .password-toggle {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--wine-light);
             cursor: pointer;
-        }
-          .profile {
-            border: 2px dashed #bbb;
-            border-radius: 22px;
-            padding: 20px;
-            width: 150px;
-            height: 150px;
-            cursor: pointer;
-            background-color: #fafafa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 14px;
-            margin-bottom: 20px;
-            justify-self: center;
-            margin-top: 10px;
-            margin-bottom: 40px;
+            z-index: 2;
         }
         
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                max-width: 800px;
+            }
+            
+            .left-panel, .right-panel {
+                padding: 50px 35px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                max-width: 600px;
+            }
+            
+            .left-panel, .right-panel {
+                padding: 40px 30px;
+            }
+            
+            .left-panel {
+                text-align: center;
+                border-right: none;
+                border-bottom: 1px solid rgba(114, 47, 55, 0.1);
+            }
+            
+            .features li {
+                justify-content: center;
+            }
+            
+            .note-box {
+                padding: 12px 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .left-panel, .right-panel {
+                padding: 35px 25px;
+            }
+            
+            .left-panel h2 {
+                font-size: 28px;
+            }
+            
+            .right-panel h1 {
+                font-size: 30px;
+            }
+            
+            .logo-text {
+                font-size: 22px;
+            }
+            
+            .logo-icon {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .profile-preview {
+                width: 130px;
+                height: 130px;
+            }
+        }
+        
+        /* Animation for form focus */
+        @keyframes focusPulse {
+            0% { box-shadow: 0 0 0 0 rgba(114, 47, 55, 0.2); }
+            70% { box-shadow: 0 0 0 10px rgba(114, 47, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(114, 47, 55, 0); }
+        }
+        
+        input:focus, select:focus {
+            animation: focusPulse 1.5s ease-in-out;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--cream-dark);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--wine-light);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--wine-primary);
+        }
     </style>
 </head>
 <body>
     <!-- Decorative elements -->
     <div class="decorative-circle circle-1"></div>
     <div class="decorative-circle circle-2"></div>
+    <div class="decorative-circle circle-3"></div>
     
     <div class="container">
         <!-- Left Panel -->
@@ -384,29 +597,46 @@
             </div>
             
             <h2>Create Head Staff Account</h2>
-            <p>Set up a new Head Staff account with full access to give Reports</p>
+            <p>Set up new Head Staff accounts with administrative access to manage school reports, attendance, and academic oversight.</p>
             
-            
+            <ul class="features">
+                <li><i class="fas fa-check-circle"></i> Full administrative access</li>
+                <li><i class="fas fa-chart-line"></i> Comprehensive reporting tools</li>
+                <li><i class="fas fa-users"></i> Staff management capabilities</li>
+                <li><i class="fas fa-shield-alt"></i> Secure authentication system</li>
+                <li><i class="fas fa-file-alt"></i> Generate and review reports</li>
+            </ul>
         </div>
         
         <!-- Right Panel -->
         <div class="right-panel">
             <h1>Create Account</h1>
-            <h3><strong>Note:</strong> This page is strictly for Open Head of Staff Portal like <i>Superviors, Principal and Vice-principal</i>  only</h3>
-            <br>
-            <p class="subtitle">Fill in the details below to create a new admin account</p>
             
-            <form  method="post" action="/hod-hm-register" enctype="multipart/form-data">
-                <!-- Email Field -->
-                   <div id="Profile">
-                    <input type="file" name="upload" id="profile-picture" accept="image/*" class="profile">
+            <div class="note-box">
+                <h3><i class="fas fa-exclamation-circle"></i> Important Notice</h3>
+                <p>This page is strictly for creating Head of Staff accounts only (Supervisors, Principal and Vice-principal).</p>
+            </div>
+            
+            <p class="subtitle">Complete the form below to register a new Head Staff member</p>
+            
+            <form method="post" action="/hod-hm-register" enctype="multipart/form-data" id="adminForm">
+                <!-- Profile Picture Upload -->
+                <div class="form-group profile-upload-container">
+                    <div class="profile-preview" id="profilePreview">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <input type="file" name="upload" id="profile-picture" accept="image/*" class="profile-input" required>
+                    <label for="profile-picture" class="profile-label">
+                        <i class="fas fa-camera"></i> Upload Profile Picture
+                    </label>
                 </div>
                 
+                <!-- Email Field -->
                 <div class="form-group">
                     <label for="email">Email Address</label>
                     <div class="input-with-icon">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" name="email" placeholder="admin@example.com" required>
+                        <input type="email" id="email" name="email" placeholder="staff.name@alma.edu" required>
                     </div>
                     <div class="error" id="email-error">Please enter a valid email address</div>
                 </div>
@@ -416,40 +646,51 @@
                     <label for="phone">Phone Number</label>
                     <div class="input-with-icon">
                         <i class="fas fa-phone"></i>
-                        <input type="tel" id="phone" name="phone" placeholder="+1 (555) 123-4567" required>
+                        <input type="tel" id="phone" name="phone" placeholder="+234 800 123 4567" required>
                     </div>
                     <div class="error" id="phone-error">Please enter a valid phone number</div>
                 </div>
                 
-                <!-- Name Field -->
+                <!-- Full Name Field -->
                 <div class="form-group">
                     <label for="name">Full Name</label>
                     <div class="input-with-icon">
                         <i class="fas fa-user"></i>
-                        <input type="text" id="name" name="name" placeholder="John Smith" required>
+                        <input type="text" id="name" name="name" placeholder="Enter full name" required>
                     </div>
                     <div class="error" id="name-error">Please enter your full name</div>
                 </div>
-
+                
+                <!-- Teacher ID Field -->
                 <div class="form-group">
-                    <label for="name">Positin</label>
+                    <label for="teacher_id">Staff ID</label>
                     <div class="input-with-icon">
-                        <i class="fas fa-user"></i>
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="teacher_id" name="teacher_id" placeholder="e.g., ALMA-HOD-001" required>
+                    </div>
+                </div>
+                
+                <!-- Position Selection -->
+                <div class="form-group">
+                    <label for="position">Position</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-briefcase"></i>
                         <select name="position" id="position" required>
                             <option value="">Select position</option>
                             <option value="Supervisor">Supervisor</option>
                             <option value="Principal">Principal</option>
-                            <option value="Vise-principal">Vise-principal</option>
-                            <option value="Senior-HOD">Senior-HOD</option>
-                            <option value="Junior-HOD">Junior-HOD</option>
-                            <option value="Primary-HM">Primary-HM</option>
-                            <option value="Pre-primary-HM">Pre-primary-HM</option>
-                            <option value="SRC-President">SRC-President</option>
-                            <option value="Senior-Head-Prefect">Senior-Head-Prefect</option>
+                            <option value="Vise-principal">Vice-principal</option>
+                            <option value="Senior-HOD">Senior HOD</option>
+                            <option value="Junior-HOD">Junior HOD</option>
+                            <option value="Primary-HM">Primary HM</option>
+                            <option value="Pre-primary-HM">Pre-primary HM</option>
+                            <option value="SRC-President">SRC President</option>
+                            <option value="Senior-Head-Prefect">Senior Head Prefect</option>
                         </select>
                     </div>
-                    <div class="error" id="name-error">Please enter your position in the school</div>
+                    <div class="error" id="position-error">Please select a position</div>
                 </div>
+                
                 <!-- Member Since Field -->
                 <div class="form-group">
                     <label for="memberSince">Member Since</label>
@@ -459,109 +700,103 @@
                     </div>
                     <div class="error" id="date-error">Please select a valid date</div>
                 </div>
+                
+                <!-- Qualification Field -->
                 <div class="form-group">
-                    <label for="memberSince">Qualification</label>
+                    <label for="qualification">Qualification</label>
                     <div class="input-with-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                        <input type="text" id="qualification" name="qualification" required>
+                        <i class="fas fa-graduation-cap"></i>
+                        <input type="text" id="qualification" name="qualification" placeholder="e.g., B.Ed, M.Ed, Ph.D" required>
                     </div>
-                   
-                </div>
-                                <div class="form-group">
-                    <label for="memberSince">Years of Services</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                        <input type="text" id="qualification" name="year_services" required>
-                    </div>
-                   
-                </div>
-                 <div class="form-group">
-                    <label for="memberSince">Permission from who</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                        <input type="text" id="permit" name="permit" placeholder="Enter the name or description that give the permission" required>
-                    </div>
-                    <div class="error" id="date-error">Enter a name  or description</div>
                 </div>
                 
+                <!-- Years of Service Field -->
                 <div class="form-group">
-                    <label for="">Password</label>
+                    <label for="year_services">Years of Service</label>
                     <div class="input-with-icon">
-                        <i class="fas fa-lock"></i>
-                            <input type="password" id="password" name="password" class="password-input" placeholder="Enter your password" required>
+                        <i class="fas fa-clock"></i>
+                        <input type="text" id="year_services" name="year_services" placeholder="e.g., 5 years" required>
                     </div>
-                     <div class="error" id="date-error">Enetr password</div>
                 </div>
-                <!-- <div class="form-group">
-                    <label for="">Comfirm Password</label>
+                
+                <!-- Permission Field -->
+                <div class="form-group">
+                    <label for="permit">Authorization From</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user-check"></i>
+                        <input type="text" id="permit" name="permit" placeholder="Name of authorizing person/body" required>
+                    </div>
+                    <div class="error" id="permit-error">Please specify who authorized this account</div>
+                </div>
+                
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label for="password">Password</label>
                     <div class="input-with-icon">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="comfirmpassword" placeholder="Re-enter password" required>
+                        <input type="password" id="password" name="password" class="password-input" placeholder="Enter secure password" required>
+                        <span class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </span>
                     </div>
-                    
-                </div> -->
+                    <div class="error" id="password-error">Password must be at least 6 characters</div>
+                </div>
+                
                 <!-- Submit Button -->
                 <button type="submit" class="submit-btn">
-                    <i class="fas fa-user-plus"></i> Create  Account
-                </button>               
+                    <i class="fas fa-user-plus"></i> Create Staff Account
+                </button>
+                
                 <div class="form-footer">
-                    By creating an account, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+                    By creating an account, you agree to ALMA's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-          //display image preview
+        // Display image preview for profile picture
         const profileInput = document.getElementById('profile-picture');
+        const profilePreview = document.getElementById('profilePreview');
+        
         profileInput.addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    profileInput.style.backgroundImage = `url(${e.target.result})`;
-                    profileInput.style.backgroundSize = 'cover';
-                    profileInput.style.backgroundPosition = 'center';
-                    profileInput.textContent = '';
+                    profilePreview.innerHTML = `<img src="${e.target.result}" alt="Profile Preview">`;
                 }
                 reader.readAsDataURL(file);
             }
         });
-        //validate password length
+        
+        // Click profile preview to trigger file input
+        profilePreview.addEventListener('click', function() {
+            profileInput.click();
+        });
+        
+        // Validate password length
         const passwordInput = document.getElementById('password');
         passwordInput.addEventListener('input', function(){
-            passwordInput.setCustomValidity("");
+            const passwordError = document.getElementById('password-error');
             if(passwordInput.value.length < 6){
-                passwordInput.setCustomValidity("Password must be at least 6 characters long");
-            }
-            else{
-                passwordInput.setCustomValidity("");
+                passwordError.style.display = 'block';
+                passwordError.textContent = "Password must be at least 6 characters long";
+            } else {
+                passwordError.style.display = 'none';
             }
         });
-        //hide and show password
-      const togglePassword = document.getElementById('togglePassword');
-        const password1 = document.getElementById('password');
-
+        
+        // Toggle password visibility
+        const togglePassword = document.getElementById('togglePassword');
         togglePassword.addEventListener('click', function() {
-            // Toggle the type attribute
-            const type = password1.getAttribute('type') === 'password' ? 'text' : 'password';
-            password1.setAttribute('type', type);
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
             
             // Toggle the eye icon
-            this.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
         });
-
-        //validate password and comfirm password
-        const comfirmPasswordInput = document.getElementById('comfirmpassword');
-        comfirmPasswordInput.addEventListener('input', function(){
-            comfirmPasswordInput.setCustomValidity("");
-            if(comfirmPasswordInput.value !== passwordInput.value){
-                comfirmPasswordInput.setCustomValidity("Passwords do not match");
-            }
-            else{
-                comfirmPasswordInput.setCustomValidity("");
-            }
-        });
+        
         // Set default date to today
         document.getElementById('memberSince').valueAsDate = new Date();
         
@@ -598,6 +833,13 @@
                 isValid = false;
             }
             
+            // Validate position
+            const position = document.getElementById('position');
+            if (!position.value) {
+                document.getElementById('position-error').style.display = 'block';
+                isValid = false;
+            }
+            
             // Validate date
             const memberSince = document.getElementById('memberSince');
             if (!memberSince.value) {
@@ -605,31 +847,47 @@
                 isValid = false;
             }
             
-            // If valid, show success message
+            // Validate permit
+            const permit = document.getElementById('permit');
+            if (permit.value.trim().length < 2) {
+                document.getElementById('permit-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate password
+            if (passwordInput.value.length < 6) {
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            // If valid, submit the form
             if (isValid) {
-                // Get form values
+                // Get form values for confirmation
                 const formData = {
                     email: email.value,
                     phone: phone.value,
                     name: name.value,
-                    status: document.querySelector('input[name="status"]:checked').value,
-                    memberSince: memberSince.value
+                    teacher_id: document.getElementById('teacher_id').value,
+                    position: position.value,
+                    memberSince: memberSince.value,
+                    qualification: document.getElementById('qualification').value,
+                    year_services: document.getElementById('year_services').value,
+                    permit: permit.value
                 };
                 
-                // In a real application, you would send this data to a server
                 console.log('Form submitted with data:', formData);
                 
-                // Show success message
-                // alert(`Admin account created successfully!\n\nEmail: ${formData.email}\nName: ${formData.name}\nStatus: ${formData.status}\nMember Since: ${formData.memberSince}`);
+                // In a real application, the form would be submitted to the server
+                // For now, we'll show a confirmation message
+                alert(`Head Staff account created successfully!\n\nName: ${formData.name}\nPosition: ${formData.position}\nEmail: ${formData.email}`);
                 
-                // Reset form (optional)
-                // document.getElementById('adminForm').reset();
-                // document.getElementById('memberSince').valueAsDate = new Date();
+                // Submit the form
+                this.submit();
             }
         });
         
         // Real-time validation for better UX
-        document.querySelectorAll('input').forEach(input => {
+        document.querySelectorAll('input, select').forEach(input => {
             input.addEventListener('blur', function() {
                 const errorId = this.id + '-error';
                 const errorElement = document.getElementById(errorId);
@@ -641,6 +899,21 @@
                         errorElement.style.display = 'block';
                     }
                 }
+            });
+        });
+        
+        // Add animation to form when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const formGroups = document.querySelectorAll('.form-group');
+            formGroups.forEach((group, index) => {
+                group.style.opacity = '0';
+                group.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    group.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    group.style.opacity = '1';
+                    group.style.transform = 'translateY(0)';
+                }, index * 100);
             });
         });
     </script>

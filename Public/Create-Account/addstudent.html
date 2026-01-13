@@ -6,6 +6,22 @@
     <title>Student Account Creation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ===== WINE & CREAM COLOR SCHEME ===== */
+        :root {
+            --wine: #722F37;
+            --wine-dark: #5C252D;
+            --wine-light: #8B3A42;
+            --cream: #F5F5DC;
+            --cream-dark: #E8E4C9;
+            --cream-light: #FFF8E7;
+            --text-dark: #3A2F2F;
+            --text-light: #5A4A4A;
+            --border: #D4C4C4;
+            --success: #2E7D32;
+            --warning: #C47C3A;
+            --error: #B03A3A;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -14,8 +30,8 @@
         }
         
         body {
-            background-color: #f5f5f0;
-            color: #333;
+            background-color: var(--cream);
+            color: var(--text-dark);
             min-height: 100vh;
             padding: 20px;
             position: relative;
@@ -35,25 +51,26 @@
             background-position: center;
             filter: blur(8px);
             z-index: -1;
-            opacity: 0.15;
+            opacity: 0.1;
         }
         
         .container {
             max-width: 1100px;
             margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(245, 245, 220, 0.95);
             border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 15px 40px rgba(114, 47, 55, 0.1);
             overflow: hidden;
             position: relative;
             z-index: 1;
             backdrop-filter: blur(5px);
+            border: 2px solid var(--cream-dark);
         }
         
         header {
-            background: linear-gradient(145deg, #f8f8f8 0%, #e8e8e8 100%);
+            background: linear-gradient(145deg, var(--cream) 0%, var(--cream-dark) 100%);
             padding: 30px 40px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 2px solid var(--wine);
         }
         
         .logo {
@@ -63,7 +80,7 @@
         }
         
         .logo-icon {
-            background-color: #d8d8d8;
+            background-color: var(--wine);
             width: 50px;
             height: 50px;
             border-radius: 12px;
@@ -71,39 +88,40 @@
             align-items: center;
             justify-content: center;
             margin-right: 15px;
-            color: #777;
+            color: var(--cream);
         }
         
         .logo-text {
             font-size: 26px;
             font-weight: 700;
-            color: #666;
+            color: var(--wine);
         }
         
         header h1 {
-            color: #555;
+            color: var(--wine);
             font-size: 32px;
             margin-bottom: 10px;
         }
         
         header p {
-            color: #777;
+            color: var(--text-light);
             font-size: 16px;
             line-height: 1.5;
         }
         
         .form-container {
             padding: 40px;
-            background-color: #fefefa;
+            background-color: var(--cream-light);
         }
         
         .form-section {
             margin-bottom: 40px;
             padding: 30px;
             border-radius: 15px;
-            background-color: #f9f9f9;
-            border: 1px solid #e8e8e8;
+            background-color: var(--cream);
+            border: 2px solid var(--wine);
             position: relative;
+            box-shadow: 0 5px 15px rgba(114, 47, 55, 0.05);
         }
         
         .section-header {
@@ -112,24 +130,24 @@
             align-items: center;
             margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #e8e8e8;
+            border-bottom: 2px solid var(--wine-light);
         }
         
         .section-title {
             font-size: 22px;
-            color: #555;
+            color: var(--wine);
             display: flex;
             align-items: center;
         }
         
         .section-title i {
             margin-right: 12px;
-            color: #888;
+            color: var(--wine-light);
         }
         
         .edit-badge {
-            background-color: #e8e8e8;
-            color: #777;
+            background-color: var(--wine);
+            color: var(--cream);
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 14px;
@@ -138,10 +156,11 @@
             align-items: center;
             cursor: pointer;
             transition: all 0.3s;
+            border: 1px solid var(--wine-dark);
         }
         
         .edit-badge:hover {
-            background-color: #ddd;
+            background-color: var(--wine-dark);
         }
         
         .edit-badge i {
@@ -176,13 +195,13 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #666;
+            color: var(--wine);
             font-size: 15px;
         }
         
         label.required::after {
             content: " *";
-            color: #b76e6e;
+            color: var(--error);
         }
         
         .input-with-icon {
@@ -194,25 +213,25 @@
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: #999;
+            color: var(--wine-light);
         }
         
         input, select, textarea {
             width: 100%;
             padding: 14px 15px 14px 45px;
-            border: 2px solid #ddd;
+            border: 2px solid var(--border);
             border-radius: 10px;
             font-size: 15px;
             transition: all 0.3s;
-            background-color: #fefefe;
-            color: #555;
+            background-color: var(--cream-light);
+            color: var(--text-dark);
         }
         
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #aaa;
-            box-shadow: 0 0 0 3px rgba(170, 170, 170, 0.2);
-            background-color: #fff;
+            border-color: var(--wine);
+            box-shadow: 0 0 0 3px rgba(114, 47, 55, 0.2);
+            background-color: white;
         }
         
         /* Radio button styling for gender */
@@ -235,14 +254,14 @@
             flex-direction: column;
             align-items: center;
             padding: 15px;
-            border: 2px solid #ddd;
+            border: 2px solid var(--border);
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
             font-weight: normal;
             margin: 0;
-            background-color: #fefefe;
+            background-color: var(--cream-light);
         }
         
         .gender-option label i {
@@ -253,22 +272,20 @@
         }
         
         .gender-option input:checked + label {
-            border-color: #999;
-            background-color: rgba(170, 170, 170, 0.1);
-            color: #555;
+            border-color: var(--wine);
+            background-color: rgba(114, 47, 55, 0.1);
+            color: var(--wine);
             font-weight: 600;
         }
         
         .gender-option label i.fa-male {
-            color: #6a8cb8;
+            color: var(--wine-light);
         }
         
         .gender-option label i.fa-female {
             color: #d47b7b;
         }
 
-        
-        
         .gender-option label i.fa-genderless {
             color: #8a8a8a;
         }
@@ -297,11 +314,11 @@
             display: flex;
             align-items: center;
             padding: 12px 15px;
-            border: 2px solid #ddd;
+            border: 2px solid var(--border);
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
-            background-color: #fefefe;
+            background-color: var(--cream-light);
         }
         
         .house-option input {
@@ -325,8 +342,8 @@
         }
         
         .house-option input:checked ~ .house-option {
-            border-color: #999;
-            background-color: rgba(170, 170, 170, 0.1);
+            border-color: var(--wine);
+            background-color: rgba(114, 47, 55, 0.1);
         }
         
         /* Color coding for houses */
@@ -335,7 +352,7 @@
         }
         
         .house-red input:checked + span {
-            color: #c33;
+            color: var(--wine);
         }
         
         .house-blue {
@@ -343,7 +360,7 @@
         }
         
         .house-blue input:checked + span {
-            color: #36c;
+            color: var(--wine-light);
         }
         
         .house-green {
@@ -351,7 +368,7 @@
         }
         
         .house-green input:checked + span {
-            color: #393;
+            color: #2E7D32;
         }
         
         .house-yellow {
@@ -359,7 +376,7 @@
         }
         
         .house-yellow input:checked + span {
-            color: #c90;
+            color: #C47C3A;
         }
         
         /* Form actions */
@@ -369,13 +386,13 @@
             gap: 15px;
             margin-top: 40px;
             padding-top: 30px;
-            border-top: 2px solid #e8e8e8;
+            border-top: 2px solid var(--wine);
             justify-content: center;
         }
         
         .submit-btn {
-            background: linear-gradient(to right, #aaa, #888);
-            color: white;
+            background: linear-gradient(to right, var(--wine), var(--wine-dark));
+            color: var(--cream);
             border: none;
             padding: 16px 40px;
             font-size: 18px;
@@ -387,12 +404,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid var(--wine-dark);
         }
         
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(136, 136, 136, 0.3);
-            background: linear-gradient(to right, #999, #777);
+            box-shadow: 0 5px 15px rgba(114, 47, 55, 0.3);
+            background: linear-gradient(to right, var(--wine-light), var(--wine));
         }
         
         .submit-btn i {
@@ -400,9 +418,9 @@
         }
         
         .cancel-btn {
-            background-color: #f0f0f0;
-            color: #777;
-            border: 2px solid #ddd;
+            background-color: var(--cream);
+            color: var(--wine);
+            border: 2px solid var(--wine);
             padding: 16px 30px;
             font-size: 16px;
             font-weight: 600;
@@ -415,8 +433,8 @@
         }
         
         .cancel-btn:hover {
-            background-color: #e8e8e8;
-            border-color: #ccc;
+            background-color: var(--cream-dark);
+            border-color: var(--wine-dark);
         }
         
         .cancel-btn i {
@@ -427,8 +445,9 @@
         .decorative-circle {
             position: absolute;
             border-radius: 50%;
-            background-color: rgba(248, 248, 248, 0.3);
+            background-color: rgba(114, 47, 55, 0.1);
             z-index: -1;
+            border: 1px solid rgba(114, 47, 55, 0.2);
         }
         
         .circle-1 {
@@ -448,7 +467,7 @@
         /* Help text */
         .help-text {
             font-size: 13px;
-            color: #888;
+            color: var(--wine-light);
             margin-top: 5px;
             display: flex;
             align-items: center;
@@ -462,10 +481,10 @@
         .success-message {
             text-align: center;
             padding: 40px;
-            background-color: #f0f8f0;
+            background-color: rgba(46, 125, 50, 0.1);
             border-radius: 10px;
             margin-top: 20px;
-            border: 1px solid #d0e8d0;
+            border: 1px solid rgba(46, 125, 50, 0.2);
             display: none;
         }
         
@@ -479,29 +498,29 @@
         }
         
         .success-icon {
-            color: #7a9d7e;
+            color: var(--success);
             font-size: 60px;
             margin-bottom: 20px;
         }
         
         .success-message h2 {
-            color: #555;
+            color: var(--wine);
             margin-bottom: 15px;
         }
         
         .success-message p {
-            color: #777;
+            color: var(--text-light);
             margin-bottom: 25px;
             font-size: 16px;
         }
         
         /* Student ID preview */
         .student-id-preview {
-            background: linear-gradient(135deg, #f8f8f8 0%, #e8e8e8 100%);
+            background: linear-gradient(135deg, var(--cream) 0%, var(--cream-dark) 100%);
             border-radius: 10px;
             padding: 20px;
             margin-top: 20px;
-            border: 1px solid #ddd;
+            border: 2px solid var(--wine);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -516,49 +535,55 @@
             width: 70px;
             height: 70px;
             border-radius: 50%;
-            background-color: #d8d8d8;
+            background-color: var(--wine);
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 20px;
-            color: #777;
+            color: var(--cream);
             font-size: 30px;
+            border: 2px solid var(--cream);
         }
         
         .id-info h3 {
-            color: #555;
+            color: var(--wine);
             margin-bottom: 5px;
         }
         
         .id-info p {
-            color: #777;
+            color: var(--text-light);
             font-size: 14px;
         }
         
         .id-badge {
-            background-color: #aaa;
-            color: white;
+            background-color: var(--wine);
+            color: var(--cream);
             padding: 8px 15px;
             border-radius: 20px;
             font-weight: 600;
             font-size: 14px;
+            border: 1px solid var(--wine-dark);
         }
         
         /* Footer */
         footer {
             text-align: center;
             padding: 20px;
-            color: #888;
+            color: var(--text-light);
             font-size: 14px;
-            background-color: #f8f8f8;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            background-color: var(--cream);
+            border-top: 2px solid var(--wine);
         }
         
         footer a {
-            color: #777;
+            color: var(--wine);
             text-decoration: none;
             font-weight: 600;
-            border-bottom: 1px dotted #aaa;
+            border-bottom: 1px dotted var(--wine);
+        }
+        
+        footer a:hover {
+            color: var(--wine-dark);
         }
         
         /* Section numbering */
@@ -568,34 +593,175 @@
             justify-content: center;
             width: 30px;
             height: 30px;
-            background-color: #d8d8d8;
-            color: #777;
+            background-color: var(--wine);
+            color: var(--cream);
             border-radius: 50%;
             margin-right: 10px;
             font-weight: 700;
             font-size: 14px;
+            border: 1px solid var(--wine-dark);
         }
+        
         .profile {
-            border: 2px dashed #bbb;
+            border: 2px dashed var(--wine);
             border-radius: 22px;
             padding: 20px;
             width: 150px;
             height: 150px;
             cursor: pointer;
-            background-color: #fafafa;
+            background-color: var(--cream);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #999;
+            color: var(--wine);
             font-size: 14px;
             margin-bottom: 20px;
             justify-self: center;
             margin-top: 10px;
             margin-bottom: 40px;
+            transition: all 0.3s;
+        }
+        
+        .profile:hover {
+            background-color: var(--cream-dark);
+            border-color: var(--wine-dark);
+        }
+        
+        /* Success message links */
+        .success-message a {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--wine);
+            color: var(--cream);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 1px solid var(--wine-dark);
+        }
+        
+        .success-message a:hover {
+            background-color: var(--wine-dark);
+            transform: translateY(-2px);
+        }
+        
+        .success-message button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--cream);
+            color: var(--wine);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            border: 2px solid var(--wine);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .success-message button:hover {
+            background-color: var(--cream-dark);
+        }
+        
+        /* Placeholder styling */
+        ::placeholder {
+            color: var(--wine-light);
+            opacity: 0.7;
+        }
+        
+        /* Select dropdown styling */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23722F37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 15px;
+            padding-right: 45px;
+        }
+        
+        /* Textarea styling */
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        /* Medical report textarea specific */
+        textarea[name="medical"], 
+        textarea[name="cure"] {
+            padding: 14px 15px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 15px;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            header h1 {
+                font-size: 24px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .submit-btn, .cancel-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+        
+        /* Focus states for accessibility */
+        input:focus, 
+        select:focus, 
+        textarea:focus, 
+        button:focus {
+            outline: 2px solid var(--wine);
+            outline-offset: 2px;
+        }
+        
+        /* Gender option hover effect */
+        .gender-option label:hover {
+            border-color: var(--wine-light);
+            background-color: rgba(114, 47, 55, 0.05);
+        }
+        
+        /* House option hover effect */
+        .house-option:hover {
+            border-color: var(--wine-light);
+            background-color: rgba(114, 47, 55, 0.05);
+        }
+        
+        /* Edit badge hover effect */
+        .edit-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(114, 47, 55, 0.2);
+        }
+        
+        /* Profile picture hover effect */
+        #profile-picture:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(114, 47, 55, 0.1);
+        }
+        
+        /* Section hover effect */
+        .form-section:hover {
+            box-shadow: 0 8px 25px rgba(114, 47, 55, 0.1);
         }
     </style>
 </head>
 <body>
+    <!-- The rest of your HTML code remains EXACTLY the same -->
     <!-- Decorative elements -->
     <div class="decorative-circle circle-1"></div>
     <div class="decorative-circle circle-2"></div>
@@ -798,7 +964,6 @@
                             <input type="date" id="admission-date" name="admission_date" required>
                         </div>
                     </div>
-                    
                   
                 </div>
             </div>
@@ -907,34 +1072,15 @@
                  <div class="form-group">
                         <label for="emergency-contact" class="required">Medical Report</label>
                         <div class="input-with-icon">
-                            <i class=""></i>
-                            <textarea name="medical" id="emergency-contact"cols="20" rows="10" required>
-                            </textarea>
+                            <textarea name="medical" id="emergency-contact" cols="20" rows="10" required></textarea>
                         </div>
                 </div>
                 <div class="from-group">
                     <label for="">Any immediate Cure</label>
                     <div class="input-with-icon">
-                        <i class=""></i>
                         <textarea name="cure" id="emergency_contact" required></textarea>
                     </div>
                 </div>
-                <!-- Student ID Preview -->
-                <!-- <div class="student-id-preview">
-                    <div class="id-preview-left">
-                        <div class="id-avatar">
-                            <i class="fas fa-user-graduate"></i>
-                        </div>
-                        <div class="id-info">
-                            <h3>David Johnson</h3>
-                            <p>Grade 11 - Science | NIS-2021-0876</p>
-                            <p>Blue House | Admitted: Sept 5, 2021</p>
-                        </div>
-                    </div>
-                    <div class="id-badge">
-                        Student ID Preview
-                    </div>
-                </div> -->
             </div>
             
             <!-- Form Actions -->
@@ -956,19 +1102,19 @@
             <h2>Student Account Created Successfully!</h2>
             <p>The student account has been created and added to the system. Login credentials have been sent to the provided email address.</p>
             <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
-                <a href="#" style="display: inline-block; padding: 12px 30px; background-color: #aaa; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                <a href="#" style="display: inline-block; padding: 12px 30px; background-color: var(--wine); color: var(--cream); text-decoration: none; border-radius: 8px; font-weight: 600;">
                     <i class="fas fa-eye"></i> View Student Profile
                 </a>
-               <button type="submit" style="display: inline-block; padding: 12px 30px; background-color: #f0f0f0; color: #777; text-decoration: none; border-radius: 8px; font-weight: 600; border: 2px solid #ddd;">  <i class="fas fa-plus"></i> Create Another</button>
+               <button type="submit" style="display: inline-block; padding: 12px 30px; background-color: var(--cream); color: var(--wine); text-decoration: none; border-radius: 8px; font-weight: 600; border: 2px solid var(--wine);">  <i class="fas fa-plus"></i> Create Another</button>
             </div>
         </div>
         
         <footer>
             <p>By creating a student account, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
-            <!-- <p style="margin-top: 10px;">Need help? <a href="#">Contact Student Services</a> or call +1 (800) 123-4567</p> -->
         </footer>
     </div>
 
+    <!-- ALL JAVASCRIPT CODE REMAINS EXACTLY THE SAME -->
     <!-- Set default dates and pre-select options -->
     <script>
         //display image preview

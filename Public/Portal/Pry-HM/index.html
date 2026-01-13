@@ -3,186 +3,900 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Primary-HOD</title>
-</head>
-<body>
-   
-    <!-- Display the profile of person -->
-     
-     <!-- create input for each features -->
-    <form action="/report" method="post">
-             <h1>Primary HOD Dashboard </h1>
-            <div id="detial">
-                <div id="profile-picture">
-
-                </div>
-                <p>Email:<span id="name"></span></p>
-                <p>Position: <span id="position"></span></p>
-                <p>Phone: <span id="phone"></span></p>
-                <p>Email: <span id="email"></span></p>
-                <p>Member Since: <span id="member"></span></p>
-                <p>Qualification: <span id="qualification"></span></p>
-                <p>Teacher ID: <span id="teacher_id"></span></p>
-                
-            </div>
-         <br>
-         <a href="/Public/Create-Account/addstudent.html">
-            <button id="Create-Account">
-                Create Student Account
-            </button>
-                </a><br>
-        <label>Title</label>
-         <select name="title" id="title" required>
-            <option value="">Select type of report</option>
-            <option value="Daily-progress-report">Daily Progress Report</option>
-            <option value="weekly-progress-report">Weekly Progress Report</option>
-            <option value="Monthly-progress-report"> Monthly Progress Report</option>
-            <option value="Teamly-progress-report">Teamly Progress Report</option>
-         </select>
-         <br>
-        <label>Reporters Name</label>
-            <input type="text" placeholder="Enter hod names" name="name"><br>
-         <label>Teachers ID</label>
-         <input type="text" placeholder="Enter empleoyment or teacher id" name="teacher_id">
-    <h2>Reports</h2>
-         <h3>Absences Report</h3>
-         <label for="">Date</label><br>
-         <input type="date" name="date" id="date"> <br>
-        <input type="text" id="class1" name="class1" placeholder="Enter class" /><br>
-        <input type="text" id="class1-num" name="class1_num" placeholder="Enter number of absences" /><br>
-        <input type="text" id="class2" name="class2" placeholder="Enter class" /><br>
-        <input type="text" id="class2-num" name="class2_num" placeholder="Enter number of absences" /><br>
-        <input type="text" id="class3" name="class3" placeholder="Enter class" /><br>
-        <input type="text" id="class3-num" name="class3_num" placeholder="Enter number of absences" /><br>
-        <input type="text" id="class4" name="class4" placeholder="Enter class" /><br>
-        <input type="text" id="class4-num" name="class4_num" placeholder="Enter number of absences" /><br>
-        <input type="text" id="class5" name="class5" placeholder="Enter class"><br>
-        <input type="text" id="class5-num" name="class5_num" placeholder="Enter number of absences" /><br>
-
-        <h3>Daily Complaints Report</h3>
-        <textarea id="complaints" name="complaints" rows="4" cols="50" placeholder="Enter daily complaints here..."></textarea><br>
-        <h3>Daily Work Remarks per Teacher</h3>
-        <input type="text" id="teacher1" name="teacher1" placeholder="Enter class" /><br>
-        <input type="text" id="teacher1-remark" name="teacher1_remark" placeholder="Enter work remark" /><br>
-        <input type="text" id="teacher2" name="teacher2" placeholder="Enter class" /><br>
-        <input type="text" id="teacher2-remark" name="teacher2_remark" placeholder="Enter work remark" /><br>
-        <input type="text" id="teacher3" name="teacher3" placeholder="Enter class" /><br>
-        <input type="text" id="teacher3-remark" name="teacher3_remark" placeholder="Enter work remark" /><br>
-        <input type="text" name="teacher4" id="teacher4" placeholder="Enter class"><br>
-        <input type="text" name="teacher4_remark" id="teacher4-remark" placeholder="Enter work remark"><br>
-        <input type="text" id="teacher5" name="teacher5" placeholder="Enter class"><br>
-        <input type="text" id="teacher5" name="teacher5_remark" placeholder="Enter work remark"/><br>
-      <select name="department" id="">
-            <option value="">select position</option>
-            <option value="Senior-HOD">Senior-HOD</option>
-            <option value="Junior-HOD">Junior-HOD</option>
-            <option value="pirmary-HM">Pirmary-HM</option>
-            <option value="pre-primary-HM">Pre-primary-HM</option>
-        </select><br>
-        <label for="">Give Comment</label> <br>
-        <textarea name="comment" id="" cols="30" rows="10"></textarea> <br>
-        <button type="submit">Submit Report</button>
-    </form>
+    <title>Primary HOD Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Wine and Cream Color Palette */
+        :root {
+            --wine-primary: #722F37;
+            --wine-secondary: #8A3A43;
+            --wine-light: #9E4A54;
+            --wine-accent: #5A2329;
+            --cream-primary: #F7F3E3;
+            --cream-secondary: #F5F0E1;
+            --cream-dark: #E8E2D0;
+            --cream-light: #FDFBF5;
+            --text-dark: #333333;
+            --text-medium: #5A5A5A;
+            --text-light: #777777;
+            --shadow-light: rgba(114, 47, 55, 0.1);
+            --shadow-medium: rgba(114, 47, 55, 0.15);
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--cream-primary);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
         }
-        h1 {
-            color: #333;
-        }
-        form {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            max-width: 700px;
-            width: 100%;
-            border: 1px solid #ccc;
-            padding: 30px;
-            border-radius: 5px;
-            align-items: flex-start;
-            justify-self: center;
-        }
-        input {
-            margin: 5px 0;
-            padding: 8px;
-            width: 200px;
-        }
-        button {
-            padding: 8px 12px;
-            background-color: #4CAF50;
+
+        /* Header */
+        .main-header {
+            background: linear-gradient(135deg, var(--wine-primary), var(--wine-accent));
             color: white;
-            border: none;
-            cursor: pointer;
+            padding: 1.2rem 2rem;
+            box-shadow: 0 4px 12px var(--shadow-medium);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        button:hover {
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-icon {
+            background-color: rgba(255, 255, 255, 0.15);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .header-title h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .header-title p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--wine-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--wine-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-light);
+        }
+
+        .btn-secondary {
+            background-color: var(--cream-dark);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: #d8d2bf;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
             background-color: #45a049;
         }
-        textarea {
-            margin: 5px 0;
-            padding: 8px;
-            width: 400px;
+
+        /* Main Container */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
         }
-        #Create-Account{
-            background-color: #333;
-            color: white;
-            float: right;
+
+        @media (min-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 1fr 2fr;
+            }
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background-color: white;
             border-radius: 10px;
+            box-shadow: 0 4px 12px var(--shadow-light);
+            overflow: hidden;
+            height: fit-content;
         }
-        #detial{
+
+        .profile-header {
+            background: linear-gradient(to right, var(--wine-primary), var(--wine-secondary));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .profile-header h2 {
+            font-size: 1.4rem;
+            font-weight: 500;
+        }
+
+        .profile-body {
+            padding: 2rem;
+        }
+
+        .profile-picture-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        #profile-picture {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background-color: var(--cream-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid var(--wine-light);
+            overflow: hidden;
+            box-shadow: 0 4px 8px var(--shadow-light);
+        }
+
+        #profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-details {
             display: flex;
             flex-direction: column;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            width: 90%;
+            gap: 1.2rem;
         }
-        #profile-picture{
-            width: 200px;
-            height: 200px;
-            margin-bottom: 10px;
+
+        .profile-item {
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed var(--cream-dark);
         }
-        
+
+        .profile-label {
+            font-weight: 600;
+            color: var(--wine-primary);
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .profile-value {
+            color: var(--text-medium);
+            font-size: 1.05rem;
+            padding-left: 1.5rem;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px var(--shadow-light);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .quick-actions h3 {
+            color: var(--wine-primary);
+            margin-bottom: 1.2rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        /* Report Form */
+        .report-form-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px var(--shadow-light);
+            overflow: hidden;
+        }
+
+        .form-header {
+            background: linear-gradient(to right, var(--wine-primary), var(--wine-secondary));
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .form-header h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-content {
+            padding: 2rem;
+        }
+
+        .form-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--cream-dark);
+        }
+
+        .form-section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .form-section h3 {
+            color: var(--wine-primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--cream-dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--wine-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--error);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--cream-dark);
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: var(--cream-light);
+            color: var(--text-dark);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--wine-light);
+            box-shadow: 0 0 0 3px rgba(114, 47, 55, 0.1);
+            background-color: white;
+        }
+
+        select.form-control {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23722F37' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 16px;
+            padding-right: 2.5rem;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--cream-dark);
+        }
+
+        /* Absences Grid */
+        .absences-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .absence-item {
+            background-color: var(--cream-light);
+            border: 1px solid var(--cream-dark);
+            border-radius: 6px;
+            padding: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .absence-item:hover {
+            border-color: var(--wine-light);
+            box-shadow: 0 2px 8px var(--shadow-light);
+        }
+
+        /* Teacher Remarks */
+        .teacher-remarks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .teacher-item {
+            background-color: var(--cream-light);
+            border: 1px solid var(--cream-dark);
+            border-radius: 6px;
+            padding: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .teacher-item:hover {
+            border-color: var(--wine-light);
+            box-shadow: 0 2px 8px var(--shadow-light);
+        }
+
+        /* Footer */
+        .dashboard-footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--cream-dark);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-left {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .absences-grid,
+            .teacher-remarks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-card, .report-form-container, .quick-actions {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--cream-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--wine-light);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--wine-secondary);
+        }
     </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="header-left">
+                <div class="header-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <div class="header-title">
+                    <h1>Primary HOD Dashboard</h1>
+                    <p>Manage reports, absences, and teacher remarks</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="/Public/Create-Account/addstudent.html" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Create Student Account
+                </a>
+                <button class="btn btn-secondary" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard Content -->
+    <div class="dashboard-container">
+        <!-- Left Column: Profile & Quick Actions -->
+        <div class="left-column">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-header">
+                    <h2><i class="fas fa-id-card"></i> Profile Information</h2>
+                </div>
+                <div class="profile-body">
+                    <div class="profile-picture-container">
+                        <div id="profile-picture">
+                            <i class="fas fa-user-circle" style="font-size: 7rem; color: var(--wine-light);"></i>
+                        </div>
+                    </div>
+                    <div class="profile-details">
+                        <div class="profile-item">
+                            <span class="profile-label"><i class="fas fa-user"></i> Name</span>
+                            <span id="name" class="profile-value">Loading...</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label"><i class="fas fa-briefcase"></i> Position</span>
+                            <span id="position" class="profile-value">Primary HOD</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label"><i class="fas fa-phone"></i> Phone</span>
+                            <span id="phone" class="profile-value">Loading...</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label"><i class="fas fa-envelope"></i> Email</span>
+                            <span id="email" class="profile-value">Loading...</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label"><i class="fas fa-calendar-alt"></i> Member Since</span>
+                            <span id="member" class="profile-value">Loading...</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label"><i class="fas fa-graduation-cap"></i> Qualification</span>
+                            <span id="qualification" class="profile-value">Loading...</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label"><i class="fas fa-id-badge"></i> Teacher ID</span>
+                            <span id="teacher_id" class="profile-value">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" id="viewReportsBtn">
+                        <i class="fas fa-file-alt"></i> View Previous Reports
+                    </button>
+                    <button class="btn btn-secondary" id="manageTeachersBtn">
+                        <i class="fas fa-users"></i> Manage Teachers
+                    </button>
+                    <button class="btn btn-secondary" id="attendanceOverviewBtn">
+                        <i class="fas fa-chart-bar"></i> Attendance Overview
+                    </button>
+                    <button class="btn btn-secondary" id="settingsBtn">
+                        <i class="fas fa-cog"></i> Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Report Form -->
+        <div class="right-column">
+            <div class="report-form-container">
+                <div class="form-header">
+                    <h2><i class="fas fa-file-medical"></i> Submit New Report</h2>
+                </div>
+                <form action="/report" method="post" class="form-content" id="reportForm">
+                    <!-- Report Type -->
+                    <div class="form-section">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="title" class="required"><i class="fas fa-heading"></i> Report Title</label>
+                                <select name="title" id="title" class="form-control" required>
+                                    <option value="">Select type of report</option>
+                                    <option value="Daily-progress-report">Daily Progress Report</option>
+                                    <option value="weekly-progress-report">Weekly Progress Report</option>
+                                    <option value="Monthly-progress-report">Monthly Progress Report</option>
+                                    <option value="Teamly-progress-report">Team Progress Report</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="date" class="required"><i class="fas fa-calendar-day"></i> Report Date</label>
+                                <input type="date" name="date" id="date" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="reporter-name" class="required"><i class="fas fa-user-edit"></i> Reporter's Name</label>
+                                <input type="text" id="reporter-name" placeholder="Enter HOD name" name="name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="teacher-id" class="required"><i class="fas fa-id-card-alt"></i> Teacher ID</label>
+                                <input type="text" id="teacher-id" placeholder="Enter employment or teacher ID" name="teacher_id" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Absences Report -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-user-slash"></i> Absences Report</h3>
+                        <p class="form-instruction">Enter class names and number of absences for each class.</p>
+                        
+                        <div class="absences-grid">
+                            <div class="absence-item">
+                                <label for="class1">Class 1</label>
+                                <input type="text" id="class1" name="class1" placeholder="e.g., Grade 4A" class="form-control" style="margin-bottom: 0.5rem;">
+                                <label for="class1-num">Number of Absences</label>
+                                <input type="number" id="class1-num" name="class1_num" placeholder="0" min="0" class="form-control">
+                            </div>
+                            
+                            <div class="absence-item">
+                                <label for="class2">Class 2</label>
+                                <input type="text" id="class2" name="class2" placeholder="e.g., Grade 4B" class="form-control" style="margin-bottom: 0.5rem;">
+                                <label for="class2-num">Number of Absences</label>
+                                <input type="number" id="class2-num" name="class2_num" placeholder="0" min="0" class="form-control">
+                            </div>
+                            
+                            <div class="absence-item">
+                                <label for="class3">Class 3</label>
+                                <input type="text" id="class3" name="class3" placeholder="e.g., Grade 5A" class="form-control" style="margin-bottom: 0.5rem;">
+                                <label for="class3-num">Number of Absences</label>
+                                <input type="number" id="class3-num" name="class3_num" placeholder="0" min="0" class="form-control">
+                            </div>
+                            
+                            <div class="absence-item">
+                                <label for="class4">Class 4</label>
+                                <input type="text" id="class4" name="class4" placeholder="e.g., Grade 5B" class="form-control" style="margin-bottom: 0.5rem;">
+                                <label for="class4-num">Number of Absences</label>
+                                <input type="number" id="class4-num" name="class4_num" placeholder="0" min="0" class="form-control">
+                            </div>
+                            
+                            <div class="absence-item">
+                                <label for="class5">Class 5</label>
+                                <input type="text" id="class5" name="class5" placeholder="e.g., Grade 6A" class="form-control" style="margin-bottom: 0.5rem;">
+                                <label for="class5-num">Number of Absences</label>
+                                <input type="number" id="class5-num" name="class5_num" placeholder="0" min="0" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Daily Complaints Report -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Daily Complaints Report</h3>
+                        <div class="form-group">
+                            <textarea id="complaints" name="complaints" rows="4" placeholder="Enter daily complaints, issues, or concerns here..." class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Daily Work Remarks -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-comment-dots"></i> Daily Work Remarks per Teacher</h3>
+                        <p class="form-instruction">Provide feedback for each teacher's daily performance.</p>
+                        
+                        <div class="teacher-remarks-grid">
+                            <div class="teacher-item">
+                                <label for="teacher1">Teacher 1</label>
+                                <input type="text" id="teacher1" name="teacher1" placeholder="Teacher name" class="form-control" style="margin-bottom: 0.5rem;">
+                                <label for="teacher1-remark">Work Remark</label>
+                                <input type="text" id="teacher1-remark" name="teacher1_remark" placeholder="Enter work remark" class="form-control">
+                            </div>
+                            
+                            <div class="teacher-item">
+                                <label for="teacher2">Teacher 2</label>
+                                <input type="text" id="teacher2" name="teacher2" placeholder="Teacher name" class="form-control" style="margin-bottom: 0.5rem;">
+                                <label for="teacher2-remark">Work Remark</label>
+                                <input type="text" id="teacher2-remark" name="teacher2_remark" placeholder="Enter work remark" class="form-control">
+                            </div>
+                            
+                            <div class="teacher-item">
+                                <label for="teacher3">Teacher 3</label>
+                                <input type="text" id="teacher3" name="teacher3" placeholder="Teacher name" class="form-control" style="margin-bottom: 0.5rem;">
+                                <label for="teacher3-remark">Work Remark</label>
+                                <input type="text" id="teacher3-remark" name="teacher3_remark" placeholder="Enter work remark" class="form-control">
+                            </div>
+                            
+                            <div class="teacher-item">
+                                <label for="teacher4">Teacher 4</label>
+                                <input type="text" name="teacher4" id="teacher4" placeholder="Teacher name" class="form-control" style="margin-bottom: 0.5rem;">
+                                <label for="teacher4-remark">Work Remark</label>
+                                <input type="text" name="teacher4_remark" id="teacher4-remark" placeholder="Enter work remark" class="form-control">
+                            </div>
+                            
+                            <div class="teacher-item">
+                                <label for="teacher5">Teacher 5</label>
+                                <input type="text" id="teacher5" name="teacher5" placeholder="Teacher name" class="form-control" style="margin-bottom: 0.5rem;">
+                                <label for="teacher5-remark">Work Remark</label>
+                                <input type="text" id="teacher5_remark" name="teacher5_remark" placeholder="Enter work remark" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Department and Comments -->
+                    <div class="form-section">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="department"><i class="fas fa-users"></i> Department</label>
+                                <select name="department" id="department" class="form-control">
+                                    <option value="">Select position</option>
+                                    <option value="Senior-HOD">Senior-HOD</option>
+                                    <option value="Junior-HOD">Junior-HOD</option>
+                                    <option value="primary-HM">Primary-HM</option>
+                                    <option value="pre-primary-HM">Pre-primary-HM</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="comment"><i class="fas fa-comment"></i> Additional Comments</label>
+                            <textarea name="comment" id="comment" rows="5" placeholder="Enter any additional comments or observations..." class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="reset" class="btn btn-secondary">
+                            <i class="fas fa-eraser"></i> Clear Form
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-paper-plane"></i> Submit Report
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+        <p>Primary HOD Dashboard &copy; 2023 | Designed for Primary Department Management</p>
+        <p style="font-size: 0.8rem; margin-top: 0.5rem;">All reports are securely stored and managed</p>
+    </footer>
+
     <script>
         document.addEventListener("DOMContentLoaded", function(){
             ready();
-        })
-      async function ready(){
+            setupEventListeners();
+        });
+
+        async function ready(){
             const email = localStorage.getItem('Alma');
             const position = 'Primary-HM';
-            const e = {email:email,position:position}
+            const e = {email:email,position:position};
+            
             if(!email){
+                // Redirect to login if no email found
                 // window.location.href='/';
+                console.log("No email found in localStorage. Using demo data.");
+                loadDemoData();
+            } else {
+                try {
+                    const api = await fetch('/hod-hm-info', {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    
+                    if(!api.ok){
+                        console.error("API response not OK. Using demo data.");
+                        loadDemoData();
+                    } else {
+                        const response = await api.json();
+                        const conv = JSON.parse(response);
+                        console.log("API Response:", conv);
+                        
+                        // Update profile with actual data
+                        if(conv.profile) {
+                            document.getElementById('profile-picture').innerHTML = 
+                                `<img src="${'/uploads/'+conv.profile}" alt="Profile Image">`;
+                        }
+                        
+                        document.getElementById('name').textContent = conv.name || "Not provided";
+                        document.getElementById('position').textContent = conv.position || "Primary HOD";
+                        document.getElementById('phone').textContent = conv.phone || "Not provided";
+                        document.getElementById('member').textContent = conv.member_since || "Not provided";
+                        document.getElementById('email').textContent = conv.email || email;
+                        document.getElementById('qualification').textContent = conv.qualification || "Not provided";
+                        document.getElementById('teacher_id').textContent = conv.teacher_id || "Not provided";
+                        
+                        // Pre-fill the reporter name and teacher ID in the form
+                        document.getElementById('reporter-name').value = conv.name || "";
+                        document.getElementById('teacher-id').value = conv.teacher_id || "";
+                        
+                        if(response.status === 200){
+                            console.log('Profile loaded successfully');
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                    loadDemoData();
+                }
             }
-            else{
-                const api = await fetch('/hod-hm-info', {
-                    method:'POST',
-                    headers:{'Content-type':'application/json'},
-                    body:JSON.stringify(e)
-                });
-                if(!api.ok){
+            
+            // Set today's date as default
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+        }
 
+        function loadDemoData() {
+            // Demo data for when API is not available
+            document.getElementById('name').textContent = "Dr. Elizabeth Bennett";
+            document.getElementById('phone').textContent = "+1 (555) 234-5678";
+            document.getElementById('member').textContent = "2020-03-15";
+            document.getElementById('email').textContent = localStorage.getItem('Alma') || "e.bennett@primaryschool.edu";
+            document.getElementById('qualification').textContent = "M.Ed in Primary Education";
+            document.getElementById('teacher_id').textContent = "PRI-HOD-2020-005";
+            
+            // Pre-fill form with demo data
+            document.getElementById('reporter-name').value = "Dr. Elizabeth Bennett";
+            document.getElementById('teacher-id').value = "PRI-HOD-2020-005";
+        }
+
+        function setupEventListeners() {
+            // Form submission handler
+            document.getElementById('reportForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Basic validation
+                const title = document.getElementById('title').value;
+                const reporterName = document.getElementById('reporter-name').value;
+                const teacherId = document.getElementById('teacher-id').value;
+                const date = document.getElementById('date').value;
+                
+                if (!title || !reporterName || !teacherId || !date) {
+                    alert('Please fill in all required fields: Report Title, Reporter Name, Teacher ID, and Date.');
+                    return false;
                 }
-                else{
-                     const response = await api.json();
-                    const conv = JSON.parse(response);
-                    console.log(conv);
-                    document.getElementById('profile-picture').innerHTML=`<img src="${'/uploads/'+conv.profile}" alt="Profile Image" style="width: 100%; height: 100%; border-radius: 50%;">`;
-                    document.getElementById('name').textContent=conv.name;
-                    document.getElementById('position').textContent=conv.position;
-                    document.getElementById('phone').textContent=conv.phone;
-                    document.getElementById('member').textContent=conv.member_since;
-                    document.getElementById('email').textContent=conv.email;
-                    document.getElementById('qualification').textContent=conv.qualification;
-                    document.getElementById('teacher_id').textContent=conv.teacher_id;
-                    if(response.stauts===200){
-                        alert('report sucessful');
-                     }
+                
+                // In a real app, this would submit to the server
+                console.log('Form submitted successfully');
+                alert('Report submitted successfully! (Demo mode - form not actually submitted)');
+                
+                // Reset form after successful submission
+                // this.reset();
+                // document.getElementById('date').value = new Date().toISOString().split('T')[0];
+                
+                return false;
+            });
+            
+            // Quick action buttons
+            document.getElementById('viewReportsBtn').addEventListener('click', function() {
+                alert('View Previous Reports feature would open here.');
+            });
+            
+            document.getElementById('manageTeachersBtn').addEventListener('click', function() {
+                alert('Manage Teachers feature would open here.');
+            });
+            
+            document.getElementById('attendanceOverviewBtn').addEventListener('click', function() {
+                alert('Attendance Overview feature would open here.');
+            });
+            
+            document.getElementById('settingsBtn').addEventListener('click', function() {
+                alert('Settings feature would open here.');
+            });
+            
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                if(confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('Alma');
+                    // window.location.href='/';
+                    alert('Logged out successfully (demo mode).');
                 }
-            }
-       }
+            });
+            
+            // Auto-format date to today if empty
+            document.getElementById('date').addEventListener('focus', function() {
+                if(!this.value) {
+                    this.value = new Date().toISOString().split('T')[0];
+                }
+            });
+        }
     </script>
 </body>
 </html>

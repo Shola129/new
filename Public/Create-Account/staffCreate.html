@@ -6,6 +6,22 @@
     <title>Staff Account Creation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ===== WINE & CREAM COLOR SCHEME ===== */
+        :root {
+            --wine: #722F37;
+            --wine-dark: #5C252D;
+            --wine-light: #8B3A42;
+            --cream: #F5F5DC;
+            --cream-dark: #E8E4C9;
+            --cream-light: #FFF8E7;
+            --text-dark: #3A2F2F;
+            --text-light: #5A4A4A;
+            --border: #D4C4C4;
+            --success: #2E7D32;
+            --warning: #C47C3A;
+            --error: #B03A3A;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -14,8 +30,8 @@
         }
         
         body {
-            background-color: #f5f5f0;
-            color: #333;
+            background-color: var(--cream);
+            color: var(--text-dark);
             min-height: 100vh;
             padding: 20px;
             position: relative;
@@ -35,25 +51,26 @@
             background-position: center;
             filter: blur(8px);
             z-index: -1;
-            opacity: 0.2;
+            opacity: 0.1;
         }
         
         .container {
             max-width: 1100px;
             margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.92);
+            background-color: rgba(245, 245, 220, 0.95);
             border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 15px 40px rgba(114, 47, 55, 0.1);
             overflow: hidden;
             position: relative;
             z-index: 1;
             backdrop-filter: blur(5px);
+            border: 2px solid var(--cream-dark);
         }
         
         header {
-            background: linear-gradient(145deg, #f8f8f8 0%, #e8e8e8 100%);
+            background: linear-gradient(145deg, var(--cream) 0%, var(--cream-dark) 100%);
             padding: 30px 40px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 2px solid var(--wine);
         }
         
         .logo {
@@ -63,7 +80,7 @@
         }
         
         .logo-icon {
-            background-color: #d8d8d8;
+            background-color: var(--wine);
             width: 50px;
             height: 50px;
             border-radius: 12px;
@@ -71,49 +88,54 @@
             align-items: center;
             justify-content: center;
             margin-right: 15px;
-            color: #777;
+            color: var(--cream);
         }
         
         .logo-text {
             font-size: 26px;
             font-weight: 700;
-            color: #666;
+            color: var(--wine);
         }
         
         header h1 {
-            color: #555;
+            color: var(--wine);
             font-size: 32px;
             margin-bottom: 10px;
         }
         
         header p {
-            color: #777;
+            color: var(--text-light);
             font-size: 16px;
             line-height: 1.5;
         }
         
         .form-container {
             padding: 40px;
-            background-color: #fefefa;
+            background-color: var(--cream-light);
         }
         
         .form-section {
             margin-bottom: 40px;
+            padding: 30px;
+            border-radius: 15px;
+            background-color: var(--cream);
+            border: 2px solid var(--wine);
+            box-shadow: 0 5px 15px rgba(114, 47, 55, 0.05);
         }
         
         .section-title {
             font-size: 22px;
-            color: #555;
+            color: var(--wine);
             margin-bottom: 25px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #e8e8e8;
+            border-bottom: 2px solid var(--wine-light);
             display: flex;
             align-items: center;
         }
         
         .section-title i {
             margin-right: 12px;
-            color: #888;
+            color: var(--wine-light);
         }
         
         .form-grid {
@@ -136,13 +158,13 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #666;
+            color: var(--wine);
             font-size: 15px;
         }
         
         label.required::after {
             content: " *";
-            color: #b76e6e;
+            color: var(--error);
         }
         
         .input-with-icon {
@@ -154,18 +176,18 @@
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: #999;
+            color: var(--wine-light);
         }
         
         input, select, textarea {
             width: 100%;
             padding: 14px 15px 14px 45px;
-            border: 2px solid #ddd;
+            border: 2px solid var(--border);
             border-radius: 10px;
             font-size: 15px;
             transition: all 0.3s;
-            background-color: #f9f9f9;
-            color: #555;
+            background-color: var(--cream-light);
+            color: var(--text-dark);
         }
         
         textarea {
@@ -176,9 +198,9 @@
         
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #aaa;
-            box-shadow: 0 0 0 3px rgba(170, 170, 170, 0.2);
-            background-color: #fff;
+            border-color: var(--wine);
+            box-shadow: 0 0 0 3px rgba(114, 47, 55, 0.2);
+            background-color: white;
         }
         
         /* Radio button styling for status */
@@ -201,14 +223,14 @@
             flex-direction: column;
             align-items: center;
             padding: 15px;
-            border: 2px solid #ddd;
+            border: 2px solid var(--border);
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
             font-weight: normal;
             margin: 0;
-            background-color: #f9f9f9;
+            background-color: var(--cream-light);
         }
         
         .status-option label i {
@@ -219,22 +241,22 @@
         }
         
         .status-option input:checked + label {
-            border-color: #999;
-            background-color: rgba(170, 170, 170, 0.1);
-            color: #555;
+            border-color: var(--wine);
+            background-color: rgba(114, 47, 55, 0.1);
+            color: var(--wine);
             font-weight: 600;
         }
         
         .status-option label i.fa-check-circle {
-            color: #7a9d7e;
+            color: var(--success);
         }
         
         .status-option label i.fa-pause-circle {
-            color: #d4a574;
+            color: var(--warning);
         }
         
         .status-option label i.fa-clock {
-            color: #8a8a8a;
+            color: var(--text-light);
         }
         
         /* Radio button styling for type of work */
@@ -261,11 +283,11 @@
             display: flex;
             align-items: center;
             padding: 12px 15px;
-            border: 2px solid #ddd;
+            border: 2px solid var(--border);
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
-            background-color: #f9f9f9;
+            background-color: var(--cream-light);
         }
         
         .work-type-option input {
@@ -280,21 +302,21 @@
         
         .work-type-option i {
             margin-right: 10px;
-            color: #888;
+            color: var(--wine-light);
         }
         
         .work-type-option input:checked + span {
             font-weight: 600;
-            color: #555;
+            color: var(--wine);
         }
         
         .work-type-option input:checked + span i {
-            color: #7a9d7e;
+            color: var(--success);
         }
         
         .work-type-option input:checked ~ .work-type-option {
-            border-color: #999;
-            background-color: rgba(170, 170, 170, 0.1);
+            border-color: var(--wine);
+            background-color: rgba(114, 47, 55, 0.1);
         }
         
         /* Checkbox styling */
@@ -312,6 +334,7 @@
         .checkbox-group label {
             margin-bottom: 0;
             font-weight: normal;
+            color: var(--text-dark);
         }
         
         /* Form actions */
@@ -321,13 +344,13 @@
             gap: 15px;
             margin-top: 40px;
             padding-top: 30px;
-            border-top: 2px solid #e8e8e8;
+            border-top: 2px solid var(--wine);
             justify-content: center;
         }
         
         .submit-btn {
-            background: linear-gradient(to right, #aaa, #888);
-            color: white;
+            background: linear-gradient(to right, var(--wine), var(--wine-dark));
+            color: var(--cream);
             border: none;
             padding: 16px 40px;
             font-size: 18px;
@@ -339,12 +362,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid var(--wine-dark);
         }
         
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(136, 136, 136, 0.3);
-            background: linear-gradient(to right, #999, #777);
+            box-shadow: 0 5px 15px rgba(114, 47, 55, 0.3);
+            background: linear-gradient(to right, var(--wine-light), var(--wine));
         }
         
         .submit-btn i {
@@ -352,9 +376,9 @@
         }
         
         .cancel-btn {
-            background-color: #f0f0f0;
-            color: #777;
-            border: 2px solid #ddd;
+            background-color: var(--cream);
+            color: var(--wine);
+            border: 2px solid var(--wine);
             padding: 16px 30px;
             font-size: 16px;
             font-weight: 600;
@@ -367,8 +391,8 @@
         }
         
         .cancel-btn:hover {
-            background-color: #e8e8e8;
-            border-color: #ccc;
+            background-color: var(--cream-dark);
+            border-color: var(--wine-dark);
         }
         
         .cancel-btn i {
@@ -379,8 +403,9 @@
         .decorative-circle {
             position: absolute;
             border-radius: 50%;
-            background-color: rgba(248, 248, 248, 0.3);
+            background-color: rgba(114, 47, 55, 0.1);
             z-index: -1;
+            border: 1px solid rgba(114, 47, 55, 0.2);
         }
         
         .circle-1 {
@@ -400,7 +425,7 @@
         /* Help text */
         .help-text {
             font-size: 13px;
-            color: #888;
+            color: var(--wine-light);
             margin-top: 5px;
             display: flex;
             align-items: center;
@@ -414,10 +439,10 @@
         .success-message {
             text-align: center;
             padding: 40px;
-            background-color: #f0f8f0;
+            background-color: rgba(46, 125, 50, 0.1);
             border-radius: 10px;
             margin-top: 20px;
-            border: 1px solid #d0e8d0;
+            border: 1px solid rgba(46, 125, 50, 0.2);
             display: none;
         }
         
@@ -431,18 +456,18 @@
         }
         
         .success-icon {
-            color: #7a9d7e;
+            color: var(--success);
             font-size: 60px;
             margin-bottom: 20px;
         }
         
         .success-message h2 {
-            color: #555;
+            color: var(--wine);
             margin-bottom: 15px;
         }
         
         .success-message p {
-            color: #777;
+            color: var(--text-light);
             margin-bottom: 25px;
             font-size: 16px;
         }
@@ -451,35 +476,251 @@
         footer {
             text-align: center;
             padding: 20px;
-            color: #888;
+            color: var(--text-light);
             font-size: 14px;
-            background-color: #f8f8f8;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            background-color: var(--cream);
+            border-top: 2px solid var(--wine);
         }
         
         footer a {
-            color: #777;
+            color: var(--wine);
             text-decoration: none;
             font-weight: 600;
-            border-bottom: 1px dotted #aaa;
+            border-bottom: 1px dotted var(--wine);
         }
+        
+        footer a:hover {
+            color: var(--wine-dark);
+        }
+        
         .profile {
-            border: 2px dashed #bbb;
+            border: 2px dashed var(--wine);
             border-radius: 22px;
             padding: 20px;
             width: 150px;
             height: 150px;
             cursor: pointer;
-            background-color: #fafafa;
+            background-color: var(--cream);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #999;
+            color: var(--wine);
             font-size: 14px;
             margin-bottom: 20px;
             justify-self: center;
             margin-top: 10px;
             margin-bottom: 40px;
+            transition: all 0.3s;
+        }
+        
+        .profile:hover {
+            background-color: var(--cream-dark);
+            border-color: var(--wine-dark);
+        }
+        
+        /* Custom input styles */
+        #work-type, #teacher_id, #pwd {
+            width: 100%;
+            padding: 14px 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background-color: var(--cream-light);
+            color: var(--text-dark);
+        }
+        
+        #work-type:focus, #teacher_id:focus, #pwd:focus {
+            outline: none;
+            border-color: var(--wine);
+            box-shadow: 0 0 0 3px rgba(114, 47, 55, 0.2);
+            background-color: white;
+        }
+        
+        /* Password strength indicator */
+        #password-strength {
+            font-size: 13px;
+            color: var(--wine-light);
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        #password-strength i {
+            margin-right: 5px;
+        }
+        
+        /* Placeholder styling */
+        ::placeholder {
+            color: var(--wine-light);
+            opacity: 0.7;
+        }
+        
+        /* Select dropdown styling */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23722F37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 15px;
+            padding-right: 45px;
+        }
+        
+        /* Success message links */
+        .success-message a {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--wine);
+            color: var(--cream);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 1px solid var(--wine-dark);
+        }
+        
+        .success-message a:hover {
+            background-color: var(--wine-dark);
+            transform: translateY(-2px);
+        }
+        
+        .success-message button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--cream);
+            color: var(--wine);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            border: 2px solid var(--wine);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .success-message button:hover {
+            background-color: var(--cream-dark);
+        }
+        
+        /* Hover effects */
+        .status-option label:hover {
+            border-color: var(--wine-light);
+            background-color: rgba(114, 47, 55, 0.05);
+        }
+        
+        .work-type-option:hover {
+            border-color: var(--wine-light);
+            background-color: rgba(114, 47, 55, 0.05);
+        }
+        
+        .profile:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(114, 47, 55, 0.1);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 15px;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            header h1 {
+                font-size: 24px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .form-section {
+                padding: 20px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .submit-btn, .cancel-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .status-options {
+                flex-direction: column;
+            }
+            
+            #work-type, #teacher_id, #pwd {
+                width: 100%;
+            }
+        }
+        
+        /* Focus states for accessibility */
+        input:focus, 
+        select:focus, 
+        textarea:focus, 
+        button:focus {
+            outline: 2px solid var(--wine);
+            outline-offset: 2px;
+        }
+        
+        /* Checkbox styling */
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--wine);
+        }
+        
+        /* Additional qualification section styling */
+        h2 {
+            color: var(--wine);
+            font-size: 22px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--wine-light);
+            display: flex;
+            align-items: center;
+        }
+        
+        h2 i {
+            margin-right: 12px;
+            color: var(--wine-light);
+        }
+        
+        /* Work type options styling */
+        .work-type-options input[type="text"] {
+            grid-column: span 3;
+        }
+        
+        @media (max-width: 768px) {
+            .work-type-options input[type="text"] {
+                grid-column: span 1;
+            }
+        }
+        
+        /* Profile section in grid */
+        #Profile {
+            grid-column: span 2;
+            display: flex;
+            justify-content: center;
+        }
+        
+        @media (max-width: 768px) {
+            #Profile {
+                grid-column: span 1;
+            }
+        }
+        
+        /* Form section without extra padding for qualification */
+        .form-section:first-of-type {
+            padding-top: 20px;
+        }
+        
+        /* Qualification section */
+        h2 + .form-grid {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -714,7 +955,7 @@
                      <div class="form-group">
                         <label class="required">Teacher id</label>
                         <div class="work-type-options">
-                           <input type="text" id="work-type" placeholder="SEDC-345" name="teacher_id">
+                           <input type="text" id="teacher_id" placeholder="SEDC-345" name="teacher_id">
                         </div>
                     </div>
                     <div class="form-group">
@@ -726,42 +967,7 @@
                              <i class="fas fa-info-circle"></i> Password Strength: 0/5
                         </div>
                 </div>
-                <style>
-                    #work-type {
-                        width: 500px;
-                        padding: 14px 15px;
-                        border: 2px solid #ddd;
-                        border-radius: 10px;
-                        font-size: 15px;
-                        transition: all 0.3s;
-                        background-color: #f9f9f9;
-                        color: #555;
-                    }
-
-                    #teacher_id{
-                        width: 500px;
-                        padding: 14px 15px;
-                        border: 2px solid #ddd;
-                        border-radius: 10px;
-                        font-size: 15px;
-                        transition: all 0.3s;
-                        background-color: #f9f9f9;
-                        color: #555;
-                    
-                    }
-
-                    #pwd{
-                         width: 500px;
-                        padding: 14px 15px;
-                        border: 2px solid #ddd;
-                        border-radius: 10px;
-                        font-size: 15px;
-                        transition: all 0.3s;
-                        background-color: #f9f9f9;
-                        color: #555;
-                    }
-                </style>
-
+                </div>
                 
                 <div class="form-group">
                     <label for="notes">Additional Notes</label>
@@ -793,10 +999,10 @@
             <h2>Staff Account Created Successfully!</h2>
             <p>The staff account has been created and added to the system. A confirmation email has been sent to the provided email address.</p>
             <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
-                <a href="#" style="display: inline-block; padding: 12px 30px; background-color: #aaa; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                <a href="#" style="display: inline-block; padding: 12px 30px; background-color: var(--wine); color: var(--cream); text-decoration: none; border-radius: 8px; font-weight: 600;">
                     <i class="fas fa-eye"></i> View Account
                 </a>
-                <a href="#" style="display: inline-block; padding: 12px 30px; background-color: #f0f0f0; color: #777; text-decoration: none; border-radius: 8px; font-weight: 600; border: 2px solid #ddd;">
+                <a href="#" style="display: inline-block; padding: 12px 30px; background-color: var(--cream); color: var(--wine); text-decoration: none; border-radius: 8px; font-weight: 600; border: 2px solid var(--wine);">
                     <i class="fas fa-plus"></i> Create Another
                 </a>
             </div>
@@ -808,6 +1014,7 @@
         </footer>
     </div>
 
+    <!-- ALL JAVASCRIPT CODE REMAINS EXACTLY THE SAME -->
     <!-- Set default date to today -->
     <script>
           //display image preview

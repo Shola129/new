@@ -3,58 +3,709 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ALMA Staff Directory</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Wine and Cream Color Palette */
+        :root {
+            --wine-primary: #722F37;
+            --wine-secondary: #8A3A43;
+            --wine-light: #9E4A54;
+            --wine-accent: #5A2329;
+            --cream-primary: #F7F3E3;
+            --cream-secondary: #F5F0E1;
+            --cream-dark: #E8E2D0;
+            --cream-light: #FDFBF5;
+            --text-dark: #333333;
+            --text-medium: #5A5A5A;
+            --text-light: #777777;
+            --success: #7a9d7e;
+            --warning: #d4a574;
+            --danger: #d47b7b;
+            --shadow-light: rgba(114, 47, 55, 0.1);
+            --shadow-medium: rgba(114, 47, 55, 0.15);
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--cream-primary);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Header Section */
+        .page-header {
+            background: linear-gradient(135deg, var(--wine-primary), var(--wine-secondary));
+            color: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px var(--shadow-medium);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--wine-accent), var(--wine-light));
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-text h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header-text p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        /* Back Button */
+        .back-button {
+            background-color: var(--cream-light);
+            color: var(--wine-primary);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-button:hover {
+            background-color: var(--cream-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .back-button i {
+            font-size: 1.1rem;
+        }
+
+        /* Staff Stats */
+        .staff-stats {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background-color: var(--cream-light);
+            border-radius: 10px;
+            padding: 20px 30px;
+            text-align: center;
+            box-shadow: 0 4px 8px var(--shadow-light);
+            border: 1px solid var(--cream-dark);
+            min-width: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px var(--shadow-medium);
+        }
+
+        .stat-card h3 {
+            font-size: 2.5rem;
+            color: var(--wine-primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-card p {
+            color: var(--wine-light);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* Staff Grid */
+        .staff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        /* Staff Card */
+        .staff-card {
+            background-color: var(--cream-light);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            transition: all 0.3s ease;
+            border: 1px solid var(--cream-dark);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .staff-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px var(--shadow-medium);
+            border-color: var(--wine-light);
+        }
+
+        .staff-header {
+            background: linear-gradient(135deg, var(--wine-primary), var(--wine-secondary));
+            padding: 25px 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .staff-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--wine-accent), var(--wine-light));
+        }
+
+        .staff-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background-color: var(--cream-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 4px solid var(--cream-light);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        .staff-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .staff-avatar .avatar-placeholder {
+            color: var(--wine-primary);
+            font-size: 2.5rem;
+        }
+
+        .staff-info {
+            flex: 1;
+        }
+
+        .staff-info h3 {
+            color: white;
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .staff-info p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .staff-position {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .staff-details {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--cream-dark);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .detail-label {
+            color: var(--wine-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex: 1;
+        }
+
+        .detail-value {
+            color: var(--text-medium);
+            font-size: 0.95rem;
+            text-align: right;
+            flex: 1;
+            font-weight: 500;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .status-active {
+            background-color: rgba(122, 157, 126, 0.15);
+            color: var(--success);
+        }
+
+        .status-inactive {
+            background-color: rgba(212, 165, 116, 0.15);
+            color: var(--warning);
+        }
+
+        .status-left {
+            background-color: rgba(212, 123, 123, 0.15);
+            color: var(--danger);
+        }
+
+        /* Staff Filters */
+        .staff-filters {
+            background-color: var(--cream-light);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px var(--shadow-light);
+            border: 1px solid var(--cream-dark);
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-header h2 {
+            color: var(--wine-primary);
+            font-size: 1.4rem;
+        }
+
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border: 2px solid var(--cream-dark);
+            border-radius: 6px;
+            background-color: var(--cream-light);
+            color: var(--text-medium);
+            font-size: 0.95rem;
+            cursor: pointer;
+            min-width: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--wine-light);
+            box-shadow: 0 0 0 3px rgba(114, 47, 55, 0.1);
+        }
+
+        .filter-btn {
+            background-color: var(--wine-primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background-color: var(--wine-secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .page-footer {
+            text-align: center;
+            padding: 25px;
+            color: var(--wine-light);
+            font-size: 0.9rem;
+            margin-top: 40px;
+            border-top: 1px solid var(--cream-dark);
+        }
+
+        .page-footer a {
+            color: var(--wine-primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: var(--cream-light);
+            border-radius: 12px;
+            border: 2px dashed var(--cream-dark);
+            margin: 40px 0;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--wine-light);
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            color: var(--wine-primary);
+            margin-bottom: 10px;
+            font-size: 1.6rem;
+        }
+
+        .empty-state p {
+            color: var(--text-medium);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--wine-primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(114, 47, 55, 0.3);
+            transition: all 0.3s ease;
+            z-index: 100;
+            border: none;
+        }
+
+        .scroll-top:hover {
+            background-color: var(--wine-secondary);
+            transform: translateY(-5px);
+        }
+
+        /* Loading State */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--cream-dark);
+            border-top: 5px solid var(--wine-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .staff-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 20px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-text h1 {
+                font-size: 1.8rem;
+            }
+
+            .staff-stats {
+                gap: 15px;
+            }
+
+            .stat-card {
+                min-width: 140px;
+                padding: 15px 20px;
+            }
+
+            .stat-card h3 {
+                font-size: 2rem;
+            }
+
+            .staff-header {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .staff-avatar {
+                width: 80px;
+                height: 80px;
+            }
+
+            .filter-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filter-controls {
+                width: 100%;
+            }
+
+            .filter-select {
+                min-width: 100%;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .detail-label, .detail-value {
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .staff-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .staff-stats {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stat-card {
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .scroll-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .back-button, .scroll-top, .filter-controls {
+                display: none !important;
+            }
+
+            .staff-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+
+            .page-header {
+                background: white !important;
+                color: black !important;
+                box-shadow: none;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--cream-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--wine-light);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--wine-secondary);
+        }
+    </style>
 </head>
 <body>
-    <a href="../Principal/index.html">
-        <button>
-            Back
-        </button>
-    </a>
-     <h1>List of staffs that have worked in ALMA</h1>
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTopBtn">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <div class="header-text">
+                <h1>ALMA Staff Directory</h1>
+                <p>Meet our dedicated team of educators and staff members who make Abundant Light Mega Academy a place of excellence</p>
+            </div>
+            <a href="../Principal/index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Staff Statistics -->
+    <div class="staff-stats" id="staffStats">
+        <div class="stat-card">
+            <h3 id="totalStaff">0</h3>
+            <p>Total Staff</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="activeStaff">0</h3>
+            <p>Active Staff</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="teachingStaff">0</h3>
+            <p>Teaching Staff</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="adminStaff">0</h3>
+            <p>Administrative Staff</p>
+        </div>
+    </div>
+
+    <!-- Staff Filters -->
+    <div class="staff-filters">
+        <div class="filter-header">
+            <h2><i class="fas fa-filter"></i> Filter Staff Members</h2>
+            <div class="filter-controls">
+                <select class="filter-select" id="positionFilter">
+                    <option value="">All Positions</option>
+                    <option value="Teacher">Teachers</option>
+                    <option value="Principal">Principal</option>
+                    <option value="Senior-HOD">Senior HOD</option>
+                    <option value="Junior-HOD">Junior HOD</option>
+                    <option value="primary-HM">Primary HM</option>
+                    <option value="pre-primary-HM">Pre-primary HM</option>
+                    <option value="Administrative">Administrative</option>
+                </select>
+                <select class="filter-select" id="statusFilter">
+                    <option value="">All Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Left">Left</option>
+                </select>
+                <button class="filter-btn" id="clearFilters">
+                    <i class="fas fa-times"></i> Clear Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staff Grid -->
     <div class="tab-content" id="staff-content">
-                    <div class="staff-grid" id="staff-contents">
-                        <!-- <div class="staff-card">
-                            <div class="staff-header">
-                                <div class="staff-avatar">RS</div>
-                                <div class="staff-info">
-                                    <h3>Robert Smith</h3>
-                                    <p>Mathematics Teacher</p>
-                                </div>
-                            </div>
-                            <div class="staff-details">
-                                <div class="detail-row">
-                                    <span class="detail-label">Employee ID:</span>
-                                    <span class="detail-value">EMP-0034</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">Joined:</span>
-                                    <span class="detail-value">January 2018</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">Email:</span>
-                                    <span class="detail-value">r.smith@willowcreek.edu</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">Status:</span>
-                                    <span class="detail-value" style="color: var(--color-success);">Active</span>
-                                </div>
-                            </div>
-                        </div> -->                    
-                </div>
-         </div>
-        <script>
-            document.addEventListener("DOMContentLoaded", function(){
-                staffInfo();
-            })
-    async function staffInfo(){
+        <div class="staff-grid" id="staff-contents">
+            <!-- Staff cards will be loaded here dynamically -->
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <p>Abundant Light Mega Academy &copy; 2024 | Staff Directory</p>
+        <p>This directory contains information about all staff members who have worked at ALMA</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            staffInfo();
+            setupEventListeners();
+        });
+
+        async function staffInfo(){
             event.preventDefault();
+            
+            // Show loading spinner
+            document.getElementById('loadingSpinner').style.display = 'flex';
+            document.getElementById('staff-contents').innerHTML = '';
+            
             try{
                 const response = await fetch('/teacher-info', {
                     method:"POST",
                     headers:{'Content-type':'application/json'}
-                    // body:JSON.stringify(data)
                 });
+                
                 if(!response.ok){
                     throw new Error (`Error discussed ${response.status}`); 
                 }
@@ -62,202 +713,202 @@
                     const result= await response.json();
                     const conv = JSON.parse(result);
                     let output='';
+                    let totalStaff = conv.length;
+                    let activeStaff = 0;
+                    let teachingStaff = 0;
+                    let adminStaff = 0;
+                    
                     for(let i=0; i < conv.length; i++){
-                        output+=`
-                        <div class="staff-card">
+                        // Count statistics
+                        if(conv[i].status === 'Active') activeStaff++;
+                        if(conv[i].position && (conv[i].position.includes('Teacher') || conv[i].position.includes('HOD') || conv[i].position.includes('HM'))) teachingStaff++;
+                        if(conv[i].position && conv[i].position.includes('Administrative')) adminStaff++;
+                        
+                        // Determine status badge class
+                        let statusClass = 'status-active';
+                        if(conv[i].status === 'Inactive') statusClass = 'status-inactive';
+                        if(conv[i].status === 'Left') statusClass = 'status-left';
+                        
+                        output += `
+                        <div class="staff-card" data-position="${conv[i].position || ''}" data-status="${conv[i].status || ''}">
                             <div class="staff-header">
-                                <div class="staff-avatar"><img class="upload-profile" src="${'/uploads/'+conv[i].profile}" alt="""></div>
+                                <div class="staff-avatar">
+                                    ${conv[i].profile ? 
+                                        `<img src="${'/uploads/'+conv[i].profile}" alt="${conv[i].name}">` : 
+                                        `<div class="avatar-placeholder"><i class="fas fa-user-tie"></i></div>`
+                                    }
+                                </div>
                                 <div class="staff-info">
-                                    <h3>${conv[i].name}</h3>
+                                    <h3>${conv[i].name || 'Staff Member'}</h3>
+                                    ${conv[i].position ? `<span class="staff-position">${conv[i].position}</span>` : ''}
                                 </div>
                             </div>
                             <div class="staff-details">
                                 <div class="detail-row">
                                     <span class="detail-label">Employee ID:</span>
-                                    <span class="detail-value">${conv[i].teacher_id}</span>
+                                    <span class="detail-value">${conv[i].teacher_id || 'N/A'}</span>
                                 </div>
                                 <div class="detail-row">
                                     <span class="detail-label">Joined:</span>
-                                    <span class="detail-value">${conv[i].time_joined}</span>
+                                    <span class="detail-value">${conv[i].time_joined || 'N/A'}</span>
                                 </div>
                                 <div class="detail-row">
                                     <span class="detail-label">Email:</span>
-                                    <span class="detail-value">${conv[i].email}</span>
+                                    <span class="detail-value">${conv[i].email || 'N/A'}</span>
                                 </div>
-                                 <div class="detail-row">
+                                <div class="detail-row">
                                     <span class="detail-label">Address:</span>
-                                    <span class="detail-value">${conv[i].address}</span>
+                                    <span class="detail-value">${conv[i].address || 'N/A'}</span>
                                 </div>
                                 <div class="detail-row">
                                     <span class="detail-label">Status:</span>
-                                    <span class="detail-value" style="color: var(--color-success);">${conv[i].status}</span>
+                                    <span class="detail-value"><span class="status-badge ${statusClass}">${conv[i].status || 'N/A'}</span></span>
                                 </div>
-                                 <div class="detail-row">
-                                    <span class="detail-label">Position</span>
-                                    <span class="detail-value">${conv[i].position}</span>
+                                <div class="detail-row">
+                                    <span class="detail-label">Position:</span>
+                                    <span class="detail-value">${conv[i].position || 'N/A'}</span>
                                 </div>
-                                 <div class="detail-row">
-                                    <span class="detail-label">Subject</span>
-                                    <span class="detail-value">${conv[i].subject}</span>
+                                <div class="detail-row">
+                                    <span class="detail-label">Subject:</span>
+                                    <span class="detail-value">${conv[i].subject || 'N/A'}</span>
                                 </div>
-                                 <div class="detail-row">
-                                    <span class="detail-label">Teacher to Which Class</span>
-                                    <span class="detail-value">${conv[i].class_head}</span>
+                                <div class="detail-row">
+                                    <span class="detail-label">Class Teacher:</span>
+                                    <span class="detail-value">${conv[i].class_head || 'N/A'}</span>
                                 </div>
-                                 <div class="detail-row">
-                                    <span class="detail-label">Relative Phone No</span>
-                                    <span class="detail-value">${conv[i].relative_phone}</span>
+                                <div class="detail-row">
+                                    <span class="detail-label">Relative Phone:</span>
+                                    <span class="detail-value">${conv[i].relative_phone || 'N/A'}</span>
                                 </div>
-                                 <div class="detail-row">
-                                    <span class="detail-label">qualification</span>
-                                    <span class="detail-value">${conv[i].qualification}</span>
+                                <div class="detail-row">
+                                    <span class="detail-label">Qualification:</span>
+                                    <span class="detail-value">${conv[i].qualification || 'N/A'}</span>
                                 </div>
-                                 <div class="detail-row">
-                                    <span class="detail-label">Phone Number</span>
-                                    <span class="detail-value">${conv[i].personal_phone}</span>
+                                <div class="detail-row">
+                                    <span class="detail-label">Phone Number:</span>
+                                    <span class="detail-value">${conv[i].personal_phone || 'N/A'}</span>
                                 </div>
-                                 <div class="detail-row">
-                                    <span class="detail-label">Work type</span>
-                                    <span class="detail-value">${conv[i].work_type}</span>
+                                <div class="detail-row">
+                                    <span class="detail-label">Work Type:</span>
+                                    <span class="detail-value">${conv[i].work_type || 'N/A'}</span>
                                 </div>
-                                 
                             </div>
                         </div>
-                        `
+                        `;
                     }
-                    document.getElementById('staff-contents').innerHTML=output;
+                    
+                    // Update statistics
+                    document.getElementById('totalStaff').textContent = totalStaff;
+                    document.getElementById('activeStaff').textContent = activeStaff;
+                    document.getElementById('teachingStaff').textContent = teachingStaff;
+                    document.getElementById('adminStaff').textContent = adminStaff;
+                    
+                    // Hide loading spinner and show content
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                    document.getElementById('staff-contents').innerHTML = output;
+                    
+                    // If no staff found
+                    if(conv.length === 0) {
+                        document.getElementById('staff-contents').innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-users-slash"></i>
+                                <h3>No Staff Members Found</h3>
+                                <p>There are currently no staff members in the directory. Please check back later or contact the administrator.</p>
+                            </div>
+                        `;
+                    }
+                    
+                    // Initialize filter functionality
+                    initializeFilters();
                 }
             }
             catch(error){
                 console.log(error.message);
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('staff-contents').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error Loading Staff Directory</h3>
+                        <p>Unable to load staff information. Please try again later or contact the administrator if the problem persists.</p>
+                    </div>
+                `;
             }
         }
-        </script>
-        <style>
-             .tab-content {
-           
-            padding: 30px;
-        }
-         .staff-card {
-            background-color: rgb(233, 220, 220);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
-            width: 15%;
-            padding: 40px;
+
+        function setupEventListeners() {
+            // Scroll to top button
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
             
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    scrollTopBtn.style.display = 'flex';
+                } else {
+                    scrollTopBtn.style.display = 'none';
+                }
+            });
+            
+            scrollTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
         }
-        
-        .tab-content.active {
-            display: block;
-        }
-          .staff-grid {
-               display: flex;
-               flex-wrap: wrap;
-               gap: 35px;
+
+        function initializeFilters() {
+            const positionFilter = document.getElementById('positionFilter');
+            const statusFilter = document.getElementById('statusFilter');
+            const clearFiltersBtn = document.getElementById('clearFilters');
+            const staffCards = document.querySelectorAll('.staff-card');
+            
+            function filterStaff() {
+                const positionValue = positionFilter.value;
+                const statusValue = statusFilter.value;
+                let visibleCount = 0;
+                
+                staffCards.forEach(card => {
+                    const cardPosition = card.getAttribute('data-position') || '';
+                    const cardStatus = card.getAttribute('data-status') || '';
+                    
+                    const positionMatch = !positionValue || cardPosition.includes(positionValue);
+                    const statusMatch = !statusValue || cardStatus === statusValue;
+                    
+                    if (positionMatch && statusMatch) {
+                        card.style.display = 'flex';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Show empty state if no cards match
+                if (visibleCount === 0) {
+                    document.getElementById('staff-contents').innerHTML += `
+                        <div class="empty-state" id="noResultsState">
+                            <i class="fas fa-search"></i>
+                            <h3>No Matching Staff Members</h3>
+                            <p>No staff members match your selected filters. Try changing your filter criteria.</p>
+                        </div>
+                    `;
+                } else {
+                    const noResultsState = document.getElementById('noResultsState');
+                    if (noResultsState) noResultsState.remove();
+                }
             }
-            @media (max-width: 992px) {
-            .dashboard-container {
-                flex-direction: column;
-            }
             
-            .profile-sidebar {
-                width: 100%;
-                padding: 20px;
-            }
+            positionFilter.addEventListener('change', filterStaff);
+            statusFilter.addEventListener('change', filterStaff);
             
-            .profile-stats {
-                justify-content: space-between;
-            }
-            
-            .mobile-navbar {
-                display: block;
-            }
-            
-            /* .tabs-header {
-                display: none;
-            } */
-            
-            .tab-content {
-                padding: 20px;
-            }
-          
-        
-        .staff-card {
-            background-color: rgb(233, 220, 220);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
-            width: 100%;
-            padding: 40px;
-            
+            clearFiltersBtn.addEventListener('click', function() {
+                positionFilter.value = '';
+                statusFilter.value = '';
+                staffCards.forEach(card => {
+                    card.style.display = 'flex';
+                });
+                const noResultsState = document.getElementById('noResultsState');
+                if (noResultsState) noResultsState.remove();
+            });
         }
-        
-        .staff-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .staff-header {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            background-color: var(--color-cream-dark);
-        }
-        
-        .staff-avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background-color: var(--color-ashes);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-right: 15px;
-        }
-        
-        .staff-info h3 {
-            color: var(--color-accent);
-            margin-bottom: 5px;
-        }
-        
-        .staff-info p {
-            color: var(--color-text-light);
-            font-size: 0.9rem;
-        }
-        
-        .staff-details {
-            padding: 20px;
-        }
-        
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--color-cream);
-        }
-        
-        .detail-label {
-            color: var(--color-text-light);
-        }
-        
-        .detail-value {
-            font-weight: 600;
-            color: var(--color-text);
-        }
-        }
-         .upload-profile{
-            /* Profile image styling */
-            background-size: cover;
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-        }
-        </style>
+    </script>
 </body>
 </html>

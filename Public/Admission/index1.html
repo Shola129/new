@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Admission Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f0f9ff;
+            color: #333;
+            line-height: 1.5;
+            padding: 20px;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(to right, #4a90e2, #63b3ed);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .school-logo {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        /* Form Sections */
+        .form-section {
+            padding: 25px;
+            border-bottom: 2px dashed #e0f2fe;
+        }
+        
+        .form-section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            color: #1e40af;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #dbeafe;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: #3b82f6;
+        }
+        
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #1e3a8a;
+            font-size: 0.95rem;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #ef4444;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #f8fafc;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Radio and Checkbox */
+        .option-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 8px;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-item input {
+            width: auto;
+        }
+        
+        /* Form Row for two columns */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        @media (min-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        /* Age Display */
+        .age-display {
+            background-color: #e0f2fe;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #1e40af;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Info Box */
+        .info-box {
+            background-color: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .info-box h4 {
+            color: #1e40af;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Buttons */
+        .form-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 25px;
+            background-color: #f8fafc;
+        }
+        
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-width: 160px;
+            transition: all 0.3s;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(to right, #3b82f6, #1d4ed8);
+            color: white;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(to right, #1d4ed8, #3b82f6);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(29, 78, 216, 0.2);
+        }
+        
+        .reset-btn {
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 2px solid #cbd5e1;
+        }
+        
+        .reset-btn:hover {
+            background-color: #e2e8f0;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.9rem;
+            background-color: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        /* Required Note */
+        .required-note {
+            text-align: center;
+            padding: 15px;
+            color: #ef4444;
+            font-size: 0.9rem;
+            background-color: #fef2f2;
+            border-bottom: 1px solid #fee2e2;
+        }
+        
+        /* Simple Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background-color: #e0f2fe;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #3b82f6;
+            width: 25%; /* Will be updated by form completion */
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+        
+        /* Simple responsive adjustments */
+        @media (max-width: 600px) {
+            .form-buttons {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .form-section {
+                padding: 20px 15px;
+            }
+        }
+        
+        /* Field Note */
+        .field-note {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        /* Grade Level Specific Fields */
+        .grade-specific {
+            background-color: #f0f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px dashed #bfdbfe;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="school-logo">
+                <i class="fas fa-school"></i>
+            </div>
+            <h1>Sunshine Academy</h1>
+            <p class="subtitle">Admission Form for Secondary & Junior School</p>
+        </header>
+        
+        <!-- Progress Indicator -->
+        <div class="progress-bar">
+            <div class="progress" id="form-progress"></div>
+        </div>
+        <div class="progress-text">Form Completion: <span id="progress-text">25%</span></div>
+        
+        <!-- Required Note -->
+        <div class="required-note">
+            <i class="fas fa-exclamation-circle"></i> Fields marked with * are required
+        </div>
+        
+        <!-- Form -->
+        <form action="#" method="post">
+            <!-- Student Information -->
+            <section class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-child"></i>
+                    <h2>Student Information</h2>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="student-name" class="required">Student's Full Name</label>
+                        <input type="text" id="student-name" name="student-name" required placeholder="First and Last Name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dob" class="required">Date of Birth</label>
+                        <input type="date" id="dob" name="dob" required>
+                        <div class="age-display">
+                            <i class="fas fa-birthday-cake"></i>
+                            <span id="age-display">Age will be calculated automatically</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required">Gender</label>
+                        <div class="option-group">
+                            <div class="option-item">
+                                <input type="radio" id="male" name="gender" value="male" required>
+                                <label for="male">Male</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" id="female" name="gender" value="female">
+                                <label for="female">Female</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nationality" class="required">Nationality</label>
+                        <input type="text" id="nationality" name="nationality" required placeholder="e.g., Indian">
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <h4><i class="fas fa-info-circle"></i> Note</h4>
+                    <p>Please ensure the student's name matches their birth certificate or official documents.</p>
+                </div>
+            </section>
+            
+            <!-- School & Grade Information -->
+            <section class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h2>School & Grade Information</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label for="apply-grade" class="required">Grade Applying For</label>
+                    <select id="apply-grade" name="apply-grade" required>
+                        <option value="">Select Grade</option>
+                        <optgroup label="Junior School">
+                            <option value="grade-1">Grade 1</option>
+                            <option value="grade-2">Grade 2</option>
+                            <option value="grade-3">Grade 3</option>
+                            <option value="grade-4">Grade 4</option>
+                            <option value="grade-5">Grade 5</option>
+                        </optgroup>
+                        <optgroup label="Secondary School">
+                            <option value="grade-6">Grade 6</option>
+                            <option value="grade-7">Grade 7</option>
+                            <option value="grade-8">Grade 8</option>
+                            <option value="grade-9">Grade 9</option>
+                            <option value="grade-10">Grade 10</option>
+                        </optgroup>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="current-school" class="required">Current School</label>
+                        <input type="text" id="current-school" name="current-school" required placeholder="Name of current school">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="current-grade" class="required">Current Grade</label>
+                        <select id="current-grade" name="current-grade" required>
+                            <option value="">Select Current Grade</option>
+                            <option value="nursery">Nursery</option>
+                            <option value="kg">Kindergarten</option>
+                            <option value="grade-1">Grade 1</option>
+                            <option value="grade-2">Grade 2</option>
+                            <option value="grade-3">Grade 3</option>
+                            <option value="grade-4">Grade 4</option>
+                            <option value="grade-5">Grade 5</option>
+                            <option value="grade-6">Grade 6</option>
+                            <option value="grade-7">Grade 7</option>
+                            <option value="grade-8">Grade 8</option>
+                            <option value="grade-9">Grade 9</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="grade-specific" id="junior-fields">
+                    <h4>For Junior School Applicants (Grades 1-5)</h4>
+                    <div class="form-group">
+                        <label for="reading-level">Reading Level</label>
+                        <select id="reading-level" name="reading-level">
+                            <option value="">Select Reading Level</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="grade-specific" id="secondary-fields" style="display:none;">
+                    <h4>For Secondary School Applicants (Grades 6-10)</h4>
+                    <div class="form-group">
+                        <label for="fav-subject">Favorite Subject</label>
+                        <input type="text" id="fav-subject" name="fav-subject" placeholder="e.g., Mathematics, Science">
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Parent/Guardian Information -->
+            <section class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-users"></i>
+                    <h2>Parent/Guardian Information</h2>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="parent-name" class="required">Parent/Guardian Name</label>
+                        <input type="text" id="parent-name" name="parent-name" required placeholder="Full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="relationship" class="required">Relationship to Student</label>
+                        <select id="relationship" name="relationship" required>
+                            <option value="">Select Relationship</option>
+                            <option value="mother">Mother</option>
+                            <option value="father">Father</option>
+                            <option value="guardian">Guardian</option>
+                            <option value="grandparent">Grandparent</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="parent-email" class="required">Email Address</label>
+                        <input type="email" id="parent-email" name="parent-email" required placeholder="parent@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="parent-phone" class="required">Phone Number</label>
+                        <input type="tel" id="parent-phone" name="parent-phone" required placeholder="10-digit mobile number">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="parent-occupation">Parent Occupation</label>
+                    <input type="text" id="parent-occupation" name="parent-occupation" placeholder="Occupation">
+                </div>
+                
+                <div class="form-group">
+                    <label for="address" class="required">Home Address</label>
+                    <textarea id="address" name="address" rows="3" required placeholder="Complete home address"></textarea>
+                </div>
+            </section>
+            
+            <!-- Medical Information -->
+            <section class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-heartbeat"></i>
+                    <h2>Medical Information</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label for="allergies">Allergies (if any)</label>
+                    <input type="text" id="allergies" name="allergies" placeholder="e.g., Peanuts, Dust, Penicillin">
+                    <p class="field-note">Please list all known allergies</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="medical-conditions">Medical Conditions</label>
+                    <textarea id="medical-conditions" name="medical-conditions" rows="3" placeholder="Any medical conditions we should know about"></textarea>
+                    <p class="field-note">Leave blank if none</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="medications">Regular Medications</label>
+                    <input type="text" id="medications" name="medications" placeholder="Medications taken regularly">
+                </div>
+            </section>
+            
+            <!-- Transportation -->
+            <section class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-bus"></i>
+                    <h2>Transportation</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Transportation Needed?</label>
+                    <div class="option-group">
+                        <div class="option-item">
+                            <input type="radio" id="transport-yes" name="transport" value="yes" required>
+                            <label for="transport-yes">Yes, school bus required</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="transport-no" name="transport" value="no">
+                            <label for="transport-no">No, private transport</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bus-stop">Nearest Bus Stop (if bus required)</label>
+                    <input type="text" id="bus-stop" name="bus-stop" placeholder="Nearest bus stop to your home">
+                </div>
+            </section>
+            
+            <!-- Declaration & Submit -->
+            <section class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-file-signature"></i>
+                    <h2>Declaration</h2>
+                </div>
+                
+                <div class="form-group">
+                    <div class="option-item">
+                        <input type="checkbox" id="declaration" name="declaration" required>
+                        <label for="declaration" class="required">I certify that all information provided is true and accurate to the best of my knowledge.</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="option-item">
+                        <input type="checkbox" id="permission" name="permission" required>
+                        <label for="permission" class="required">I give permission for my child to participate in school activities and field trips.</label>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <h4><i class="fas fa-envelope"></i> What happens next?</h4>
+                    <p>After submitting this form, our admissions office will contact you within 5 working days to schedule an interview/assessment. Please bring original documents for verification.</p>
+                </div>
+            </section>
+            
+            <!-- Buttons -->
+            <div class="form-buttons">
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Submit Application
+                </button>
+                <button type="reset" class="reset-btn">
+                    <i class="fas fa-redo"></i> Clear Form
+                </button>
+            </div>
+        </form>
+        
+        <!-- Footer -->
+        <footer>
+            <p><strong>Sunshine Academy Admissions Office</strong></p>
+            <p>Phone: (022) 1234-5678 | Email: admissions@sunshine.edu</p>
+            <p>Office Hours: Monday-Friday, 9:00 AM - 4:00 PM</p>
+            <p>© 2023 Sunshine Academy. Simple admission form with HTML & CSS only.</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Simple script for age calculation and grade-specific fields
+        // This is minimal JavaScript for UX enhancement only
+        document.addEventListener('DOMContentLoaded', function() {
+            // Age calculation when date of birth changes
+            const dobInput = document.getElementById('dob');
+            const ageDisplay = document.getElementById('age-display');
+            
+            dobInput.addEventListener('change', function() {
+                if (dobInput.value) {
+                    const birthDate = new Date(dobInput.value);
+                    const today = new Date();
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const monthDiff = today.getMonth() - birthDate.getMonth();
+                    
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    
+                    ageDisplay.textContent = `Student will be ${age} years old`;
+                    
+                    // Update progress bar
+                    updateProgressBar();
+                }
+            });
+            
+            // Show/hide grade-specific fields
+            const gradeSelect = document.getElementById('apply-grade');
+            const juniorFields = document.getElementById('junior-fields');
+            const secondaryFields = document.getElementById('secondary-fields');
+            
+            gradeSelect.addEventListener('change', function() {
+                const selectedGrade = gradeSelect.value;
+                
+                if (selectedGrade && (selectedGrade === 'grade-1' || selectedGrade === 'grade-2' || 
+                    selectedGrade === 'grade-3' || selectedGrade === 'grade-4' || selectedGrade === 'grade-5')) {
+                    juniorFields.style.display = 'block';
+                    secondaryFields.style.display = 'none';
+                } else if (selectedGrade && (selectedGrade === 'grade-6' || selectedGrade === 'grade-7' || 
+                    selectedGrade === 'grade-8' || selectedGrade === 'grade-9' || selectedGrade === 'grade-10')) {
+                    juniorFields.style.display = 'none';
+                    secondaryFields.style.display = 'block';
+                } else {
+                    juniorFields.style.display = 'none';
+                    secondaryFields.style.display = 'none';
+                }
+                
+                // Update progress bar
+                updateProgressBar();
+            });
+            
+            // Form progress indicator
+            function updateProgressBar() {
+                // Simple progress calculation based on filled required fields
+                const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
+                let filledCount = 0;
+                
+                requiredFields.forEach(field => {
+                    if (field.type === 'radio' || field.type === 'checkbox') {
+                        const name = field.name;
+                        const checked = document.querySelector(`input[name="${name}"]:checked`);
+                        if (checked) filledCount++;
+                    } else if (field.value.trim() !== '') {
+                        filledCount++;
+                    }
+                });
+                
+                const progressPercentage = Math.min(100, Math.round((filledCount / requiredFields.length) * 100));
+                const progressBar = document.getElementById('form-progress');
+                const progressText = document.getElementById('progress-text');
+                
+                progressBar.style.width = `${progressPercentage}%`;
+                progressText.textContent = `${progressPercentage}%`;
+                
+                // Change color based on progress
+                if (progressPercentage < 30) {
+                    progressBar.style.backgroundColor = '#ef4444';
+                } else if (progressPercentage < 70) {
+                    progressBar.style.backgroundColor = '#f59e0b';
+                } else {
+                    progressBar.style.backgroundColor = '#10b981';
+                }
+            }
+            
+            // Update progress when any form field changes
+            const form = document.querySelector('form');
+            form.addEventListener('input', updateProgressBar);
+            form.addEventListener('change', updateProgressBar);
+            
+            // Initial progress calculation
+            updateProgressBar();
+        });
+    </script>
+</body>
+</html>
