@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Abuntant Light Mega Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+
+    </style>
+</head>
+<body>
+    <!-- Login Container -->
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Login Header -->
+            <div class="login-header">
+                <div class="school-logo">
+                    <div class="logo-icon">AlM</div>
+                    <div class="school-name">Abuntant Light Mega Academy</div>
+                </div>
+                <h2 class="login-title">Student Login Portal</h2>
+            </div>
+            
+            <!-- Login Form -->
+            <form>
+                <!-- Username Input -->
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-with-icon">
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Admission Number" required>
+                    </div>
+                    <span class="explanation">Use your school-provided username. For students: Student ID. For staff: Employee ID or email.</span>
+                </div>
+                
+                <!-- Password Input -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-with-icon">
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                        <!-- Password visibility toggle - CSS only implementation -->
+                        <button type="button" class="password-toggle" id="togglePassword" aria-label="Show password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <span class="explanation">Your password is case-sensitive. Contact IT support if you've forgotten your password.</span>
+                </div>
+                
+                <!-- Form Options -->
+                <!-- <div class="form-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Remember me on this device</label>
+                    </div>
+                </div> -->
+                
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn" onclick="postData()">
+                    <i class="fas fa-sign-in-alt"></i> Login to Portal
+                </button>
+            </form>
+            
+            <!-- Demo Credentials Section -->
+           
+            
+            <!-- Login Footer -->
+            <div class="login-footer">
+                <!-- <p>Having trouble signing in? Ensure you have selected the correct role and check your credentials.</p> -->
+                <a href="#" class="help-link">
+                    <i class="fas fa-question-circle"></i> Need Help?
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simple CSS-only password toggle -->
+    <style>
+        /* Password toggle using CSS only */
+        #password {
+            padding-right: 50px;
+        }
+        
+        /* Hide the default password toggle button */
+        .password-toggle {
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+        
+        /* Show password functionality using CSS only */
+        #togglePassword:focus + .input-icon + #password,
+        #togglePassword:active + .input-icon + #password {
+            -webkit-text-security: none;
+        }
+        
+        /* Alternative method using checkbox hack for CSS-only password toggle */
+        /* This method requires a checkbox instead of a button */
+    </style>
+
+    <!-- Fallback for password toggle with pure CSS (using checkbox hack) -->
+    <div class="visually-hidden">
+        <input type="checkbox" id="showPasswordToggle">
+        <label for="showPasswordToggle">Show Password</label>
+    </div>
+    
+    <style>
+        /* CSS-only password visibility toggle using :checked state */
+        #showPasswordToggle:checked ~ .login-container .login-card .login-form #password {
+            -webkit-text-security: none;
+        }
+        
+        /* Update the eye icon when password is visible */
+        #showPasswordToggle:checked ~ .login-container .login-card .login-form .password-toggle i::before {
+            content: "\f070"; /* fa-eye-slash */
+        }
+    </style>
+    
+    <!-- Simple script-free way to make the password toggle work -->
+    <!-- We'll use a label to toggle the hidden checkbox -->
+    <script>
+        // This minimal script is only for the password toggle functionality
+        // Since the requirement is "no javascript", this is optional
+        // But it provides a better UX. Remove if JavaScript must be completely avoided.
+
+        async function fetchDataFromBackend(){
+            try{
+                const response = await fetch('http://localhost:4000/student-login');
+                if(!response.ok){
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                displayData(data);
+                console.log('Frontend received:', data);
+            }
+            catch(error){
+                console.log(`Error fetching data:`, error.message);
+            }
+        }
+
+        function displayData(data){
+            alert(`${data.message}`);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.querySelector('.password-toggle');
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = togglePassword.querySelector('i');
+            
+            if (togglePassword && passwordInput) {
+                togglePassword.addEventListener('click', function() {
+                    // Toggle the password field type
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    // Toggle the eye icon
+                    if (type === 'password') {
+                        eyeIcon.classList.remove('fa-eye-slash');
+                        eyeIcon.classList.add('fa-eye');
+                    } else {
+                        eyeIcon.classList.remove('fa-eye');
+                        eyeIcon.classList.add('fa-eye-slash');
+                    }
+                });
+            }
+        });
+
+        //send and receive data 
+        async function postData(){
+            event.preventDefault();
+            let id = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+
+            const holdData = {
+                id:id,
+                password:password
+            }
+            
+            try{
+                const response = await fetch('/student-login', {
+                    method:'POST',
+                    headers:{
+                        'Content-type':'application/json'
+                    },
+                    body:JSON.stringify(holdData)
+                });
+                if(!response.ok){
+                    if(response.status==404){
+                        alert('Student record not found');
+                    }
+                    else if(response.status==400){
+                        alert("please enter all required fields.");
+                    }
+                    else if(response.status==403){
+                        alert('incorrect password');
+                    }
+                    // alert(`HTTP error status: ${response.errmes.message}`);
+                }
+                else{
+                        const result = await response.json();
+                        const convert = JSON.parse(result);
+                        alert(`Login Successful! Welcome, ${convert.name}`);
+                        console.log('Success:', convert);
+                        setTimeout(() => {
+                            window.location.href='/Public/Portal/Student/index.html';
+                        }, 5000);
+                }
+            }
+            catch(error){
+                console.log(error.message);
+            }
+        }
+    </script>
+</body>
+</html>

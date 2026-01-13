@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abundant Light Mega Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+    <!-- Header with Logo -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-icon">ALM</div>
+                <div class="logo-text">Abundant Light Mega <span>Academy</span></div>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <ul>
+                    <li><a href="#home">HOME</a></li>
+                    <li><a href="./Login/student-login.html">STUDENTS</a></li>
+                    <li><a href="./Login/staff-login.html">STAFFS</a></li>
+                    <li><a href="./Login/headStaffs.html">Head Of Staff</a></li>
+                    <li><a href="#programs">ADMISSION</a></li>
+                    <li><a href="">CALLENDER</a></li>
+                    <li><a href="">EVENTS & NEWS</a></li>
+                    <li><a href="#contacts">CONTACTS</a></li>
+                </ul>
+            </nav>
+            
+            <!-- Mobile Navigation Toggle -->
+            <div class="mobile-nav-toggle" id="mobileNavToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation Menu -->
+        <div class="mobile-nav" id="mobileNav">
+            <div class="mobile-nav-close" id="mobileNavClose">&times;</div>
+            <ul>
+                <li><a href="#home" class="mobile-nav-link">HOME</a></li>
+                <li><a href="">ADMISSION</a></li>
+                <li><a href="./Login/student-login.html" class="mobile-nav-link">STUDENTS</a></li>
+                <li><a href="./Login/staff-login.html" class="mobile-nav-link">STAFFS</a></li>
+                <li><a href="./Login/headStaffs.html">Head Of Staff</a></li>
+                <li><a href="" class="mobile-nav-link">CALLENDER</a></li>
+                <li><a href="" class="mobile-nav-link">EVENTS & NEWS</a></li>
+                <li><a href="" class="mobile-nav-link">CONTACTS</a></li>
+            </ul>
+        </div>
+        
+        <!-- Mobile Navigation Overlay -->
+        <div class="mobile-overlay" id="mobileOverlay"></div>
+    </header>
+
+    <!-- Hero Section with Background Image -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1>Excellence in Education Since 1995</h1>
+            <p>Abundant Light Mega AcademyS provides a holistic learning environment that nurtures intellectual, social, and emotional growth for students from preschool through high school.</p>
+        </div>
+    </section>
+
+    <!-- Mission and Vision -->
+    <section class="mission-vision">
+        <div class="container">
+            <h2 class="section-title">Our Mission & Vision</h2>
+            <div class="mv-container">
+                <div class="mv-box">
+                    <i class="fas fa-bullseye"></i>
+                    <h3>Our Mission</h3>
+                    <p>To provide a transformative educational experience that empowers students to become critical thinkers, compassionate leaders, and responsible global citizens through a rigorous curriculum and nurturing environment.</p>
+                </div>
+                <div class="mv-box">
+                    <i class="fas fa-eye"></i>
+                    <h3>Our Vision</h3>
+                    <p>To be recognized as a premier educational institution that cultivates innovation, embraces diversity, and prepares students to excel in an ever-changing world while upholding the highest standards of academic excellence.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About Our School</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Founded in 1995, Abundant Light Mega AcademyS has grown from a small community school to a comprehensive educational institution serving over 1,200 students from diverse backgrounds. Our campus spans 25 acres of beautiful grounds designed to inspire learning and creativity.</p>
+                    <p>Our faculty consists of dedicated educators who are experts in their fields, with 85% holding advanced degrees. We maintain a low student-to-teacher ratio of 12:1 to ensure personalized attention for every student.</p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <span class="stat-number">28</span>
+                            <span class="stat-label">Years of Excellence</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">1,200+</span>
+                            <span class="stat-label">Students</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">95%</span>
+                            <span class="stat-label">College Acceptance</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">45</span>
+                            <span class="stat-label">Extracurricular Clubs</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Abundant Light Mega AcademyS Campus">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Awards and Achievements with Images -->
+    <section class="awards" id="awards">
+        <div class="container">
+            <h2 class="section-title">Awards & Achievements</h2>
+            <div class="awards-container">
+                <div class="award-card">
+                    <div class="award-img">
+                        <img src="https://images.unsplash.com/photo-1614732414444-096e5f1122d5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Blue Ribbon Award">
+                    </div>
+                    <div class="award-info">
+                        <h3>National Blue Ribbon School</h3>
+                        <p>Awarded 2022 for overall academic excellence and student achievement.</p>
+                    </div>
+                </div>
+                <div class="award-card">
+                    <div class="award-img">
+                        <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w-800&q=80" alt="STEM Award">
+                    </div>
+                    <div class="award-info">
+                        <h3>STEM Excellence Award</h3>
+                        <p>Recognized for outstanding science, technology, engineering, and math programs.</p>
+                    </div>
+                </div>
+                <div class="award-card">
+                    <div class="award-img">
+                        <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Green School Certification">
+                    </div>
+                    <div class="award-info">
+                        <h3>Green School Certification</h3>
+                        <p>Gold level certification for environmental sustainability and eco-friendly practices.</p>
+                    </div>
+                </div>
+                <div class="award-card">
+                    <div class="award-img">
+                        <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Arts Recognition Award">
+                    </div>
+                    <div class="award-info">
+                        <h3>Arts Recognition Award</h3>
+                        <p>National recognition for excellence in visual and performing arts programs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="gallery">
+        <div class="container">
+            <h2 class="section-title">School Gallery</h2>
+            <div class="gallery-container">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="School Library">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w-800&q=80" alt="Science Lab">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Classroom">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2 class="section-title">What Parents & Students Say</h2>
+            <div class="testimonials-container">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "Abundant Light Mega Academy has transformed my daughter's learning experience. The teachers are exceptional and truly care about each student's success."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MR</div>
+                        <div class="author-info">
+                            <h4>Maria Rodriguez</h4>
+                            <p>Parent of 10th Grader</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "The STEM program here is incredible. I've been able to participate in robotics competitions and science fairs that prepared me for college."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JS</div>
+                        <div class="author-info">
+                            <h4>James Sullivan</h4>
+                            <p>12th Grade Student</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "As an alumna, I can confidently say that Willow Creek prepared me exceptionally well for university. The critical thinking skills I developed here are invaluable."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">AW</div>
+                        <div class="author-info">
+                            <h4>Amanda Wilson</h4>
+                            <p>Alumna, Class of 2018</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Student Performance Analysis - Pie Chart Only -->
+    <section class="performance" id="performance">
+        <div class="container">
+            <h2 class="section-title">Student Performance Analysis</h2>
+            <div class="performance-container">
+                <div class="pie-chart-container">
+                    <div class="pie-chart-wrapper">
+                        <div class="pie-chart">
+                            <div class="pie-center">Overall<br>Performance<br>2023</div>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--color-ashes);"></div>
+                                <span>Excellent (35%)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color:  #2B3D60;"></div>
+                                <span>Good (30%)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--color-accent);"></div>
+                                <span>Satisfactory (15%)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--color-cream-darker);"></div>
+                                <span>Needs Improvement (20%)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="performance-info">
+                        <h3>Academic Performance Overview</h3>
+                        <p>Our student performance analysis for the 2022-2023 academic year shows continued improvement across all grade levels.</p>
+                        <p><strong>Key Findings:</strong></p>
+                        <p>• 35% of students achieved "Excellent" ratings in core subjects</p>
+                        <p>• 30% of students received "Good" academic performance ratings</p>
+                        <p>• 15% of students are performing at a "Satisfactory" level</p>
+                        <p>• 20% of students require additional support to reach grade-level expectations</p>
+                        <p>The data reflects our commitment to personalized learning and academic excellence.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Facilities Showcase -->
+    <section class="facilities" id="facilities">
+        <div class="container">
+            <h2 class="section-title">Our Facilities</h2>
+            <div class="facilities-container">
+                <div class="facility-card">
+                    <div class="facility-img">
+                        <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Modern Library">
+                    </div>
+                    <div class="facility-info">
+                        <h3>State-of-the-Art Library</h3>
+                        <p>Our library features over 30,000 volumes, digital resources, quiet study areas, and collaborative workspaces for students.</p>
+                    </div>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-img">
+                        <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Science Laboratory">
+                    </div>
+                    <div class="facility-info">
+                        <h3>Advanced Science Labs</h3>
+                        <p>Fully equipped laboratories for biology, chemistry, and physics with modern equipment and safety features.</p>
+                    </div>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-img">
+                        <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Sports Complex">
+                    </div>
+                    <div class="facility-info">
+                        <h3>Athletic Complex</h3>
+                        <p>Indoor gymnasium, outdoor track and field, tennis courts, and swimming pool for comprehensive physical education.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Additional Services -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">Additional Services</h2>
+            <div class="services-container">
+                <div class="service-card">
+                    <i class="fas fa-bus"></i>
+                    <h3>Transportation</h3>
+                    <p>Safe and reliable bus services covering all major neighborhoods in the area.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-utensils"></i>
+                    <h3>Nutrition Program</h3>
+                    <p>Healthy, balanced meals prepared daily by our certified nutritionists.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-heartbeat"></i>
+                    <h3>Health Services</h3>
+                    <p>On-site nurse and wellness programs to support student health.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>College Counseling</h3>
+                    <p>Comprehensive guidance for college applications and career planning.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Academy Programs -->
+    <section class="programs" id="programs">
+        <div class="container">
+            <h2 class="section-title">Academy Programs</h2>
+            <div class="programs-container">
+                <div class="program-tab">
+                    <div class="program-header">
+                        <h3>STEM Academy</h3>
+                    </div>
+                    <div class="program-content">
+                        <p>Focused on Science, Technology, Engineering, and Mathematics with advanced coursework and research opportunities.</p>
+                        <ul>
+                            <li>Advanced Placement Courses</li>
+                            <li>Robotics & Coding</li>
+                            <li>Science Research Projects</li>
+                            <li>Math Olympiad Training</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="program-tab">
+                    <div class="program-header">
+                        <h3>Arts Academy</h3>
+                    </div>
+                    <div class="program-content">
+                        <p>Comprehensive arts education in visual arts, music, theater, and dance with professional instruction.</p>
+                        <ul>
+                            <li>Studio Art & Design</li>
+                            <li>Instrumental Music</li>
+                            <li>Theater Production</li>
+                            <li>Digital Media Arts</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="program-tab">
+                    <div class="program-header">
+                        <h3>Global Studies</h3>
+                    </div>
+                    <div class="program-content">
+                        <p>Emphasis on international perspectives, languages, and cultural understanding for global citizenship.</p>
+                        <ul>
+                            <li>Multiple Language Options</li>
+                            <li>Cultural Exchange Programs</li>
+                            <li>International Relations</li>
+                            <li>Model United Nations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Us -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h3>Visit Our Campus</h3>
+                            <p>123 Education Lane, Willow Creek, WC 12345</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <h3>Call Us</h3>
+                            <p>Main Office: (555) 123-4567</p>
+                            <p>Admissions: (555) 123-4568</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h3>Email Us</h3>
+                            <p>info@willowcreekacademy.edu</p>
+                            <p>admissions@willowcreekacademy.edu</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <h3>Office Hours</h3>
+                            <p>Monday - Friday: 7:30 AM - 5:00 PM</p>
+                            <p>Saturday: 9:00 AM - 12:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" class="form-control" placeholder="Your Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" placeholder="your.email@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" class="form-control" placeholder="Inquiry Subject">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" class="form-control" rows="5" placeholder="Your message..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ongoing Construction Projects -->
+    <section class="projects" id="projects">
+        <div class="container">
+            <h2 class="section-title">Buildings Under Construction</h2>
+            <div class="projects-container">
+                <div class="project-card">
+                    <div class="project-img">
+                        <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Innovation Center Construction">
+                        <div class="project-status">75% Complete</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Innovation Center</h3>
+                        <p>A new building dedicated to collaborative learning, maker spaces, and technology integration.</p>
+                        <div class="project-details">
+                            <span><i class="far fa-calendar"></i> Completion: Spring 2024</span>
+                            <span><i class="fas fa-ruler-combined"></i> 25,000 sq ft</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Construction Progress</span>
+                                <span>75%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-img">
+                        <img src="https://images.unsplash.com/photo-1573495612930-02b6c6d0f3b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Performing Arts Theater Construction">
+                        <div class="project-status">30% Complete</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Performing Arts Theater</h3>
+                        <p>A 500-seat theater for music, drama, and dance performances with state-of-the-art acoustics.</p>
+                        <div class="project-details">
+                            <span><i class="far fa-calendar"></i> Completion: Fall 2024</span>
+                            <span><i class="fas fa-ruler-combined"></i> 500 seats</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Construction Progress</span>
+                                <span>30%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 30%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-img">
+                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Athletic Facility Expansion">
+                        <div class="project-status">60% Complete</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Athletic Facility Expansion</h3>
+                        <p>Expansion of existing athletic complex with new indoor training facilities and swimming pool.</p>
+                        <div class="project-details">
+                            <span><i class="far fa-calendar"></i> Completion: Winter 2024</span>
+                            <span><i class="fas fa-ruler-combined"></i> 15,000 sq ft</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Construction Progress</span>
+                                <span>60%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Abundant Light <a href="./Login/Admin-login.html">Mega</a> AcademyS</h3>
+                    <p>Excellence in education since 1995. Nurturing tomorrow's leaders through innovative teaching and holistic development.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#programs">Academics</a></li>
+                        <li><a href="#facilities">Facilities</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Important Info</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Admissions</a></li>
+                        <li><a href="#">Academic Calendar</a></li>
+                        <li><a href="#">School Policies</a></li>
+                        <li><a href="#">Employment</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Newsletter</h3>
+                    <p>Subscribe to our newsletter for updates on school events and achievements.</p>
+                    <form>
+                        <input type="email" class="form-control" placeholder="Your email" style="margin-bottom: 10px;">
+                        <button type="submit" class="submit-btn-sub" style="padding: 10px 20px;">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 Abundant Light Mega Academy. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple JavaScript-free navigation using :target pseudo-class
+        // We'll use the :target selector to show/hide the mobile menu
+        // But since we can't use JavaScript, we'll use CSS :target pseudo-class
+        // However, for a better mobile experience, we'll add a tiny script for mobile nav
+        
+        // For the purpose of this exercise, I'll add a simple script for mobile navigation
+        // but you can also implement it with pure CSS using :target if needed
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileNavToggle = document.getElementById('mobileNavToggle');
+            const mobileNav = document.getElementById('mobileNav');
+            const mobileNavClose = document.getElementById('mobileNavClose');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+            
+            // Toggle mobile navigation
+            mobileNavToggle.addEventListener('click', function() {
+                mobileNav.classList.add('active');
+                mobileOverlay.classList.add('active');
+            });
+            
+            // Close mobile navigation
+            mobileNavClose.addEventListener('click', function() {
+                mobileNav.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+            });
+            
+            // Close mobile navigation when clicking on overlay
+            mobileOverlay.addEventListener('click', function() {
+                mobileNav.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+            });
+            
+            // Close mobile navigation when clicking on a link
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileNav.classList.remove('active');
+                    mobileOverlay.classList.remove('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

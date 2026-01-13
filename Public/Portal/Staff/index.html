@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Portal - NewDich Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --cream-bg: #fefefa;
+            --cream-light: #f8f8f8;
+            --cream-dark: #f5f5f0;
+            --ash-light: #e8e8e8;
+            --ash: #d8d8d8;
+            --ash-dark: #888;
+            --ash-darker: #666;
+            --primary: #7a9d7e;
+            --primary-dark: #5a7d5e;
+        }
+        
+        body {
+            background-color: var(--cream-dark);
+            color: #333;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Background image */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: blur(6px);
+            z-index: -1;
+            opacity: 0.15;
+        }
+        
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        /* Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(145deg, var(--cream-light) 0%, var(--ash-light) 100%);
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: fixed;
+            z-index: 999;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            background-color: var(--ash);
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: var(--ash-darker);
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--ash-darker);
+        }
+        
+        .nav-menu {
+            padding: 20px 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .nav-item {
+            display: block;
+            padding: 16px 25px;
+            color: var(--ash-darker);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-item i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(0, 0, 0, 0.03);
+            color: var(--primary-dark);
+            border-left-color: var(--primary);
+        }
+        
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            font-size: 13px;
+            color: var(--ash-dark);
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 0;
+            background-color: var(--cream-bg);
+            transition: margin-left 0.3s ease;
+        }
+        
+        /* Top Header */
+        .top-header {
+            background: linear-gradient(145deg, var(--cream-light) 0%, var(--ash-light) 100%);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+        
+        .header-title h1 {
+            color: var(--ash-darker);
+            font-size: 24px;
+        }
+        
+        .header-title p {
+            color: var(--ash-dark);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 15px;
+            background-color: var(--cream-bg);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--ash);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ash-darker);
+            font-size: 18px;
+        }
+        
+        .user-info h4 {
+            color: var(--ash-darker);
+            font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .user-info p {
+            color: var(--ash-dark);
+            font-size: 13px;
+        }
+        
+        .logout-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* Content Sections */
+        .content-wrapper {
+            padding: 30px;
+        }
+        
+        .content-section {
+            margin-bottom: 40px;
+            background-color: var(--cream-light);
+            border-radius: 15px;
+            border: 1px solid var(--ash-light);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            padding: 20px 30px;
+            background: linear-gradient(145deg, var(--cream-light) 0%, var(--ash-light) 100%);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-header h2 {
+            color: var(--ash-darker);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-header h2 i {
+            color: var(--primary);
+        }
+        
+        .section-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .section-content {
+            padding: 30px;
+        }
+        
+        /* Result Upload Section */
+        .result-upload-form {
+            background-color: var(--cream-bg);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--ash-light);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--ash-darker);
+            font-size: 15px;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--ash);
+            border-radius: 8px;
+            font-size: 15px;
+            background-color: var(--cream-bg);
+            color: var(--ash-darker);
+            transition: all 0.3s;
+        }
+        
+        .form-group select:focus, .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(122, 157, 126, 0.2);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        /* Results Table Container */
+        .result-table-container {
+            overflow-x: auto;
+            background-color: var(--cream-bg);
+            border-radius: 10px;
+            border: 1px solid var(--ash-light);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+        
+        .result-table thead {
+            background: linear-gradient(145deg, var(--cream-light) 0%, var(--ash-light) 100%);
+        }
+        
+        .result-table th {
+            padding: 15px 12px;
+            text-align: left;
+            color: var(--ash-darker);
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid var(--ash-light);
+            white-space: nowrap;
+        }
+        
+        .result-table td {
+            padding: 12px;
+            color: var(--ash-darker);
+            border: 1px solid var(--ash-light);
+        }
+        
+        .result-table input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--ash);
+            border-radius: 5px;
+            background-color: var(--cream-bg);
+            color: var(--ash-darker);
+            text-align: center;
+        }
+        
+        .result-table input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(122, 157, 126, 0.2);
+        }
+        
+        .result-table tbody tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+        
+        .result-table tbody tr:hover {
+            background-color: rgba(122, 157, 126, 0.05);
+        }
+        
+        .subject-name {
+            font-weight: 600;
+            color: var(--ash-darker);
+        }
+        
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            border: none;
+            font-size: 15px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: var(--ash);
+            color: var(--ash-darker);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--ash-dark);
+            color: white;
+        }
+        
+        .btn-wide {
+            min-width: 150px;
+        }
+        
+        /* Instructions Box */
+        .instructions-box {
+            margin-bottom: 20px;
+            background-color: rgba(122, 157, 126, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(122, 157, 126, 0.2);
+        }
+        
+        .instructions-box h4 {
+            color: var(--ash-darker);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions-box h4 i {
+            color: var(--primary);
+        }
+        
+        .instructions-box p {
+            color: var(--ash-dark);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Success Message */
+        .success-message {
+            text-align: center;
+            padding: 40px;
+            background-color: rgba(122, 157, 126, 0.1);
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid var(--primary);
+            display: none;
+        }
+        
+        .success-icon {
+            color: var(--primary);
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .success-message h3 {
+            color: var(--ash-darker);
+            margin-bottom: 15px;
+        }
+        
+        .success-message p {
+            color: var(--ash-dark);
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+        
+        /* Footer */
+        .page-footer {
+            text-align: center;
+            padding: 25px;
+            color: var(--ash-dark);
+            font-size: 14px;
+            background-color: var(--cream-light);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            margin-top: 40px;
+        }
+        
+        .page-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 250px;
+            }
+            
+            .main-content {
+                margin-left: 250px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .form-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .top-header {
+                padding: 15px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .header-title h1 {
+                font-size: 20px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .content-wrapper {
+                padding: 20px;
+            }
+            
+            .section-content {
+                padding: 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .header-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .user-profile {
+                justify-content: center;
+            }
+            
+            .logout-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .section-badge {
+                align-self: flex-start;
+            }
+            
+            .result-table-container {
+                padding: 10px;
+            }
+            
+            .result-upload-form {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .content-wrapper {
+                padding: 15px;
+            }
+            
+            .section-content {
+                padding: 15px;
+            }
+            
+            .header-title h1 {
+                font-size: 18px;
+            }
+            
+            .logo-text {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="logo-text">Staff Portal</div>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="#results" class="nav-item active">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Upload Results</span>
+                </a>
+            </div>
+            
+            <div class="sidebar-footer">
+                NewDich Academy &copy; 2023
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <div class="top-header">
+                <div class="header-title">
+                    <h1>Result Upload Portal</h1>
+                    <p>Science Teacher | Grade 11</p>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="user-info">
+                            <h4>Sarah Williams</h4>
+                            <p>Science Teacher</p>
+                        </div>
+                    </div>
+                    
+                    <button class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Content Wrapper -->
+            <div class="content-wrapper">
+                <!-- Result Upload Section -->
+                <div class="content-section" id="results">
+                    <div class="section-header">
+                        <h2><i class="fas fa-upload"></i> Upload Student Results</h2>
+                        <div class="section-badge">Academic Records</div>
+                    </div>
+                    
+                    <div class="section-content">
+                        <!-- Instructions -->
+                        <div class="instructions-box">
+                            <h4><i class="fas fa-info-circle"></i> Instructions</h4>
+                            <p><strong>Test 1 & Test 2:</strong> Enter scores out of 15 marks each. <br>
+                            <strong>Exam:</strong> Enter scores out of 70 marks. <br>
+                            <strong>Total:</strong> Automatically calculated (Test 1 + Test 2 + Exam). <br>
+                            <strong>Position & Grade:</strong> Will be calculated after submission.</p>
+                        </div>
+                        
+                        <!-- Result Selection Form -->
+                        <form class="result-upload-form" id="resultForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="term-select">Term *</label>
+                                    <select id="term-select" name="term" required>
+                                        <option value="">Select Term</option>
+                                        <option value="term1">Term 1</option>
+                                        <option value="term2">Term 2</option>
+                                        <option value="term3">Term 3</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="class-select">Class *</label>
+                                    <select id="class-select" name="class" required>
+                                        <option value="">Select Class</option>
+                                        <option value="grade10">Grade 10</option>
+                                        <option value="grade11">Grade 11</option>
+                                        <option value="grade12">Grade 12</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="session-select">Academic Session *</label>
+                                    <select id="session-select" name="session" required>
+                                        <option value="">Select Session</option>
+                                        <option value="2022-2023">2022-2023</option>
+                                        <option value="2023-2024">2023-2024</option>
+                                        <option value="2024-2025">2024-2025</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                                    <i class="fas fa-redo"></i> Clear Form
+                                </button>
+                                <button type="button" class="btn btn-primary btn-wide" onclick="loadResultsTable()">
+                                    <i class="fas fa-table"></i> Load Results Table
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Results Table (Initially Hidden) -->
+                        <div class="result-table-container" id="resultsTableContainer" style="display: none;">
+                            <table class="result-table" id="resultsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Test 1 (15)</th>
+                                        <th>Test 2 (15)</th>
+                                        <th>Exam (70)</th>
+                                        <th>Total (100)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Subjects will be dynamically added here -->
+                                </tbody>
+                            </table>
+                            
+                            <!-- Table Actions -->
+                            <div class="form-actions" style="margin-top: 30px;">
+                                <button type="button" class="btn btn-secondary" onclick="clearTable()">
+                                    <i class="fas fa-times"></i> Clear Table
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="saveResults()">
+                                    <i class="fas fa-save"></i> Save Results
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Success Message -->
+                        <div class="success-message" id="successMessage">
+                            <div class="success-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h3>Results Saved Successfully!</h3>
+                            <p>All student results have been saved to the database. You can now generate reports or upload another set of results.</p>
+                            <button class="btn btn-primary" onclick="resetForm()">
+                                <i class="fas fa-plus"></i> Upload More Results
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="page-footer">
+                    <p>NewDich Academy Staff Portal &copy; 2023 | <a href="#">Privacy Policy</a></p>
+                    <p style="margin-top: 10px;">For technical support, contact IT Department</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+        
+        // List of all subjects
+        const subjects = [
+            "Physics",
+            "Chemistry", 
+            "Biology",
+            "Mathematics",
+            "English Language",
+            "French",
+            "History",
+            "Geography",
+            "Economics",
+            "Accounting",
+            "Commerce",
+            "Government",
+            "Literature in English"
+        ];
+        
+        // Load results table when button is clicked
+        function loadResultsTable() {
+            const term = document.getElementById('term-select').value;
+            const classLevel = document.getElementById('class-select').value;
+            const session = document.getElementById('session-select').value;
+            
+            if (!term || !classLevel || !session) {
+                alert('Please select Term, Class, and Session first');
+                return;
+            }
+            
+            // Clear existing table rows
+            const tbody = document.getElementById('resultsTable').querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            // Add rows for each subject
+            subjects.forEach((subject, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="subject-name">${subject}</td>
+                    <td><input type="number" min="0" max="15" value="0" oninput="calculateTotal(${index})" id="test1-${index}"></td>
+                    <td><input type="number" min="0" max="15" value="0" oninput="calculateTotal(${index})" id="test2-${index}"></td>
+                    <td><input type="number" min="0" max="70" value="0" oninput="calculateTotal(${index})" id="exam-${index}"></td>
+                    <td><span id="total-${index}">0</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Show the table
+            document.getElementById('resultsTableContainer').style.display = 'block';
+            
+            // Scroll to table
+            document.getElementById('resultsTableContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Calculate total for a row
+        function calculateTotal(index) {
+            const test1 = parseFloat(document.getElementById(`test1-${index}`).value) || 0;
+            const test2 = parseFloat(document.getElementById(`test2-${index}`).value) || 0;
+            const exam = parseFloat(document.getElementById(`exam-${index}`).value) || 0;
+            
+            const total = test1 + test2 + exam;
+            document.getElementById(`total-${index}`).textContent = total;
+        }
+        
+        // Clear the form
+        function clearForm() {
+            document.getElementById('term-select').value = '';
+            document.getElementById('class-select').value = '';
+            document.getElementById('session-select').value = '';
+            document.getElementById('resultsTableContainer').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+        
+        // Clear the table
+        function clearTable() {
+            const inputs = document.querySelectorAll('#resultsTable input');
+            inputs.forEach(input => {
+                input.value = '0';
+            });
+            
+            const totals = document.querySelectorAll('#resultsTable td span');
+            totals.forEach(total => {
+                total.textContent = '0';
+            });
+        }
+        
+        // Save results
+        function saveResults() {
+            const term = document.getElementById('term-select').value;
+            const classLevel = document.getElementById('class-select').value;
+            const session = document.getElementById('session-select').value;
+            
+            if (!term || !classLevel || !session) {
+                alert('Please select Term, Class, and Session first');
+                return;
+            }
+            
+            // Collect all data
+            const resultsData = [];
+            subjects.forEach((subject, index) => {
+                const test1 = document.getElementById(`test1-${index}`).value;
+                const test2 = document.getElementById(`test2-${index}`).value;
+                const exam = document.getElementById(`exam-${index}`).value;
+                const total = document.getElementById(`total-${index}`).textContent;
+                
+                resultsData.push({
+                    subject: subject,
+                    test1: test1,
+                    test2: test2,
+                    exam: exam,
+                    total: total
+                });
+            });
+            
+            // In a real application, you would send this data to a server
+            // For now, we'll just show a success message
+            
+            // Hide table and show success message
+            document.getElementById('resultsTableContainer').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            
+            // Scroll to success message
+            document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+            
+            console.log('Results saved:', {
+                term: term,
+                class: classLevel,
+                session: session,
+                results: resultsData
+            });
+        }
+        
+        // Reset form after success
+        function resetForm() {
+            clearForm();
+            document.getElementById('successMessage').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

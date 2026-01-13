@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- Report form -->
+     <!-- header start -->
+    <div class="header">
+        <h1>Admin Student BlackList</h1>
+    </div>
+    <!-- header end -->
+    <form action="/submit-report" method="post">
+        <label for="report-type">Crime Type</label> <br>
+        <select id="report-type" name="report_type">
+            <option value="">Select crime type</option>
+            <option value="Vandalism">Vandalismphone,  (graffiti, breaking staff)</option>
+            <option value="Theft">Theft (stealing property)</option>
+            <option value="Cheating">Cheating (academic dishonesty)</option>
+            <option value="Bullying">Bullying (intimidation or harassment)</option>
+            <option value="Drugs">Drugs (possession or distribution of illegal substances)</option>
+            <option value="Other">Other</option>
+        </select>
+        <br><br>
+        <label for="">Student Name</label><br>
+        <input type="text" id="student-name" name="student_name" placeholder="Fin Billey"> <br><br>
+        <label for="">Student ID</label><br>
+        <input type="text" id="student-id" name="student_id" placeholder="SEDF-234-567"> <br><br>
+        <label for="">Student Current Class</label><br>
+        <select name="student_class" id="student-class"> 
+             <option value="">Select class</option>
+                <option value="SS3-Science">SS3-Science</option>
+                <option value="SS3-Commercial">SS3-Commercial</option>
+                <option value="SS3-ART">SS3-ART</option>
+                <option value="SS2-Science">SS2-Science</option>
+                <option value="SS3-Commercial">SS2-Commercial</option>
+                <option value="SS2-ART">SS2-ART</option>
+                <option value="SS1-Science">SS1-Science</option>
+                <option value="SS1-Commercial">SS1-Commercial</option>
+                <option value="SS1-ART">SS1-ART</option>
+                <option value="JSS3">JSS3</option>
+                <option value="JSS2">JSS2</option>
+                <option value="JSS1">JSS1</option>
+                <option value="PRY5">PRY5</option>
+                <option value="PRY4">PRY4</option>
+                <option value="PRY3">PRY3</option>
+                <option value="PRY2">PRY2</option>
+                <option value="PRY1">PRY1</option>
+                <option value="NUR2">NUR2</option>
+                <option value="NUR1">NUR1</option>
+                <option value="KG1">KG1</option>
+        </select> <br><br>
+        <label for="date-range">Date</label>
+        <input type="date" id="start-date" name="date"> <br><br>
+        <label for="">Comment</label> <br>
+        <textarea id="description" name="description" rows="4" cols="50"></textarea>
+        <br><br>
+        <label for="">Approval By Who</label>
+        <select name="approval_by" id="approval-by">
+            <option value="">Select approver</option>
+            <option value="Principal">Principal</option>
+            <option value="Vice Principal">Vice Principal</option>
+            <option value="Head of Department">Head of Department</option>
+            <option value="Class Teacher">Class Teacher</option>
+        </select>
+        <br><br>
+        <label for="">Approval Name:</label>
+        <input type="text" id="approval-name" name="approval_name" placeholder="Mr. John Doe">
+        <br><br>
+        <input type="submit" value="Generate Report">
+    </form>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"], select, textarea, input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+    </style>
+</body>
+</html>

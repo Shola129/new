@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Report Viewing System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f9ff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #1a4f8c, #2a6bb1);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .role-navigation {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .role-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            background-color: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .role-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .role-btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .role-btn.student-btn:hover {
+            border-color: #3498db;
+            color: #3498db;
+        }
+        
+        .role-btn.principal-btn:hover {
+            border-color: #2ecc71;
+            color: #2ecc71;
+        }
+        
+        .role-btn.vice-principal-btn:hover {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+        
+        .role-btn.supervisor-btn:hover {
+            border-color: #f39c12;
+            color: #f39c12;
+        }
+        
+        /* Report sections - hidden by default */
+        .report-section {
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Show targeted section */
+        #student-reports:target,
+        #principal-reports:target,
+        #vice-principal-reports:target,
+        #supervisor-reports:target {
+            display: block;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: #1a4f8c;
+        }
+        
+        .report-count {
+            background-color: #e6f0ff;
+            color: #2a6bb1;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .report-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 20px;
+            background-color: #f0f7ff;
+            border: 1px solid #d0e2ff;
+            border-radius: 20px;
+            cursor: pointer;
+            color: #555;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: #2a6bb1;
+            color: white;
+            border-color: #2a6bb1;
+        }
+        
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .report-card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #2a6bb1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .report-card.student-report {
+            border-left-color: #3498db;
+        }
+        
+        .report-card.principal-report {
+            border-left-color: #2ecc71;
+        }
+        
+        .report-card.vice-principal-report {
+            border-left-color: #e74c3c;
+        }
+        
+        .report-card.supervisor-report {
+            border-left-color: #f39c12;
+        }
+        
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .report-title {
+            font-size: 1.3rem;
+            color: #1a4f8c;
+            margin-bottom: 5px;
+        }
+        
+        .report-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .report-category {
+            display: inline-block;
+            background-color: #e6f0ff;
+            color: #2a6bb1;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .report-date {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .report-status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background-color: #fff4e6;
+            color: #f39c12;
+        }
+        
+        .status-resolved {
+            background-color: #e6f7f0;
+            color: #2ecc71;
+        }
+        
+        .status-urgent {
+            background-color: #ffe6e6;
+            color: #e74c3c;
+        }
+        
+        .report-content {
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .report-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #555;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            background-color: #f0f7ff;
+            border-color: #2a6bb1;
+            color: #2a6bb1;
+        }
+        
+        .default-message {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+        
+        .default-message i {
+            font-size: 3rem;
+            color: #b3cde8;
+            margin-bottom: 20px;
+        }
+        
+        .default-message h2 {
+            color: #1a4f8c;
+            margin-bottom: 10px;
+        }
+        
+        .default-message p {
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto 20px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #ddd;
+            margin-top: 20px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .report-count {
+                margin-top: 10px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .role-navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .role-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            .role-navigation, footer, .report-actions, .filter-btn {
+                display: none;
+            }
+            
+            .report-section {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            .report-card {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-school"></i>Report Viewing System</h1>
+            <p>View reports from students, principals, vice principals, and supervisors</p>
+        </header>
+        
+        <!-- Role Navigation -->
+        <div class="role-navigation">
+            <a href="#student-reports" class="role-btn student-btn">
+                <i class="fas fa-user-graduate"></i> Student Reports
+            </a>
+            <a href="#principal-reports" class="role-btn principal-btn">
+                <i class="fas fa-user-tie"></i> Principal Reports
+            </a>
+            <a href="#vice-principal-reports" class="role-btn vice-principal-btn">
+                <i class="fas fa-user-friends"></i> Vice Principal Reports
+            </a>
+            <a href="#supervisor-reports" class="role-btn supervisor-btn">
+                <i class="fas fa-clipboard-check"></i> Supervisor Reports
+            </a>
+        </div>
+        
+        <!-- Default message when no role is selected -->
+        <!-- <div class="default-message" id="default-view">
+            <i class="fas fa-file-alt"></i>
+            <h2>Select a Role to View Reports</h2>
+            <p>Click on one of the role buttons above to view reports submitted by students, principals, vice principals, or supervisors.</p>
+            <p>You can view report details, check their status, and see when they were submitted.</p>
+        </div> -->
+        
+        <!-- Student Reports Section -->
+        <div class="report-section" id="student-reports">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-user-graduate"></i> Student Reports</h2>
+                <div class="report-count">8 Reports</div>
+            </div>
+            
+            <div class="report-filters">
+                <a href="#student-reports" class="filter-btn active">All</a>
+                <a href="#student-reports" class="filter-btn">Academic</a>
+                <a href="#student-reports" class="filter-btn">Behavioral</a>
+                <a href="#student-reports" class="filter-btn">Facilities</a>
+                <a href="#student-reports" class="filter-btn">Pending</a>
+            </div>
+            
+            <div class="reports-grid">
+                <div class="report-card student-report">
+                    <div class="report-header">
+                        <div>
+                            <h3 class="report-title">Library Books Damaged</h3>
+                            <div class="report-meta">
+                                <span class="report-category">Facilities</span>
+                                <span class="report-date">Oct 15, 2023</span>
+                                <span class="report-status status-pending">Pending</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-content">
+                        <p>Found several books in the science section with torn pages. Requesting replacement funds for at least 5 books that are beyond repair.</p>
+                    </div>
+                    <div class="report-actions">
+                        <a href="#student-reports" class="action-btn">View Details</a>
+                        <a href="#student-reports" class="action-btn">Mark as Read</a>
+                    </div>
+                </div>
+                
+                <div class="report-card student-report">
+                    <div class="report-header">
+                        <div>
+                            <h3 class="report-title">Cafeteria Food Quality</h3>
+                            <div class="report-meta">
+                                <span class="report-category">Facilities</span>
+                                <span class="report-date">Oct 12, 2023</span>
+                                <span class="report-status status-resolved">Resolved</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-content">
+                        <p>Multiple students have reported cold meals during lunch time. The food is often served lukewarm, affecting taste and potentially safety.</p>
+                    </div>
+                    <div class="report-actions">
+                        <a href="#student-reports" class="action-btn">View Details</a>
+                        <a href="#student-reports" class="action-btn">Mark as Read</a>
+                    </div>
+                </div>
+                
+                <div class="report-card student-report">
+                    <div class="report-header">
+                        <div>
+                            <h3 class="report-title">Math Tutoring Request</h3>
+                            <div class="report-meta">
+                                <span class="report-category">Academic</span>
+                                <span class="report-date">Oct 10, 2023</span>
+                                <span class="report-status status-resolved">Resolved</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-content">
+                        <p>Requesting additional tutoring sessions for Algebra II. Many students are struggling with the current curriculum pace.</p>
+                    </div>
+                    <div class="report-actions">
+                        <a href="#student-reports" class="action-btn">View Details</a>
+                        <a href="#student-reports" class="action-btn">Mark as Read</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Principal Reports Section -->
+        <div class="report-section" id="principal-reports">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-user-tie"></i> Principal Reports</h2>
+                <div class="report-count">6 Reports</div>
+            </div>
+            
+            <div class="report-filters">
+                <a href="#principal-reports" class="filter-btn active">All</a>
+                <a href="#principal-reports" class="filter-btn">Administrative</a>
+                <a href="#principal-reports" class="filter-btn">Policy</a>
+                <a href="#principal-reports" class="filter-btn">Budget</a>
+            </div>
+            
+            <div class="reports-grid">
+                <div class="report-card principal-report">
+                    <div class="report-header">
+                        <div>
+                            <h3 class="report-title">Parent-Teacher Meeting Schedule</h3>
+                            <div class="report-meta">
+                                <span class="report-category">Administrative</span>
+                                <span class="report-date">Oct 12, 2023</span>
+                                <span class="report-status status-resolved">Resolved</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-content">
+                        <p>Fall parent-teacher meetings scheduled for November 5-7. All staff must confirm availability by October 20th. Extended hours will be available on November 6th.</p>
+                    </div>
+                    <div class="report-actions">
+                        <a href="#principal-reports" class="action-btn">View Details</a>
+                        <a href="#principal-reports" class="action-btn">Download Schedule</a>
+                    </div>
+                </div>
+                
+                <div class="report-card principal-report">
+                    <div class="report-header">
+                        <div>
+                            <h3 class="report-title">Annual Budget Review</h3>
+                            <div class="report-meta">
+                                <span class="report-category">Budget</span>
+                                <span class="report-date">Oct 5, 2023</span>
+                                <span class="report-status status-pending">Pending Approval</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-content">
+                        <p>Proposed budget for the 2024 academic year. Includes increases for technology upgrades and facility maintenance. Needs board approval by November 15th.</p>
+                    </div>
+                    <div class="report-actions">
+                        <a href="#principal-reports" class="action-btn">View Details</a>
+                        <a href="#principal-reports" class="action-btn">Download Budget</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vice Principal Reports Section -->
+        <div class="report-section" id="vice-principal-reports">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-user-friends"></i> Vice Principal Reports</h2>
+                <div class="report-count">7 Reports</div>
+            </div>
+            
+            <div class="report-filters">
+                <a href="#vice-principal-reports" class="filter-btn active">All</a>
+                <a href="#vice-principal-reports" class="filter-btn">Disciplinary</a>
+                <a href="#vice-principal-reports" class="filter-btn">Attendance</a>
+                <a href="#vice-principal-reports" class="filter-btn">Operations</a>
+            </div>
+            
+            <div class="reports-grid">
+                <div class="report-card vice-principal-report">
+                    <div class="report-header">
+                        <div>
+                            <h3 class="report-title">Hallway Monitoring Update</h3>
+                            <div class="report-meta">
+                                <span class="report-category">Operations</span>
+                                <span class="report-date">Oct 8, 2023</span>
+                                <span class="report-status status-resolved">Resolved</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-content">
+                        <p>Increased hallway monitoring has reduced tardiness by 25% in the past two weeks. Continuing the initiative through the end of the semester.</p>
+                    </div>
+                    <div class="report-actions">
+                        <a href="#vice-principal-reports" class="action-btn">View Details</a>
+                        <a href="#vice-principal-reports" class="action-btn">View Statistics</a>
+                    </div>
+                </div>
+                
+                <div class="report-card vice-principal-report">
+                    <div class="report-header">
+                        <div>
+                            <h3 class="report-title">Disciplinary Actions - October</h3>
+                            <div class="report-meta">
+                                <span class="report-category">Disciplinary</span>
+                                <span class="report-date">Oct 3, 2023</span>
+                                <span class="report-status status-urgent">Needs Review</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-content">
+                        <p>Summary of disciplinary actions taken in October. Three suspensions issued for repeated violations of the code of conduct. Requires principal review.</p>
+                    </div>
+                    <div class="report-actions">
+                        <a href="#vice-principal-reports" class="action-btn">View Details</a>
+                        <a href="#vice-principal-reports" class="action-btn">Download Report</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Supervisor Reports Section -->
+        <div class="report-section" id="supervisor-reports">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-clipboard-check"></i> Supervisor Reports</h2>
+                <div class="report-count">5 Reports</div>
+            </div>
+            
+            <div class="report-filters">
+                <a href="#supervisor-reports" class="filter-btn active">All</a>
+                <a href="#supervisor-reports" class="filter-btn">Facilities</a>
+                <a href="#supervisor-reports" class="filter-btn">Staff</a>
+                <a href="#supervisor-reports" class="filter-btn">Evaluation</a>
+            </div>
+            
+            <div class="reports-grid">
+                <div class="report-card supervisor-report">
+                    <div class="report-header">
+                        <div>
+                            <h3 class="report-title">Science Lab Equipment Audit</h3>
+                            <div class="report-meta">
+                                <span class="report-category">Facilities</span>
+                                <span class="report-date">Oct 10, 2023</span>
+                                <span class="report-status status-resolved">Resolved</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-content">
+                        <p>Completed audit of all lab equipment. 15% of items need replacement or repair. Budget request submitted for $8,500 in replacements.</p>
+                    </div>
+                    <div class="report-actions">
+                        <a href="#supervisor-reports" class="action-btn">View Details</a>
+                        <a href="#supervisor-reports" class="action-btn">View Audit</a>
+                    </div>
+                </div>
+                
+                <div class="report-card supervisor-report">
+                    <div class="report-header">
+                        <div>
+                            <h3 class="report-title">Custodial Staff Performance Review</h3>
+                            <div class="report-meta">
+                                <span class="report-category">Staff</span>
+                                <span class="report-date">Oct 1, 2023</span>
+                                <span class="report-status status-pending">Under Review</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-content">
+                        <p>Quarterly performance review for custodial staff. All members meeting expectations. Two staff members recommended for additional training.</p>
+                    </div>
+                    <div class="report-actions">
+                        <a href="#supervisor-reports" class="action-btn">View Details</a>
+                        <a href="#supervisor-reports" class="action-btn">Download Review</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>School Report Viewing System &copy; 2023 | All reports are confidential</p>
+            <p>This system works without JavaScript - all navigation implemented with HTML and CSS only</p>
+        </footer>
+    </div>
+</body>
+</html>

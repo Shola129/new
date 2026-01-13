@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Settings - Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        /* Variables */
+        :root {
+            --primary: #2c5aa0;
+            --primary-light: #4a7bc8;
+            --primary-dark: #1e3a6f;
+            --success: #2e7d32;
+            --danger: #c62828;
+            --warning: #f57c00;
+            --info: #0288d1;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --border: #dee2e6;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 12px 12px 0 0;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+        
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 992px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Card Styling */
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px var(--shadow);
+            overflow: hidden;
+        }
+        
+        /* Form Card */
+        .form-card {
+            padding: 25px;
+        }
+        
+        .card-header {
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--gray-light);
+        }
+        
+        .card-header h2 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+        }
+        
+        /* Grid for inputs */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        /* Buttons */
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            min-width: 120px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--gray-light);
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--border);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #b71c1c;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #1b5e20;
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            min-width: auto;
+        }
+        
+        /* Table Card */
+        .table-card {
+            padding: 0;
+        }
+        
+        .table-header {
+            padding: 25px 25px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-header h2 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        .settings-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+        
+        .settings-table th {
+            background-color: var(--light);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid var(--border);
+            font-size: 0.9rem;
+        }
+        
+        .settings-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .settings-table tr:hover {
+            background-color: var(--gray-light);
+        }
+        
+        .settings-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .status-active {
+            color: var(--success);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .status-inactive {
+            color: var(--gray);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--gray-light);
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.3s ease;
+            max-width: 350px;
+        }
+        
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .notification.error {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .notification.info {
+            background-color: var(--info);
+            color: white;
+        }
+        
+        /* Confirmation Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .modal-body {
+            margin-bottom: 25px;
+        }
+        
+        .modal-body p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .setting-to-delete {
+            background-color: var(--light);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .setting-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border);
+        }
+        
+        .setting-detail:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .form-card, .table-header {
+                padding: 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .settings-table th,
+            .settings-table td {
+                padding: 12px 10px;
+            }
+            
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .card-header h2,
+            .table-header h2 {
+                font-size: 1.2rem;
+            }
+            
+            .modal {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-school"></i>
+                Fees Manager
+            </h1>
+            <p>Add, view, and manage school parameters for different classes, terms, and sessions</p>
+        </div>
+        
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Form Card -->
+            <div class="card form-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-plus-circle"></i> Add New Fees</h2>
+                </div>
+                
+                <form id="schoolForm" action="/set-fees" method="post">
+                     <div class="form-group">
+                        <label for="schoolName">
+                            <i class="fas fa-university"></i> Fees Name
+                        </label>
+                        <input type="text" id="fees-name" name="fees_name" placeholder="Enter school name" required>
+                    </div> 
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="schoolValue">
+                                <i class="fas fa-money-bill-wave"></i>Fees Amount (₦)
+                            </label>
+                            <input type="number" id="schoolValue" name="fees_value" placeholder="Enter amount" min="0" step="0.01" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="session">
+                                <i class="fas fa-calendar-alt"></i> Academic Session
+                            </label>
+                            <select id="session" name="session" required>
+                                <option value="">Select session</option>
+                                <option value="2023/2024">2023/2024</option>
+                                <option value="2024/2025">2024/2025</option>
+                                <option value="2025/2026">2025/2026</option>
+                                <option value="2026/2027">2026/2027</option>
+                                <option value="2027/2028">2027/2028</option>
+                                <option value="2028/2029">2028/2029</option>
+                                <option value="2029/2030">2029/2030</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="class">
+                                <i class="fas fa-users"></i> Class Level
+                            </label>
+                            <select id="class" name="classes" required>
+                                <option value="">Select class</option>
+                                <option value="SS-Science">SS-Science</option>
+                                <option value="SS-ART">SS-ART</option>
+                                <option value="SS-Commercial">SS-Commercial</option>
+                                <option value="JSS">JSS</option>
+                                <option value="PRY3-5">PRY3-5</option>
+                                <option value="PRY1-2">PRY1-2</option>
+                                <option value="NUR1-2">NUR1-2</option>
+                                <option value="KG">KG</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="term">
+                                <i class="fas fa-book-open"></i> Academic Term
+                            </label>
+                            <select id="term" name="term" required>
+                                <option value="">Select term</option>
+                                <option value="First">First Term</option>
+                                <option value="Second">Second Term</option>
+                                <option value="Third">Third Term</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">
+                            <i class="fas fa-file-alt"></i> Description (Optional)
+                        </label>
+                        <input type="text" id="description" name="description" placeholder="Enter any additional notes">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                            <i class="fas fa-redo"></i> Reset Form
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Setting
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Table Card -->
+            <div class="card table-card">
+                <div class="table-header">
+                    <h2><i class="fas fa-list-alt"></i> School Settings List</h2>
+                    <div class="badge" id="settingsCount">0 settings</div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="settings-table" id="settingsTable">
+                        <thead>
+                            <tr>
+                                <th>S/N</th>
+                                <th>Fees Name</th>
+                                <th>Amount</th>
+                                <th>Class</th>
+                                <th>Term</th>
+                                <th>Session</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="settingsTableBody">
+                            <!-- Settings will be added here dynamically -->
+                        </tbody>
+                    </table>
+                    
+                    <!-- Empty State -->
+                    <div id="emptyState" class="empty-state" style="display: none;">
+                        <i class="fas fa-school"></i>
+                        <h3>No School Settings Yet</h3>
+                        <p>Add your first school setting using the form on the left</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        Settings saved successfully!
+    </div>
+    
+    <!-- Confirmation Modal for Delete -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-trash-alt"></i> Confirm Deletion</h3>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this school setting? This action cannot be undone.</p>
+                
+                <div class="setting-to-delete" id="settingToDelete">
+                    <!-- Setting details will be inserted here -->
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash"></i> Delete Setting
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Minimal JavaScript -->
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function(){
+            getAllSetFees();
+        })
+
+        async function getAllSetFees(){
+            try{
+                const api = await fetch('/get-all-fees', {
+                    method:'POST',
+                    headers:{'Content-type':'application-json'}
+                });
+                if(!api.ok){
+
+                }
+                else{
+                    const response = await api.json();
+                    const convert = JSON.parse(response);
+                    let display='';
+                    for(let index=0; index<convert.length; index++){
+                        display+=`
+                            <tr>
+                                    <td class="sn-cell">${index + 1}</td>
+                                    <td>${convert[index].fees_name}</td>
+                                    <td>₦${parseFloat(convert[index].fees_value).toLocaleString()}</td>
+                                    <td>${convert[index].classes}</td>
+                                    <td>${convert[index].term}</td>
+                                    <td>${convert[index].session}</td>
+                                    <td><strong>${convert[index].description}</strong></td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm" onclick="openDeleteModal('${convert[index].term}', '${convert[index].session}', '${convert[index].classes}')">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </td>
+                            </tr>
+                        `
+                    }
+                    const table = document.getElementById("settingsTableBody");
+                    table.innerHTML=display;
+
+                }
+            }
+            catch(err){
+                console.log(err.message);
+            }
+        }
+
+        async function openDeleteModal(term, session, classes){
+            console.log(term, session, classes);
+            const e ={session:session, term:term, classes:classes};
+            try{
+                const api = await fetch('/delete-set-fees', {
+                    method:"POST",
+                    headers:{"Content-type":"application/json"},
+                    body:JSON.stringify(e)
+                });
+                if(!api.ok){
+                    if(api.status==400){
+                        alert("all feild require");
+                    }
+                }
+                else{
+                    if(api.status==200){
+                        alert("Successfully delete fees set");
+                    }
+                }
+            }
+            catch(err){
+                console.log(err.message);
+            }
+        }
+        // // Global variables
+        // let schoolSettings = [];
+        // let settingToDelete = null;
+        
+        // // When page loads
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     // Load saved settings from localStorage
+        //     loadSettings();
+            
+        //     // Handle form submission
+        //     document.getElementById('schoolForm').addEventListener('submit', function(event) {
+        //         event.preventDefault();
+        //         saveSetting();
+        //     });
+            
+        //     // Update settings count
+        //     updateSettingsCount();
+        // });
+        
+        // // Save new school setting
+        // function saveSetting() {
+        //     // Get form values
+        //     const schoolName = document.getElementById('schoolName').value.trim();
+        //     const schoolValue = document.getElementById('schoolValue').value;
+        //     const classLevel = document.getElementById('class').value;
+        //     const term = document.getElementById('term').value;
+        //     const session = document.getElementById('session').value;
+        //     const description = document.getElementById('description').value.trim();
+            
+        //     // Validation
+        //     if (!schoolName || !schoolValue || !classLevel || !term || !session) {
+        //         showNotification('Please fill in all required fields', 'error');
+        //         return;
+        //     }
+            
+        //     if (parseFloat(schoolValue) <= 0) {
+        //         showNotification('Please enter a valid school fee amount', 'error');
+        //         return;
+        //     }
+            
+        //     // Check for duplicate (same class, term, session)
+        //     const isDuplicate = schoolSettings.some(setting => 
+        //         setting.class === classLevel && 
+        //         setting.term === term && 
+        //         setting.session === session
+        //     );
+            
+        //     if (isDuplicate) {
+        //         showNotification(`A setting for ${classLevel}, ${term}, ${session} already exists`, 'error');
+        //         return;
+        //     }
+            
+        //     // Create new setting object
+        //     const newSetting = {
+        //         id: Date.now().toString(), // Simple unique ID
+        //         schoolName,
+        //         schoolValue: parseFloat(schoolValue),
+        //         class: classLevel,
+        //         term,
+        //         session,
+        //         description: description || '',
+        //         dateCreated: new Date().toISOString(),
+        //         status: 'active'
+        //     };
+            
+        //     // Add to array
+        //     schoolSettings.push(newSetting);
+            
+        //     // Save to localStorage
+        //     saveToLocalStorage();
+            
+        //     // Update table
+        //     addSettingToTable(newSetting);
+            
+        //     // Update settings count
+        //     updateSettingsCount();
+            
+        //     // Show success notification
+        //     showNotification(`Setting for ${classLevel}, ${term} saved successfully!`, 'success');
+            
+        //     // Reset form
+        //     resetForm();
+        // }
+        
+        // // Add setting to table
+        // function addSettingToTable(setting) {
+        //     // Hide empty state if it's shown
+        //     document.getElementById('emptyState').style.display = 'none';
+            
+        //     // Create table row
+        //     const tableBody = document.getElementById('settingsTableBody');
+        //     const row = document.createElement('tr');
+        //     row.setAttribute('data-id', setting.id);
+            
+        //     // Format the school value with currency
+        //     const formattedValue = `₦${setting.schoolValue.toLocaleString('en-NG', {minimumFractionDigits: 2})}`;
+            
+        //     // Create row HTML
+        //     row.innerHTML = `
+        //         <td>${setting.schoolName}</td>
+        //         <td>${setting.class}</td>
+        //         <td>${setting.term}</td>
+        //         <td>${setting.session}</td>
+        //         <td><strong>${formattedValue}</strong></td>
+        //         <td>
+        //             <button class="btn btn-danger btn-sm" onclick="openDeleteModal('${setting.id}')">
+        //                 <i class="fas fa-trash"></i> Delete
+        //             </button>
+        //         </td>
+        //     `;
+            
+        //     // Add row to table
+        //     tableBody.appendChild(row);
+        // }
+        
+        // // Load all settings from localStorage
+        // function loadSettings() {
+        //     const savedSettings = localStorage.getItem('schoolSettings');
+            
+        //     if (savedSettings) {
+        //         schoolSettings = JSON.parse(savedSettings);
+                
+        //         // Add each setting to the table
+        //         schoolSettings.forEach(setting => {
+        //             addSettingToTable(setting);
+        //         });
+                
+        //         // Show empty state if no settings
+        //         if (schoolSettings.length === 0) {
+        //             document.getElementById('emptyState').style.display = 'block';
+        //         }
+        //     } else {
+        //         // Show empty state
+        //         document.getElementById('emptyState').style.display = 'block';
+        //     }
+        // }
+        
+        // // Save settings to localStorage
+        // function saveToLocalStorage() {
+        //     localStorage.setItem('schoolSettings', JSON.stringify(schoolSettings));
+        // }
+        
+        // // Update settings count badge
+        // function updateSettingsCount() {
+        //     const count = schoolSettings.length;
+        //     const countElement = document.getElementById('settingsCount');
+        //     countElement.textContent = `${count} setting${count !== 1 ? 's' : ''}`;
+            
+        //     // Show/hide empty state
+        //     const emptyState = document.getElementById('emptyState');
+        //     if (count === 0) {
+        //         emptyState.style.display = 'block';
+        //     } else {
+        //         emptyState.style.display = 'none';
+        //     }
+        // }
+        
+        // // Open delete confirmation modal
+        // function openDeleteModal(settingId) {
+        //     settingToDelete = schoolSettings.find(setting => setting.id === settingId);
+            
+        //     if (!settingToDelete) {
+        //         showNotification('Setting not found', 'error');
+        //         return;
+        //     }
+            
+        //     // Format the school value with currency
+        //     const formattedValue = `₦${settingToDelete.schoolValue.toLocaleString('en-NG', {minimumFractionDigits: 2})}`;
+            
+        //     // Update modal content
+        //     const deleteContent = document.getElementById('settingToDelete');
+        //     deleteContent.innerHTML = `
+        //         <div class="setting-detail">
+        //             <span>School:</span>
+        //             <strong>${settingToDelete.schoolName}</strong>
+        //         </div>
+        //         <div class="setting-detail">
+        //             <span>Class:</span>
+        //             <strong>${settingToDelete.class}</strong>
+        //         </div>
+        //         <div class="setting-detail">
+        //             <span>Term:</span>
+        //             <strong>${settingToDelete.term}</strong>
+        //         </div>
+        //         <div class="setting-detail">
+        //             <span>Session:</span>
+        //             <strong>${settingToDelete.session}</strong>
+        //         </div>
+        //         <div class="setting-detail">
+        //             <span>Amount:</span>
+        //             <strong>${formattedValue}</strong>
+        //         </div>
+        //     `;
+            
+        //     // Set up delete button
+        //     document.getElementById('confirmDeleteBtn').onclick = function() {
+        //         deleteSetting(settingId);
+        //     };
+            
+        //     // Show modal
+        //     document.getElementById('deleteModal').classList.add('active');
+        // }
+        
+        // // Close delete modal
+        // function closeDeleteModal() {
+        //     document.getElementById('deleteModal').classList.remove('active');
+        //     settingToDelete = null;
+        // }
+        
+        // // Delete setting
+        // function deleteSetting(settingId) {
+        //     // Remove from array
+        //     const index = schoolSettings.findIndex(setting => setting.id === settingId);
+            
+        //     if (index !== -1) {
+        //         const deletedSetting = schoolSettings[index];
+                
+        //         // Remove from array
+        //         schoolSettings.splice(index, 1);
+                
+        //         // Save to localStorage
+        //         saveToLocalStorage();
+                
+        //         // Remove from table
+        //         const row = document.querySelector(`tr[data-id="${settingId}"]`);
+        //         if (row) {
+        //             row.remove();
+        //         }
+                
+        //         // Update settings count
+        //         updateSettingsCount();
+                
+        //         // Close modal
+        //         closeDeleteModal();
+                
+        //         // Show success notification
+        //         showNotification(`Setting for ${deletedSetting.class}, ${deletedSetting.term} deleted successfully`, 'success');
+        //     } else {
+        //         showNotification('Setting not found', 'error');
+        //     }
+        // }
+        
+        // // Reset form
+        // function resetForm() {
+        //     document.getElementById('schoolForm').reset();
+        //     showNotification('Form has been reset', 'info');
+        // }
+        
+        // // Show notification
+        // function showNotification(message, type = 'success') {
+        //     const notification = document.getElementById('notification');
+            
+        //     // Set message and type
+        //     notification.textContent = message;
+        //     notification.className = 'notification';
+        //     notification.classList.add(type);
+            
+        //     // Show notification
+        //     setTimeout(() => {
+        //         notification.classList.add('show');
+        //     }, 10);
+            
+        //     // Hide after 3 seconds
+        //     setTimeout(() => {
+        //         notification.classList.remove('show');
+        //     }, 3000);
+        // }
+        
+        // // Add custom class option
+        // function addCustomClass() {
+        //     const className = prompt("Enter new class name:");
+        //     if (className) {
+        //         const classSelect = document.getElementById('class');
+        //         const newOption = document.createElement('option');
+        //         newOption.value = className;
+        //         newOption.textContent = className;
+        //         classSelect.appendChild(newOption);
+        //         showNotification(`New class "${className}" added`, 'success');
+        //     }
+        // }
+        
+        // // Add custom session option
+        // function addCustomSession() {
+        //     const sessionYear = prompt("Enter new session (e.g., 2028/2029):");
+        //     if (sessionYear) {
+        //         const sessionSelect = document.getElementById('session');
+        //         const newOption = document.createElement('option');
+        //         newOption.value = sessionYear;
+        //         newOption.textContent = sessionYear;
+        //         sessionSelect.appendChild(newOption);
+        //         showNotification(`New session "${sessionYear}" added`, 'success');
+        //     }
+        // }
+        
+        // // Export settings to JSON
+        // function exportSettings() {
+        //     if (schoolSettings.length === 0) {
+        //         showNotification('No settings to export', 'error');
+        //         return;
+        //     }
+            
+        //     const dataStr = JSON.stringify(schoolSettings, null, 2);
+        //     const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+        //     const exportFileDefaultName = 'school-settings.json';
+            
+        //     const linkElement = document.createElement('a');
+        //     linkElement.setAttribute('href', dataUri);
+        //     linkElement.setAttribute('download', exportFileDefaultName);
+        //     linkElement.click();
+            
+        //     showNotification('Settings exported successfully', 'success');
+        // }
+    </script>
+</body>
+</html>

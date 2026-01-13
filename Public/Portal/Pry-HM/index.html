@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primary-HOD</title>
+</head>
+<body>
+   
+    <!-- Display the profile of person -->
+     
+     <!-- create input for each features -->
+    <form action="/report" method="post">
+             <h1>Primary HOD Dashboard </h1>
+            <div id="detial">
+                <div id="profile-picture">
+
+                </div>
+                <p>Email:<span id="name"></span></p>
+                <p>Position: <span id="position"></span></p>
+                <p>Phone: <span id="phone"></span></p>
+                <p>Email: <span id="email"></span></p>
+                <p>Member Since: <span id="member"></span></p>
+                <p>Qualification: <span id="qualification"></span></p>
+                <p>Teacher ID: <span id="teacher_id"></span></p>
+                
+            </div>
+         <br>
+         <a href="/Public/Create-Account/addstudent.html">
+            <button id="Create-Account">
+                Create Student Account
+            </button>
+                </a><br>
+        <label>Title</label>
+         <select name="title" id="title" required>
+            <option value="">Select type of report</option>
+            <option value="Daily-progress-report">Daily Progress Report</option>
+            <option value="weekly-progress-report">Weekly Progress Report</option>
+            <option value="Monthly-progress-report"> Monthly Progress Report</option>
+            <option value="Teamly-progress-report">Teamly Progress Report</option>
+         </select>
+         <br>
+        <label>Reporters Name</label>
+            <input type="text" placeholder="Enter hod names" name="name"><br>
+         <label>Teachers ID</label>
+         <input type="text" placeholder="Enter empleoyment or teacher id" name="teacher_id">
+    <h2>Reports</h2>
+         <h3>Absences Report</h3>
+         <label for="">Date</label><br>
+         <input type="date" name="date" id="date"> <br>
+        <input type="text" id="class1" name="class1" placeholder="Enter class" /><br>
+        <input type="text" id="class1-num" name="class1_num" placeholder="Enter number of absences" /><br>
+        <input type="text" id="class2" name="class2" placeholder="Enter class" /><br>
+        <input type="text" id="class2-num" name="class2_num" placeholder="Enter number of absences" /><br>
+        <input type="text" id="class3" name="class3" placeholder="Enter class" /><br>
+        <input type="text" id="class3-num" name="class3_num" placeholder="Enter number of absences" /><br>
+        <input type="text" id="class4" name="class4" placeholder="Enter class" /><br>
+        <input type="text" id="class4-num" name="class4_num" placeholder="Enter number of absences" /><br>
+        <input type="text" id="class5" name="class5" placeholder="Enter class"><br>
+        <input type="text" id="class5-num" name="class5_num" placeholder="Enter number of absences" /><br>
+
+        <h3>Daily Complaints Report</h3>
+        <textarea id="complaints" name="complaints" rows="4" cols="50" placeholder="Enter daily complaints here..."></textarea><br>
+        <h3>Daily Work Remarks per Teacher</h3>
+        <input type="text" id="teacher1" name="teacher1" placeholder="Enter class" /><br>
+        <input type="text" id="teacher1-remark" name="teacher1_remark" placeholder="Enter work remark" /><br>
+        <input type="text" id="teacher2" name="teacher2" placeholder="Enter class" /><br>
+        <input type="text" id="teacher2-remark" name="teacher2_remark" placeholder="Enter work remark" /><br>
+        <input type="text" id="teacher3" name="teacher3" placeholder="Enter class" /><br>
+        <input type="text" id="teacher3-remark" name="teacher3_remark" placeholder="Enter work remark" /><br>
+        <input type="text" name="teacher4" id="teacher4" placeholder="Enter class"><br>
+        <input type="text" name="teacher4_remark" id="teacher4-remark" placeholder="Enter work remark"><br>
+        <input type="text" id="teacher5" name="teacher5" placeholder="Enter class"><br>
+        <input type="text" id="teacher5" name="teacher5_remark" placeholder="Enter work remark"/><br>
+      <select name="department" id="">
+            <option value="">select position</option>
+            <option value="Senior-HOD">Senior-HOD</option>
+            <option value="Junior-HOD">Junior-HOD</option>
+            <option value="pirmary-HM">Pirmary-HM</option>
+            <option value="pre-primary-HM">Pre-primary-HM</option>
+        </select><br>
+        <label for="">Give Comment</label> <br>
+        <textarea name="comment" id="" cols="30" rows="10"></textarea> <br>
+        <button type="submit">Submit Report</button>
+    </form>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            max-width: 700px;
+            width: 100%;
+            border: 1px solid #ccc;
+            padding: 30px;
+            border-radius: 5px;
+            align-items: flex-start;
+            justify-self: center;
+        }
+        input {
+            margin: 5px 0;
+            padding: 8px;
+            width: 200px;
+        }
+        button {
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        textarea {
+            margin: 5px 0;
+            padding: 8px;
+            width: 400px;
+        }
+        #Create-Account{
+            background-color: #333;
+            color: white;
+            float: right;
+            border-radius: 10px;
+        }
+        #detial{
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            width: 90%;
+        }
+        #profile-picture{
+            width: 200px;
+            height: 200px;
+            margin-bottom: 10px;
+        }
+        
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            ready();
+        })
+      async function ready(){
+            const email = localStorage.getItem('Alma');
+            const position = 'Primary-HM';
+            const e = {email:email,position:position}
+            if(!email){
+                // window.location.href='/';
+            }
+            else{
+                const api = await fetch('/hod-hm-info', {
+                    method:'POST',
+                    headers:{'Content-type':'application/json'},
+                    body:JSON.stringify(e)
+                });
+                if(!api.ok){
+
+                }
+                else{
+                     const response = await api.json();
+                    const conv = JSON.parse(response);
+                    console.log(conv);
+                    document.getElementById('profile-picture').innerHTML=`<img src="${'/uploads/'+conv.profile}" alt="Profile Image" style="width: 100%; height: 100%; border-radius: 50%;">`;
+                    document.getElementById('name').textContent=conv.name;
+                    document.getElementById('position').textContent=conv.position;
+                    document.getElementById('phone').textContent=conv.phone;
+                    document.getElementById('member').textContent=conv.member_since;
+                    document.getElementById('email').textContent=conv.email;
+                    document.getElementById('qualification').textContent=conv.qualification;
+                    document.getElementById('teacher_id').textContent=conv.teacher_id;
+                    if(response.stauts===200){
+                        alert('report sucessful');
+                     }
+                }
+            }
+       }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Account Creation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f0;
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Background image with blur effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            z-index: -1;
+            opacity: 0.15;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(5px);
+        }
+        
+        header {
+            background: linear-gradient(145deg, #f8f8f8 0%, #e8e8e8 100%);
+            padding: 30px 40px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .logo-icon {
+            background-color: #d8d8d8;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #777;
+        }
+        
+        .logo-text {
+            font-size: 26px;
+            font-weight: 700;
+            color: #666;
+        }
+        
+        header h1 {
+            color: #555;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            color: #777;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .form-container {
+            padding: 40px;
+            background-color: #fefefa;
+        }
+        
+        .form-section {
+            margin-bottom: 40px;
+            padding: 30px;
+            border-radius: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #e8e8e8;
+            position: relative;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e8e8e8;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            color: #555;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 12px;
+            color: #888;
+        }
+        
+        .edit-badge {
+            background-color: #e8e8e8;
+            color: #777;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .edit-badge:hover {
+            background-color: #ddd;
+        }
+        
+        .edit-badge i {
+            margin-right: 6px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-section {
+                padding: 20px;
+            }
+            
+            .form-container {
+                padding: 25px;
+            }
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #666;
+            font-size: 15px;
+        }
+        
+        label.required::after {
+            content: " *";
+            color: #b76e6e;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background-color: #fefefe;
+            color: #555;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #aaa;
+            box-shadow: 0 0 0 3px rgba(170, 170, 170, 0.2);
+            background-color: #fff;
+        }
+        
+        /* Radio button styling for gender */
+        .gender-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .gender-option {
+            flex: 1;
+        }
+        
+        .gender-option input {
+            display: none;
+        }
+        
+        .gender-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: normal;
+            margin: 0;
+            background-color: #fefefe;
+        }
+        
+        .gender-option label i {
+            font-size: 22px;
+            margin-bottom: 8px;
+            position: static;
+            transform: none;
+        }
+        
+        .gender-option input:checked + label {
+            border-color: #999;
+            background-color: rgba(170, 170, 170, 0.1);
+            color: #555;
+            font-weight: 600;
+        }
+        
+        .gender-option label i.fa-male {
+            color: #6a8cb8;
+        }
+        
+        .gender-option label i.fa-female {
+            color: #d47b7b;
+        }
+
+        
+        
+        .gender-option label i.fa-genderless {
+            color: #8a8a8a;
+        }
+        
+        /* House selection styling */
+        .house-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .house-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .house-options {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .house-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: #fefefe;
+        }
+        
+        .house-option input {
+            display: none;
+        }
+        
+        .house-option span {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .house-option i {
+            margin-right: 10px;
+        }
+        
+        .house-option input:checked + span {
+            font-weight: 700;
+        }
+        
+        .house-option input:checked ~ .house-option {
+            border-color: #999;
+            background-color: rgba(170, 170, 170, 0.1);
+        }
+        
+        /* Color coding for houses */
+        .house-red {
+            color: #d47b7b;
+        }
+        
+        .house-red input:checked + span {
+            color: #c33;
+        }
+        
+        .house-blue {
+            color: #6a8cb8;
+        }
+        
+        .house-blue input:checked + span {
+            color: #36c;
+        }
+        
+        .house-green {
+            color: #7a9d7e;
+        }
+        
+        .house-green input:checked + span {
+            color: #393;
+        }
+        
+        .house-yellow {
+            color: #d4a574;
+        }
+        
+        .house-yellow input:checked + span {
+            color: #c90;
+        }
+        
+        /* Form actions */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e8e8e8;
+            justify-content: center;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(to right, #aaa, #888);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(136, 136, 136, 0.3);
+            background: linear-gradient(to right, #999, #777);
+        }
+        
+        .submit-btn i {
+            margin-right: 10px;
+        }
+        
+        .cancel-btn {
+            background-color: #f0f0f0;
+            color: #777;
+            border: 2px solid #ddd;
+            padding: 16px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cancel-btn:hover {
+            background-color: #e8e8e8;
+            border-color: #ccc;
+        }
+        
+        .cancel-btn i {
+            margin-right: 10px;
+        }
+        
+        /* Decorative elements */
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(248, 248, 248, 0.3);
+            z-index: -1;
+        }
+        
+        .circle-1 {
+            width: 200px;
+            height: 200px;
+            top: -80px;
+            right: -80px;
+        }
+        
+        .circle-2 {
+            width: 150px;
+            height: 150px;
+            bottom: -60px;
+            left: -60px;
+        }
+        
+        /* Help text */
+        .help-text {
+            font-size: 13px;
+            color: #888;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .help-text i {
+            margin-right: 5px;
+        }
+        
+        /* Success message styling (hidden by default) */
+        .success-message {
+            text-align: center;
+            padding: 40px;
+            background-color: #f0f8f0;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid #d0e8d0;
+            display: none;
+        }
+        
+        /* This shows the success message when form is submitted */
+        .form-container:target {
+            display: none;
+        }
+        
+        .form-container:target + .success-message {
+            display: block;
+        }
+        
+        .success-icon {
+            color: #7a9d7e;
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .success-message h2 {
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        .success-message p {
+            color: #777;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+        
+        /* Student ID preview */
+        .student-id-preview {
+            background: linear-gradient(135deg, #f8f8f8 0%, #e8e8e8 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .id-preview-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .id-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #d8d8d8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            color: #777;
+            font-size: 30px;
+        }
+        
+        .id-info h3 {
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .id-info p {
+            color: #777;
+            font-size: 14px;
+        }
+        
+        .id-badge {
+            background-color: #aaa;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 14px;
+            background-color: #f8f8f8;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        footer a {
+            color: #777;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px dotted #aaa;
+        }
+        
+        /* Section numbering */
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background-color: #d8d8d8;
+            color: #777;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .profile {
+            border: 2px dashed #bbb;
+            border-radius: 22px;
+            padding: 20px;
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+            background-color: #fafafa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 20px;
+            justify-self: center;
+            margin-top: 10px;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Decorative elements -->
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="logo-text">ALMA</div>
+            </div>
+            
+            <h1>Create Student Account</h1>
+            <p>Fill in the details below to create a new student account. All fields marked with * are required.</p>
+        </header>
+        
+        <form action="/createstudent" method="post" class="form-container" id="studentForm" enctype="multipart/form-data">
+            <!-- Personal Information Section -->
+            <div class="form-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="section-number">1</span>
+                        <i class="fas fa-user-circle"></i> Personal Information
+                    </h2>
+                    <div class="edit-badge">
+                        <i class="fas fa-edit"></i> Edit
+                    </div>
+                </div>
+                 <div id="Profile">
+                    <input type="file" name="profile" id="profile-picture" accept="image/*" class="profile">
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name" class="required">Full Name</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="name" name="name" placeholder="David Johnson" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="admission-number" class="required">Admission Number</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-id-card"></i>
+                            <input type="text" id="admission_number" name="Admission_number" placeholder="NIS-2021-0876" required>
+                        </div>
+                        <div class="help-text">
+                            <i class="fas fa-info-circle"></i> Format: NIS-YYYY-XXXX
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dob" class="required">Date of Birth</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-birthday-cake"></i>
+                            <input type="date" id="dob" name="dob" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Gender</label>
+                        <div class="gender-options">
+                            <div class="gender-option">
+                                <input type="radio" id="male" name="gender" value="male" checked>
+                                <label for="male">
+                                    <i class="fas fa-male"></i>
+                                    Male
+                                </label>
+                            </div>
+                            <div class="gender-option">
+                                <input type="radio" id="female" name="gender" value="female">
+                                <label for="female">
+                                    <i class="fas fa-female"></i>
+                                    Female
+                                </label>
+                            </div>
+                            <div class="gender-option">
+                                <input type="radio" id="other" name="gender" value="other">
+                                <label for="other">
+                                    <i class="fas fa-genderless"></i>
+                                    Other
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nationality" class="required">Nationality</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-globe"></i>
+                            <input type="text" id="nationality" name="nationality" placeholder="American" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Information Section -->
+            <div class="form-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="section-number">2</span>
+                        <i class="fas fa-address-book"></i> Contact Information
+                    </h2>
+                    <div class="edit-badge">
+                        <i class="fas fa-edit"></i> Edit
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="email" class="required">Email</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" placeholder="david.johnson@student.newdich.edu" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone" class="required">Phone</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="phone" name="phone" placeholder="+1 (555) 123-4567" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label for="address" class="required">Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-home"></i>
+                            <input type="text" id="address" name="address" placeholder="123 Maple Street, Springfield, IL 62701" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Academic Information Section -->
+            <div class="form-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="section-number">3</span>
+                        <i class="fas fa-graduation-cap"></i> Academic Information
+                    </h2>
+                </div>
+                 <div class="form-group">
+                        <label for="class-teacher" class="required">Type of Program</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user-tie"></i>
+                            <select name="type_program" id="" required>
+                                <option value="">select program</option>
+                                <option value="normal">normal</option>
+                                <option value="schoolarship">schoolarship</option>
+                            </select>
+                        </div>
+                    </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="current-class" class="required">Current Class</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <select id="current-class" name="current_class" required>
+                                <option value="" disabled selected>Select Class</option>
+                                <option value="SS3-Science">SS3-Science</option>
+                                <option value="SS1-Commercial">SS3-Commercial</option>
+                                <option value="SS1-ART">SS3-ART</option>
+                                <option value="SS2-Science">SS2-Science</option>
+                                <option value="SS1-Commercial">SS2-Commercial</option>
+                                <option value="SS1-ART">SS2-ART</option>
+                                <option value="SS1-Science" selected>SS1-Science</option>
+                                <option value="SS1-Commercial">SS1-Commercial</option>
+                                <option value="SS1-ART">SS1-ART</option>
+                                <option value="JSS3">JSS3</option>
+                                <option value="JSS2">JSS2</option>
+                                <option value="JSS1">JSS1</option>
+                                <option value="PRY5">PRY5</option>
+                                <option value="PRY4">PRY4</option>
+                                <option value="PRY3">PRY3</option>
+                                <option value="PRY2">PRY2</option>
+                                <option value="PRY1">PRY1</option>
+                                <option value="NUR2">NUR2</option>
+                                <option value="NUR1">NUR1</option>
+                                <option value="KG1">KG1</option>
+                                <option value="Pre-PRY">Creach</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="class-teacher" class="required">Class Teacher</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user-tie"></i>
+                            <input type="text" id="class-teacher" name="class_teacher" placeholder="Ms. Emily Clark" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="admission-date" class="required">Admission Date</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-calendar-plus"></i>
+                            <input type="date" id="admission-date" name="admission_date" required>
+                        </div>
+                    </div>
+                    
+                  
+                </div>
+            </div>
+            
+            <!-- Guardian Information Section -->
+            <div class="form-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="section-number">4</span>
+                        <i class="fas fa-user-friends"></i> Guardian Information
+                    </h2>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="guardian-name" class="required">Parent/Guardian Name</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user-friends"></i>
+                            <input type="text" id="guardian-name" name="guardian_name" placeholder="Robert Johnson" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="relationship" class="required">Relationship</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-heart"></i>
+                            <select id="relationship" name="relationship" required>
+                                <option value="" disabled selected>Select Relationship</option>
+                                <option value="father" selected>Father</option>
+                                <option value="mother">Mother</option>
+                                <option value="guardian">Guardian</option>
+                                <option value="grandparent">Grandparent</option>
+                                <option value="sibling">Sibling</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="guardian-phone" class="required">Contact Phone</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone-alt"></i>
+                            <input type="tel" id="guardian-phone" name="guardian_phone" placeholder="+1 (555) 987-6543" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="guardian-email" class="required">Email</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="guardian-email" name="guardian_email" placeholder="robert.johnson@email.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label for="occupation" class="required">Occupation</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-briefcase"></i>
+                            <input type="text" id="occupation" name="occupation" placeholder="Software Engineer" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Emergency Contact Section -->
+            <div class="form-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="section-number">5</span>
+                        <i class="fas fa-first-aid"></i> Emergency Contact
+                    </h2>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="emergency-contact" class="required">Emergency Contact</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user-md"></i>
+                            <input type="text" id="emergency-contact" name="emergency_contact" placeholder="Mary Johnson" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="emergency-relationship" class="required">Relationship</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-heartbeat"></i>
+                            <select id="emergency-relationship" name="emergency_relationship" required>
+                                <option value="" disabled selected>Select Relationship</option>
+                                <option value="mother" selected>Mother</option>
+                                <option value="father">Father</option>
+                                <option value="guardian">Guardian</option>
+                                <option value="sibling">Sibling</option>
+                                <option value="relative">Relative</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label for="emergency-phone" class="required">Contact Phone</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone-square-alt"></i>
+                            <input type="tel" id="emergency-phone" name="emergency_phone" placeholder="+1 (555) 456-7890" required>
+                        </div>
+                    </div>
+                </div>
+                 <div class="form-group">
+                        <label for="emergency-contact" class="required">Medical Report</label>
+                        <div class="input-with-icon">
+                            <i class=""></i>
+                            <textarea name="medical" id="emergency-contact"cols="20" rows="10" required>
+                            </textarea>
+                        </div>
+                </div>
+                <div class="from-group">
+                    <label for="">Any immediate Cure</label>
+                    <div class="input-with-icon">
+                        <i class=""></i>
+                        <textarea name="cure" id="emergency_contact" required></textarea>
+                    </div>
+                </div>
+                <!-- Student ID Preview -->
+                <!-- <div class="student-id-preview">
+                    <div class="id-preview-left">
+                        <div class="id-avatar">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="id-info">
+                            <h3>David Johnson</h3>
+                            <p>Grade 11 - Science | NIS-2021-0876</p>
+                            <p>Blue House | Admitted: Sept 5, 2021</p>
+                        </div>
+                    </div>
+                    <div class="id-badge">
+                        Student ID Preview
+                    </div>
+                </div> -->
+            </div>
+            
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="cancel-btn">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </div>
+        </form>
+        
+        <!-- Success message that shows when form is submitted -->
+        <div class="success-message" id="success">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Student Account Created Successfully!</h2>
+            <p>The student account has been created and added to the system. Login credentials have been sent to the provided email address.</p>
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                <a href="#" style="display: inline-block; padding: 12px 30px; background-color: #aaa; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                    <i class="fas fa-eye"></i> View Student Profile
+                </a>
+               <button type="submit" style="display: inline-block; padding: 12px 30px; background-color: #f0f0f0; color: #777; text-decoration: none; border-radius: 8px; font-weight: 600; border: 2px solid #ddd;">  <i class="fas fa-plus"></i> Create Another</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>By creating a student account, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+            <!-- <p style="margin-top: 10px;">Need help? <a href="#">Contact Student Services</a> or call +1 (800) 123-4567</p> -->
+        </footer>
+    </div>
+
+    <!-- Set default dates and pre-select options -->
+    <script>
+        //display image preview
+        const profileInput = document.getElementById('profile-picture');
+        profileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileInput.style.backgroundImage = `url(${e.target.result})`;
+                    profileInput.style.backgroundSize = 'cover';
+                    profileInput.style.backgroundPosition = 'center';
+                    profileInput.textContent = '';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default dates
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            const formattedDate = `${yyyy}-${mm}-${dd}`;
+            
+            // Set date of birth (15 years ago)
+            const birthYear = yyyy - 15;
+            const birthDate = `${birthYear}-03-15`;
+            document.getElementById('dob').value = birthDate;
+            
+            // Set admission date (September 5, 2021)
+            document.getElementById('admission-date').value = '2021-09-05';
+            
+            // Pre-select options
+            document.getElementById('current-class').value = 'grade-11-science';
+            document.getElementById('class-teacher').value = 'sarah-williams';
+            document.getElementById('relationship').value = 'father';
+            document.getElementById('emergency-relationship').value = 'mother';
+            document.getElementById('house-blue').checked = true;
+        });
+    </script>
+</body>
+</html>

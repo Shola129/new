@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Transaction Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #4a6ee0, #6a11cb);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+        
+        .form-section {
+            padding: 40px;
+            background-color: #f9fafd;
+            border-bottom: 1px solid #e1e5f1;
+        }
+        
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: flex-end;
+        }
+        
+        .input-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+        
+        select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            background-color: white;
+            color: #333;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a6ee0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 20px center;
+            background-size: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #4a6ee0;
+            box-shadow: 0 0 0 3px rgba(74, 110, 224, 0.2);
+        }
+        
+        select:hover {
+            border-color: #4a6ee0;
+        }
+        
+        .button-group {
+            min-width: 150px;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 16px 30px;
+            background: linear-gradient(to right, #4a6ee0, #6a11cb);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(74, 110, 224, 0.2);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(74, 110, 224, 0.3);
+            background: linear-gradient(to right, #3a5ed0, #5a0bcb);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .submit-btn:disabled {
+            background: linear-gradient(to right, #cccccc, #aaaaaa);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .submit-btn:disabled:hover {
+            transform: none;
+            box-shadow: none;
+            background: linear-gradient(to right, #cccccc, #aaaaaa);
+        }
+        
+        .table-section {
+             display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            padding: 40px;
+            min-height: 600px;
+        }
+        
+        .table-section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .selected-info {
+            background: linear-gradient(to right, #eef4ff, #f8f9ff);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #4a6ee0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .selected-text {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .selected-details {
+            font-size: 1.1rem;
+            color: #4a6ee0;
+            background-color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .table-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4a6ee0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        thead {
+            background-color: #4a6ee0;
+            color: white;
+        }
+        
+        th {
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #eef1f7;
+            transition: background-color 0.2s;
+        }
+        
+        tbody tr:hover {
+            background-color: #f8f9ff;
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: #f9fafd;
+        }
+        
+        tbody tr:nth-child(even):hover {
+            background-color: #f1f4ff;
+        }
+        
+        td {
+            padding: 16px 15px;
+            color: #444;
+        }
+        
+        .week-cell {
+            font-weight: 600;
+            color: #2c3e50;
+            width: 15%;
+        }
+        
+        .transaction-cell {
+            font-weight: 500;
+        }
+        
+        .amount-cell {
+            color: #27ae60;
+            font-weight: 600;
+        }
+        
+        .status-paid {
+            color: #27ae60;
+            font-weight: 600;
+            background-color: rgba(39, 174, 96, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .status-pending {
+            color: #e74c3c;
+            font-weight: 600;
+            background-color: rgba(231, 76, 60, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .status-partial {
+            color: #f39c12;
+            font-weight: 600;
+            background-color: rgba(243, 156, 18, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 60px;
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            background-color: #f9fafd;
+            border-radius: 10px;
+            border: 2px dashed #d1d9e6;
+        }
+        
+        .no-data.active {
+            display: block;
+        }
+
+        /* .transaction-table {
+            display: none;
+        }
+        
+        .transaction-table.active {
+            display: block;
+        }  */
+        
+        .instructions {
+            background-color: #eef4ff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #555;
+            border-left: 5px solid #4a6ee0;
+        }
+        
+        .instructions h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        .instructions strong {
+            color: #4a6ee0;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #e1e5f1;
+            background-color: #f9fafd;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4a6ee0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .form-container {
+                flex-direction: column;
+            }
+            
+            .input-group, .button-group {
+                width: 100%;
+            }
+            
+            .selected-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .table-section {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            th, td {
+                padding: 14px 10px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Animation for tables */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .table-section {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Academic Transaction Tracker</h1>
+            <p class="subtitle">Select a session and term, then click submit to view weekly transaction records.</p>
+        </header>
+        
+        <div class="form-section">
+            <div class="form-container">
+                <div class="input-group">
+                    <label for="session-select">Select Academic Session</label>
+                    <select id="session-select" name="session">
+                        <option value="" disabled selected>Choose a session...</option>
+                        <option value="2025/2026">2025/2026 Academic Session</option>
+                        <option value="2026/2027">2026/2027 Academic Session</option>
+                        <option value="2027/2028">2027/2028 Academic Session</option>
+                        <option value="2028/2029">2028/2029 Academic Session</option>
+                        <option value="2029/2030">2029/2030 Academic Session</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="term-select">Select Academic Term</label>
+                    <select id="term-select" name="term">
+                        <option value="" disabled selected>Choose a term...</option>
+                        <option value="first">First Term</option>
+                        <option value="second">Second Term</option>
+                        <option value="third">Third Term</option>
+                    </select>
+                </div>
+                
+                <div class="button-group">
+                    <button id="submit-btn" class="submit-btn" onclick="submit()">View Transactions</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loading indicator -->
+        <div class="loading" id="loading">
+            <div class="loader"></div>
+            <p>Loading transaction data...</p>
+        </div>
+        
+        <!-- Table section -->
+        <div class="table-section" id="table-section">
+            <div class="selected-info">
+                <div class="selected-text">Showing Transactions For:</div>
+                <div class="selected-details" id="selected-details"></div>
+            </div>
+            
+            <h2 class="table-title">Weekly Transaction Records</h2>
+            <div id="table-body" class="transaction-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Week</th>
+                            <th>Transaction Type</th>
+                            <th>Amount</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody id="display">
+                    <!-- <tr>
+                            <td class="week-cell">Week 1</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td>First term tuition payment</td>
+                            <td class="amount-cell">$450.00</td>
+                            <td><span class="status-paid">Paid</span></td>
+                        </tr> -->
+                       <tr>
+                            <td class="week-cell">Week 1</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-1"></td>
+                        </tr>
+                         <tr>
+                            <td class="week-cell">Week 2</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-2"></td>
+                        </tr>
+                         <tr>
+                            <td class="week-cell">Week 3</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-3"></td>
+                        </tr>
+                         <tr>
+                            <td class="week-cell">Week 4</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-4"></td>
+                        </tr>
+                         <tr>
+                            <td class="week-cell">Week 5</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-5"></td>
+                        </tr>
+                         <tr>
+                            <td class="week-cell">Week 6</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-6"></td>
+                        </tr>
+                         <tr>
+                            <td class="week-cell">Week 7</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-7"></td>
+                        </tr>
+                         <tr>
+                            <td class="week-cell">Week 8</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-8"></td>
+                        </tr>
+                         <tr>
+                            <td class="week-cell">Week 9</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-9"></td>
+                        </tr>
+                         <tr>
+                            <td class="week-cell">Week 10</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-10"></td>
+                        </tr>
+                         <tr>
+                            <td class="week-cell">Week 11</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-11"></td>
+                        </tr>
+                         <tr>
+                            <td class="week-cell">Week 12</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-12"></td>
+                        </tr>
+                         <tr>
+                            <td class="week-cell">Week 13</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-13"></td>
+                        </tr>
+                         <tr>
+                            <td class="week-cell">Week 14</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-14"></td>
+                        </tr>
+                         <tr>
+                            <td class="week-cell">Week 15</td>
+                            <td class="transaction-cell">Tuition Fee</td>
+                            <td class="amount-cell" id="income-week-15"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="display-total"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const sessionSelect = document.getElementById('session-select').value;
+        const termSelect = document.getElementById('term-select').value;
+        const submitBtn = document.getElementById('submit-btn');
+        const tableSection = document.getElementById('table-section');
+        const selectedDetails = document.getElementById('selected-details');
+        const defaultMessage = document.getElementById('default-message');
+        const loadingIndicator = document.getElementById('loading');
+        // submitBtn.addEventListener("click", submit());
+       async function submit(){
+            //event.preventDefault();
+            const session = document.getElementById('session-select').value;
+            const term = document.getElementById('term-select').value;
+            // console.log(session, term);
+            if(!session || !term){
+                alert("select term, session");
+            }
+
+            else{
+                 //for week one
+                 document.getElementById('selected-details').innerHTML=`Transaction for ${session} session and ${term} term`;
+                 document.getElementById("table-section").style.display="block";
+            try{
+                    const e = {session:session, term:term, week:'week-1'};
+                    const api = await fetch("/particular-term-and-session",{
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                        if(api.status===404){
+                            document.getElementById('income-week-1').textContent='NO Transaction';
+                            document.getElementById('income-week-1').style.color="red";
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount);   
+                        }
+                        console.log(convert);
+                        document.getElementById('income-week-1').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+            try{
+                    const e = {session:session, term:term, week:'week-2'};
+                    const api = await fetch("/total-income-week-two", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                        if(api.status===404){
+                            document.getElementById('income-week-2').textContent='NO Transaction ';
+                            document.getElementById('income-week-2').style.color="red";
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount);   
+                        }
+                        document.getElementById('income-week-2').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            try{
+                    const e = {session:session, term:term, week:'week-2'};
+                    const api = await fetch("/total-income-week-three", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                        if(api.status===404){
+                            document.getElementById('income-week-3').textContent='NO Transaction ';
+                            document.getElementById('income-week-3').style.color="red";
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount);                        }
+                        document.getElementById('income-week-3').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+            try{
+                    const e = {session:session, term:term, week:'week-4'};
+                    const api = await fetch("/total-income-week-four", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                             if(api.status===404){
+                            document.getElementById('income-week-4').textContent='NO Transaction ';
+                            document.getElementById('income-week-4').style.color="red";
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount); 
+                        }
+                        document.getElementById('income-week-4').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            //for week 5
+            try{
+                    const e = {session:session, term:term, week:'week-5'};
+                    const api = await fetch("/total-income-week-five", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                             if(api.status===404){
+                            document.getElementById('income-week-5').textContent='NO Transaction ';
+                            document.getElementById('income-week-5').style.color="red";
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount); 
+                        }
+                        document.getElementById('income-week-5').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            //for week 6
+
+            try{
+                    const e = {session:session, term:term, week:'week-6'};
+                    const api = await fetch("/total-income-week-six", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                            if(api.status===404){
+                            document.getElementById('income-week-6').textContent='NO Transaction ';
+                            document.getElementById('income-week-6').style.color="red";                     }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount); 
+                        }
+                        document.getElementById('income-week-6').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            //for week 7
+            try{
+                    const e = {session:session, term:term, week:'week-7'};
+                    const api = await fetch("/total-income-week-seven", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                                 if(api.status===404){
+                            document.getElementById('income-week-7').textContent='NO Transaction ';
+                             document.getElementById('income-week-7').style.color="red";                    
+                                 }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount); 
+                        }
+                        document.getElementById('income-week-7').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            //for week 8
+            try{
+                    const e = {session:session, term:term, week:'week-8'};
+                    const api = await fetch("/total-income-week-eight", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                             if(api.status===404){
+                            document.getElementById('income-week-8').textContent='NO Transaction ';
+                            document.getElementById('income-week-8').style.color="red";
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount); 
+                        }
+                        document.getElementById('income-week-8').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            //week 9
+            try{
+                    const e = {session:session, term:term, week:'week-9'};
+                    const api = await fetch("/total-income-week-nine", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                             if(api.status===404){
+                            document.getElementById('income-week-9').textContent='NO Transaction ';
+                            document.getElementById('income-week-9').style.color="red";
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount); 
+                        }
+                        document.getElementById('income-week-9').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            // week10
+            try{
+                    const e = {session:session, term:term, week:'week-10'};
+                    const api = await fetch("/total-income-week-ten", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                             if(api.status===404){
+                            document.getElementById('income-week-10').textContent='NO Transaction '
+                            document.getElementById('income-week-10').style.color="red";;
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount); 
+                        }
+                        document.getElementById('income-week-10').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            // week 11
+            try{
+                    const e = {session:session, term:term, week:'week-11'};
+                    const api = await fetch("/total-income-week-eleven", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                             if(api.status===404){
+                            document.getElementById('income-week-11').textContent='NO Transaction '
+                            document.getElementById('income-week-11').style.color="red";;
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount); 
+                        }
+                        document.getElementById('income-week-11').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            // week 12
+            try{
+                    const e = {session:session, term:term, week:'week-12'};
+                    const api = await fetch("/total-income-week-twelve", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                             if(api.status===404){
+                            document.getElementById('income-week-12').textContent='NO Transaction '
+                            document.getElementById('income-week-12').style.color="red";;
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount); 
+                        }
+                        document.getElementById('income-week-12').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            //week 13
+            try{
+                    const e = {session:session, term:term, week:'week-13'};
+                    const api = await fetch("/total-income-week-thirteen", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                             if(api.status===404){
+                            document.getElementById('income-week-13').textContent='NO Transaction '
+                            document.getElementById('income-week-13').style.color="red";;
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount); 
+                        }
+                        document.getElementById('income-week-13').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            // week 14
+            try{
+                    const e = {session:session, term:term, week:'week-14'};
+                    const api = await fetch("/total-income-week-fourteen", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                             if(api.status===404){
+                            document.getElementById('income-week-14').textContent='NO Transaction '
+                            document.getElementById('income-week-14').style.color="red";;
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount); 
+                        }
+                        document.getElementById('income-week-14').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            // week 15
+            try{
+                    const e = {session:session, term:term, week:'week-15'};
+                    const api = await fetch("/total-income-week-fifteen", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                             if(api.status===404){
+                            document.getElementById('income-week-15').textContent='NO Transaction '
+                            document.getElementById('income-week-15').style.color="red";;
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount); 
+                        }
+                        document.getElementById('income-week-15').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+            //  total amount
+            try{
+                    const e = {session:session, term:term};
+                    const api = await fetch("/total-income-for-term", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+                             if(api.status===404){
+                            document.getElementById('display-total').textContent='NO Transaction'
+                            document.getElementById('display-total').style.color="red";;
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output=0;
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=parseFloat(convert[index].amount); 
+                        }
+                        document.getElementById('display-total').innerHTML=`<p>Total:</p>₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+            }
+        }
+    </script>
+</body>
+</html>

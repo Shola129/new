@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - School Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/style2.css">
+    <!-- jquery link  -->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="header-left">
+            <div class="logo">
+                <div class="logo-icon">Alma</div>
+                <div class="logo-text">Admin Dashboard</div>
+            </div>
+            <div class="welcome-text">Welcome back, Admin</div>
+        </div>
+         <!-- Desktop view -->
+        <div class="header-right-desktop" id="header-right">
+                 <a href="expenses.html">
+                    <button class="expenses-btn">
+                        <!-- icon of row up -->
+                        <i class="fas fa-arrow-up" style="color: red;"></i> Expenses
+                    </button>
+                </a>
+                <a href="./set1.html">
+                    <button class="add-student-btn">
+                        <i class="fas "></i>Set Fees
+                    </button>
+                </a>
+                <a href="report.html">
+                    <button class="add-report" onclick="report()">
+                        <i class="fas fa-file-alt"></i> Report
+                    </button>
+                </a>
+                <button class="add-staff-btn" onclick="staff()">
+                    <i class="fas fa-user-plus"></i> Create Head Of Staff Account
+                </button>
+                  <!-- <button class="add-student-btn"  onclick="stu()">
+                    <i class="fas fa-user-graduate"></i> Add New Student
+                 </button> -->
+                 <a href="notification.html">
+                        <button class="notification-btn">
+                            <div class="notification">
+                                <i class="fas fa-bell"></i>
+                                Notifications
+                            </div>
+                        </button>
+                 </a>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+
+    <!-- mobile veiw -->
+            <div class="header-display" id="header-display">
+                <i class="fas fa-bars"></i>
+            </div>
+<!-- Mobile menu cancel -->
+            <div id="header-hide" class="header-hide">
+                <i class="fas fa-times"></i>
+            </div>
+         <div class="header-right-mobile" id="header-right-mobile">
+                <a href="expenses.html">
+                    <button class="expenses-btn">
+                       <i class="fas fa-arrow-up" style="color: red;"></i> Expenses
+                    </button>
+                </a><br>
+                <a href="report.html">
+                    <button class="add-report">
+                        <i class="fas fa-file-alt"></i> Report
+                    </button>
+                </a>
+                <button class="add-staff-btn" onclick="staff()">
+                    <i class="fas fa-user-plus"></i> Create Staff Account
+                </button>
+                  <button class="add-student-btn">
+                   <i class="fas "></i>Set Fees
+                 </button>
+                 <a href="notification.html">
+                  <button class="notification-btn">
+                    <i class="fas fa-bell"></i> Notifications
+                  </button>
+                 </a>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+</header>
+    
+   
+    
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Profile Sidebar (Left Side) -->
+        <aside class="profile-sidebar">
+            <div class="profile-header">
+                <div class="profile-avatar" id="profile-image">
+                    <!-- <i class="fas fa-user-cog"></i> -->
+                     
+                </div>
+                <h2 class="profile-name" id="profile-name"></h2>
+                <div class="profile-role">Administrator</div>
+                <!-- <p style="color: var(--color-text-light); text-align: center; margin-top: 10px;">Last login:<span id="last-login"></span></p> -->
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat">
+                    <span class="stat-value" id="total-student"></span>
+                    <span class="stat-label">Students</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="total-staff"></span>
+                    <span class="stat-label">Staff</span>
+                </div>
+                <!-- <div class="stat">
+                    <span class="stat-value">97%</span>
+                    <span class="stat-label">Attendance</span>
+                </div> -->
+            </div>
+            
+            <div class="profile-info">
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4>Email</h4>
+                        <p id="profile-email"></p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4>Phone</h4>
+                        <p id="profile-number"></p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4>Member Since</h4>
+                        <p id="member-since"></p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas "></i>
+                    </div>
+                    <div class="info-content">
+                        <h4>Position</h4>
+                        <p id="position"></p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4>Permissions</h4>
+                        <p id="Admin-permit"></p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content Area (Right Side) -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1 class="content-title">Administration Dashboard</h1>
+                <div class="date-display">
+                    <i class="fas fa-calendar-day"></i> Wednesday, November 15, 2023
+                </div>
+            </div>
+             <!-- Mobile Navbar -->
+    <nav class="mobile-navbar">
+        <div class="mobile-tabs">
+            <div class="mobile-tab active" data-tab="bursar">
+                <i class="fas fa-history"></i>
+                <span>Bursar</span>
+            </div>
+            <div class="mobile-tab" data-tab="staff">
+                <i class="fas fa-users"></i>
+                <span onclick="staffInfo()">Staff</span>
+            </div>
+            <div class="mobile-tab" data-tab="students">
+                <i class="fas fa-user-graduate"></i>
+                <span>Students</span>
+            </div>
+            <div class="mobile-tab" data-tab="Del Acc">
+                <span>Del Acc</span>
+            </div>
+        </div>
+    </nav>
+            <!-- Desktop Tabs -->
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <div class="tab active" data-tab="bursar">Bursar History</div>
+                    <div class="tab" data-tab="staff" onclick="staffInfo()">Staff Profiles</div>
+                    <div class="tab" data-tab="students">Student Profiles</div>
+                </div>
+                
+                <!-- Bursar History Tab Content -->                   
+                <div class="tab-content active" id="bursar-content">
+                    <div class="bursar-summary">
+                        <div class="summary-card">
+                            <h3>View Weekly Transaction</h3>
+                            <div class="summary-value positive"><a href="./veiwTransaction.html">View</a></div>
+                        </div>
+                        <!-- <div class="summary-card">
+                            <h3>Total Spent</h3>
+                            <div class="summary-value positive" id="total-spent" style="color: red;"></div>
+                        </div> -->
+                        <div class="summary-card">
+                            <h3>Monter Debt</h3>
+                            <a href="./track2.html" style="color: red;">View</a>
+                            <!-- <div class="summary-value positive" id="balance"></div> -->
+                             
+                        </div> 
+                    </div>
+                    
+                     <div class="bursar-moblie">
+                            <div class="search-date">
+                                <label for="">Enter a particular day</label><br>
+                                <input type="text" name="date" id="date" class="btn" placeholder="2026-9-10">
+                                 <span>Use this formart <i>2026-6-9</i></span><br>
+                                <button onclick="transcation()">search</button>
+                            </div>
+                             <div id="display-transcation-error">
+
+                                </div>
+                            <div class="search-term-session">
+                                <label for="">Search for particular term and session</label> <br>
+                                <select name="session" id="session" class="btn">
+                                    <option value="">Select session</option>
+                                    <option value="2025/2026">2025/2026</option>
+                                    <option value="2026/2027">2026/2027</option>
+                                    <option value="2027/2028">2027/2028</option>
+                                    <option value="2028/2029">2028/2029</option>
+                                    <option value="2029/2030">2029/2030</option>
+                                </select>
+                                <select name="term" id="term" class="btn">
+                                    <option value="">select term</option>
+                                    <option value="first">first term</option>
+                                    <option value="second">second term</option>
+                                    <option value="third">third term</option>
+                                </select><br>
+                                <select name="week" id="week" class="btn">
+                                    <option value="">select week</option>
+                                    <option value="all weeks">All weeks</option>
+                                    <option value="week-1">week 1</option>
+                                    <option value="week-2">week 2</option>
+                                    <option value="week-3">week 3</option>
+                                    <option value="week-4">week 4</option>
+                                    <option value="week-5">week 5</option>
+                                    <option value="week-6">week 6</option>
+                                    <option value="week-7">week 7</option>
+                                    <option value="week-8">week 8</option>
+                                    <option value="week-9">week 9</option>
+                                    <option value="week-10">week 10</option>
+                                    <option value="week-11">week 11</option>
+                                    <option value="week-12">week 12</option>
+                                    <option value="week-13">week 13</option>
+                                    <option value="week-14">week 14</option>
+                                    <option value="week-15">week 15</option>
+                                </select><br>
+                                <button onclick="transca()" class="but">search</button>
+                                <!-- Display total money fetched for-->
+                                
+                           </div>
+                     </div>
+                     <script>
+                        //  whenevr clicked on the display it should show the header-right
+                        $('#header-display').on('click', function(){
+                            $(this).hide();
+                            $('#header-right-mobile').slideDown();
+                            $('#header-hide').show()
+                        });
+
+                        $('#header-hide').on('click', function(){
+                            $(this).hide();
+                            $('#header-right-mobile').slideUp();
+                            $('#header-display').show();
+                        })
+                        
+                     </script>
+                    <style>
+                        .total-money-term-session-display{
+                            margin-top: 10px;
+                            font-weight: 600;
+                            color:black;
+
+                        }
+                        /* do that the header-right should not display directly probaly a nav bar for it on the moblie views*/
+                        #header-hide{
+                                display: none;
+                            }
+                        .header-right-mobile{
+                            display: none;
+                        }
+                        @media (max-width: 768px){
+                            #header-hide{
+                                display: none;
+                            }
+                            .header-right-mobile{
+                                flex-direction: column;
+                                position: absolute;
+                                top: 120px;
+                               
+                                width: 100%;
+                                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                                padding: 10px;
+                                border-radius: 5px;
+                                z-index: 1000;
+                                background-color:#ccc;
+                                float: left;
+                            }
+                            .header-right-mobile button{
+                                margin-bottom: 10px;
+                            }
+                            #header-display{
+                                display: block;
+                                cursor: pointer;
+                            }
+
+                            .add-report, .add-staff-btn, .add-student-btn, .logout-btn, .notification{
+                                width: 50%;
+                                background-color:none;
+                                color: white;
+                                border: none;
+                                padding: 2px;
+                                border-radius: 3px;
+                                cursor: pointer;
+                            }
+                            .add-report{
+                                background-color: #2196F3;
+                                margin-top: -10px;
+                            }
+                            .add-staff-btn{
+                                margin-top: 10px;
+                            }
+                            .add-student-btn{
+                                 margin-top: 10px;
+                            }
+                            .notification{
+                                margin-top: 10px;
+                                background-color: #333333;
+                            }
+                            .logout-btn{
+                                margin-top: 10px;
+                            }
+
+                        }
+
+                        .notification-btn{
+                            background-color:#f9f9f9;
+                            color: black;
+                            border: none;
+                            padding: 10px;
+                            border-radius: 3px;
+                            cursor: pointer;
+                        }
+
+                        .expenses-btn{
+                            background-color:#f9f9f9;
+                            color: black;
+                            border: none;
+                            padding: 10px;
+                            border-radius: 3px;
+                            cursor: pointer;
+                        }
+                        .header-right-desktop{
+                            display: flex;
+                            gap: 20px;
+                        }
+
+                        .header-display{
+                            display: none;
+                            cursor: pointer;
+                        }
+                        @media (max-width: 768px){
+                            .header-right-desktop{
+                                display: none;
+                            }
+                        }
+
+                        /*make the .bursar-moblie responsive on moblie */
+                        .bursar-moblie{
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 20px;
+                        }
+                        .search-term-session{
+                            display: block;
+                            float: left;
+
+                        }
+                        .search-term-session button{
+                            margin-top: 10px;
+                            padding: 5px;
+                            background-color: var(--color-accent);
+                            color: white;
+                            border: none;
+                            border-radius: 3px;
+                            cursor: pointer;
+                        }
+                        .search-date{ 
+                            display: block;
+                            float: left;
+                            margin-right: 20px;
+                        }
+                        .search-date button{
+                            margin-top: 10px;
+                            padding: 5px;
+                            background-color: var(--color-accent);
+                            color: white;
+                            border: none;
+                            border-radius: 3px;
+                            cursor: pointer;
+                        }
+                        .search-date input{
+                            margin-right: 10px;
+                            width: 150px;
+                        }
+                        .search-term-session select{
+                            margin-right: 10px;
+                            width: 120px;
+                            
+                        }
+                       
+                        .btn{width: 120px; height: 25px;}
+                        .but{width: 150px; margin-top: 10px; height: 30px;}
+                    </style>
+                    <h3 style="color: var(--color-accent); margin-bottom: 15px;">Recent Transactions</h3>
+                    <div class="transactions-table-container">
+                        <table class="transactions-table">
+                            <thead>
+                                <tr>
+                                        <th>S/N</th>
+                                        <th>Transaction ID</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Name</th>
+                                        <th>Class</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                        <th>Amount</th>
+                                        <th>Category</th>
+                                        <th>Party</th>
+                                         <th>Sender</th>
+                                        <th>Method</th>
+                                        <th>Week</th>
+                                        <th>Term</th>
+                                        <th>Session</th>
+                                </tr>
+                            </thead>
+                            <tbody id="display-transcation">
+                                <!-- <tr>
+                                    <td>Nov 9, 2023</td>
+                                    <td>STD-2023-154</td>
+                                    <td>Robert Davis</td>
+                                    <td>Tuition Fee - Semester 2</td>
+                                    <td>$1,200</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                </tr> -->
+                            </tbody>
+                        </table>
+                            <div class="total-money-term-session-display">
+                                    <h4 id="total-money-term-session"></h4>
+                            </div>
+                    </div>
+                </div>
+                
+                <!-- Staff Profiles Tab Content -->
+                <div class="tab-content" id="staff-content">
+                    <div class="staff-grid" id="staff-contents">
+                        <!-- <div class="staff-card">
+                            <div class="staff-header">
+                                <div class="staff-avatar">RS</div>
+                                <div class="staff-info">
+                                    <h3>Robert Smith</h3>
+                                    <p>Mathematics Teacher</p>
+                                </div>
+                            </div>
+                            <div class="staff-details">
+                                <div class="detail-row">
+                                    <span class="detail-label">Employee ID:</span>
+                                    <span class="detail-value">EMP-0034</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Joined:</span>
+                                    <span class="detail-value">January 2018</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Email:</span>
+                                    <span class="detail-value">r.smith@willowcreek.edu</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Status:</span>
+                                    <span class="detail-value" style="color: var(--color-success);">Active</span>
+                                </div>
+                            </div>
+                        </div> -->
+                        
+                      
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Student Profiles Tab Content -->
+                <div class="tab-content" id="students-content">
+                    <div class="student-controls">
+                        <div class="search-box">
+                            <i class="fas fa-search" style="color: var(--color-ashes);"></i>
+                            <input type="text" id="admin_num" placeholder="Search students by name or ID...">
+                            <button style="padding: 5px; border: none;" onclick="searchSpecificId()">search</button>
+                        </div>
+                        <div>
+                            <form>
+                                <select class="filter-select" id="class">
+                                <option value="">Select class</option>
+                                <option value="SS3-Science">SS3-Science</option>
+                                <option value="SS3-Commercial">SS3-Commercial</option>
+                                <option value="SS3-ART">SS3-ART</option>
+                                <option value="SS2-Science">SS2-Science</option>
+                                <option value="SS3-Commercial">SS2-Commercial</option>
+                                <option value="SS2-ART">SS2-ART</option>
+                                <option value="SS1-Science">SS1-Science</option>
+                                <option value="SS1-Commercial">SS1-Commercial</option>
+                                <option value="SS1-ART">SS1-ART</option>
+                                <option value="JSS3">JSS3</option>
+                                <option value="JSS2">JSS2</option>
+                                <option value="JSS1">JSS1</option>
+                                <option value="PRY5">PRY5</option>
+                                <option value="PRY4">PRY4</option>
+                                <option value="PRY3">PRY3</option>
+                                <option value="PRY2">PRY2</option>
+                                <option value="PRY1">PRY1</option>
+                                <option value="NUR2">NUR2</option>
+                                <option value="NUR1">NUR1</option>
+                                <option value="KG1">KG1</option>
+                            </select>
+                            <button onclick="search()" style="padding: 10px;">search class</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="student-table-container">
+                        <table class="student-table">
+                            <thead>
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Class</th>
+                                    <th>Parent num</th>
+                                    <th>address</th>
+                                    <th>Password</th>
+                                </tr>
+                            </thead>
+                            <tbody id="diaplay-selected-class">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                      <div id="error">
+
+                        </div>
+                </div>
+               <!-- Del Acc -->
+                <div class="content" id="Del Acc-content">
+                    <h3 style="color: var(--color-accent); margin-bottom: 15px;">Dened Staff Access</h3>
+                    <div class="dened-staff-access">
+                        <form>
+                            <label for="email">Enter Staff Email to Dened Access:</label><br>
+                            <input type="email" id="email" name="email" placeholder="staff email"><br>
+                            <button onclick="denedStaff()" style="padding: 10px; margin-top: 10px;">Dened Access</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <style>
+        .content{
+            padding: 20px;
+            margin-top: 40px;
+        }
+        .dened-staff-access{
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        .dened-staff-access input{
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .dened-staff-access button{
+            background-color: var(--color-accent);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+         <p>Status: <span style="color: var(--color-success); font-weight: 600;">Online</span></p>
+        <p>&copy; 2023 Abundant Light Mega Academy Admin Dashboard. All rights reserved.</p>
+    </footer>
+    <script>
+        // Tab switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Desktop tabs
+            const desktopTabs = document.querySelectorAll('.tab');
+            const mobileTabs = document.querySelectorAll('.mobile-tab');
+            
+            // Function to switch tabs
+            function switchTab(tabId) {
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show selected tab content
+                document.getElementById(tabId + '-content').classList.add('active');
+                
+                // Update desktop tab active state
+                desktopTabs.forEach(tab => {
+                    if (tab.dataset.tab === tabId) {
+                        tab.classList.add('active');
+                    } else {
+                        tab.classList.remove('active');
+                    }
+                });
+                
+                // Update mobile tab active state
+                mobileTabs.forEach(tab => {
+                    if (tab.dataset.tab === tabId) {
+                        tab.classList.add('active');
+                    } else {
+                        tab.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Add click event listeners to desktop tabs
+            desktopTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+            
+            // Add click event listeners to mobile tabs
+            mobileTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+            
+            // Simulate search functionality (without actual backend)
+            const searchBox = document.querySelector('.search-box input');
+            const filterSelect = document.querySelector('.filter-select');
+            
+            searchBox.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const tableRows = document.querySelectorAll('.student-table tbody tr');
+                
+                tableRows.forEach(row => {
+                    const rowText = row.textContent.toLowerCase();
+                    if (rowText.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+            
+            filterSelect.addEventListener('change', function() {
+                const filterValue = this.value;
+                const tableRows = document.querySelectorAll('.student-table tbody tr');
+                
+                tableRows.forEach(row => {
+                    if (filterValue === 'all') {
+                        row.style.display = '';
+                    } else if (filterValue === 'active') {
+                        // Simple simulation - show all for demo
+                        row.style.display = '';
+                    } else if (filterValue === 'graduated') {
+                        // Simple simulation - hide all for demo
+                        row.style.display = 'none';
+                    } else if (filterValue.includes('grade')) {
+                        const gradeCell = row.cells[2];
+                        if (gradeCell.textContent.includes(filterValue.replace('grade', 'Grade '))) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+        document.addEventListener("DOMContentLoaded", function(){
+            getAllInfo();
+            transcationHistory();
+            totalIncome();
+            totalSpent();
+            balance();
+        })
+        async function getAllInfo(){
+            const admin_name = localStorage.getItem('Admin-name');
+            const Admin_email = localStorage.getItem('Admin-email');
+           
+            if(!admin_name || admin_name===null || admin_name===undefined  || !Admin_email || Admin_email===null || Admin_email===undefined){
+                // window.location.href="/";
+            }
+            else{
+
+                document.getElementById('profile-name').textContent=admin_name;
+                document.getElementById('profile-email').textContent=Admin_email;
+                const email = {"email": Admin_email};
+                try{
+                    const getAllInfo = await fetch('/Admin-info', {
+                        method:'POST',
+                        headers:{
+                            'Content-type':'application/json'
+                        },
+                        body:JSON.stringify(email)
+                    });
+                    if(!getAllInfo.ok){
+                        // throw new Error(`HTTP error status: ${getAllInfo.status}`);
+                    }
+                    else{
+                        const result = await getAllInfo.json();
+                        const con = JSON.parse(result);
+                        console.log(con);
+                        document.getElementById('profile-number').textContent=con.phone;
+                        document.getElementById('member-since').textContent=con.member;
+                        document.getElementById('Admin-permit').textContent=con.permit;
+                        document.getElementById('profile-image').innerHTML=`<img src="${'/uploads/'+con.profile}" class='upload-profile' alt="">`;
+                        document.getElementById('position').textContent=con.position;
+                    }
+                }   
+                catch(error){
+                    console.log(error.message);
+                }
+            }
+        }
+        function logout(){
+               localStorage.clear();
+                window.location.href = '/';
+        }
+        //student profile
+      async function searchSpecificId(){
+            event.preventDefault();
+            const student_id = document.getElementById('admin_num').value;
+            const id = {'Admission_number':student_id};
+            if(!student_id || student_id===null || student_id===undefined){
+                return alert('no admission number inputed');
+            }
+            else{
+                try{
+                    const sendres = await fetch('/get-student-info-by-id', {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(id)
+                    });
+                    if(!sendres.ok){
+                        if(sendres.status==404){
+                            document.getElementById('error').textContent='Admission number not found';
+                        }
+                    }
+                    else{
+                        const result = await sendres.json();
+                        const con  = JSON.parse(result);
+                        const id_num = con.admission_number;
+                        const name = con.name;
+                        const classes = con.current_class;
+                        const Password = con.password;
+                        const address = con.address;
+                        const parent_num = con.guardian_phone;
+                        const parent_email = con.guardian_email;
+                        console.log(con);
+                        document.getElementById('diaplay-selected-class').innerHTML=`
+                                <tr>
+                                    <th>${1}</th>
+                                    <th>${id_num}</th>
+                                    <th>${name}</th>
+                                    <th>${classes}</th>
+                                    <th>${parent_num}</th>
+                                    <th>${address}</th>
+                                    <th>${Password}</th>
+                                </tr>
+                        `
+                    }
+                }
+                catch(error){
+                    console.log(error.message);
+                }
+            }
+        }
+    //student profile in a class
+        async function search(){
+            event.preventDefault();
+            const selectedClass = document.getElementById("class").value;
+            const data = {"classes":selectedClass};
+            if(!selectedClass || selectedClass===null || selectedClass===''){
+                alert('no class selected');
+            }
+            else{
+                const response = await fetch('/student-profile-class',{
+                    method:"POST",
+                    headers:{"Content-type":"application/json"},
+                    body:JSON.stringify(data)
+                });
+                if(!response.ok){
+                    if(response.status==404){
+                        document.getElementById('error').textContent="no student record found yet";
+                    }
+                }
+                else{
+                    const getResponse = await response.json();
+                    const convert = JSON.parse(getResponse);
+                    //note that the req coming are coming bulk and i want to display each of the column using for loop 
+                    let displayData = '';
+                    console.log(convert);
+                    for (let index = 0; index < convert.length; index++) {
+                         displayData +=
+                                `<tr>
+                                     <td class="sn-cell">${index + 1}</td>
+                                     <td>${convert[index].admission_number}</td>
+                                     <td>${convert[index].name}</td>
+                                     <td>${convert[index].current_class}</td>
+                                     <td>${convert[index].guardian_phone}</td>
+                                     <td>${convert[index].address}</td>
+                                     <td>${convert[index].password}</td>
+                                 </tr>`;
+                                 console.log(displayData);
+                    }
+                     document.getElementById('diaplay-selected-class').innerHTML=displayData;
+                }
+            }
+        }
+
+        //get teacher info 
+        async function staffInfo(){
+            event.preventDefault();
+            try{
+                const response = await fetch('/teacher-info', {
+                    method:"POST",
+                    headers:{'Content-type':'application/json'}
+                    // body:JSON.stringify(data)
+                });
+                if(!response.ok){
+                    throw new Error (`Error discussed ${response.status}`); 
+                }
+                else{
+                    const result= await response.json();
+                    const conv = JSON.parse(result);
+                    let output='';
+                    for(let i=0; i < conv.length; i++){
+                        output+=`
+                        <div class="staff-card">
+                            <div class="staff-header">
+                                <div class="staff-avatar"><img class="upload-profile" src="${'/uploads/'+conv[i].profile}" alt="""></div>
+                                <div class="staff-info">
+                                    <h3>${conv[i].name}</h3>
+                                </div>
+                            </div>
+                            <div class="staff-details">
+                                <div class="detail-row">
+                                    <span class="detail-label">Employee ID:</span>
+                                    <span class="detail-value">${conv[i].teacher_id}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Joined:</span>
+                                    <span class="detail-value">${conv[i].time_joined}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Email:</span>
+                                    <span class="detail-value">${conv[i].email}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Address:</span>
+                                    <span class="detail-value">${conv[i].address}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Status:</span>
+                                    <span class="detail-value" style="color: var(--color-success);">${conv[i].status}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Position</span>
+                                    <span class="detail-value">${conv[i].position}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Subject</span>
+                                    <span class="detail-value">${conv[i].subject}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Teacher to Which Class</span>
+                                    <span class="detail-value">${conv[i].class_head}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Relative Phone No</span>
+                                    <span class="detail-value">${conv[i].relative_phone}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">qualification</span>
+                                    <span class="detail-value">${conv[i].qualification}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Phone Number</span>
+                                    <span class="detail-value">${conv[i].personal_phone}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Work type</span>
+                                    <span class="detail-value">${conv[i].work_type}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Password</span>
+                                    <span class="detail-value">${conv[i].password}</span>
+                                </div>
+                            </div>
+                        </div>
+                        `
+                    }
+                    document.getElementById('staff-contents').innerHTML=output;
+                }
+            }
+            catch(error){
+                console.log(error.message);
+            }
+        }
+
+
+        //transcation history
+        async function transcationHistory(){
+            event.preventDefault();
+            const offset = 0;
+            const limit = 10;
+            const e = {'offset':offset, 'limit':limit};
+            try{
+                const api = await fetch('/last-20-transcation', {
+                    method:'POST',
+                    headers:{'Content-type':'application/json'},
+                    body:JSON.stringify(e)
+                });
+                if(!api.ok){
+                    throw new Error(`Error discovered${api.status}`);
+                }
+                else{
+                    const response = await api.json();
+                    const conv = JSON.parse(response);
+                    // console.log(conv);
+                    let output = '';
+                    for(let i=0; i<conv.length; i++){
+                        output+=`
+                            <tr>
+                                <td class="sn-cell">${i + 1}</td>
+                                <td>${conv[i].transaction_id}</td>
+                                <td>${conv[i].date}</td>
+                                <td>${conv[i].time}</td>
+                                <td>${conv[i].name}</td>
+                                <td>${conv[i].class}</td>
+                                <td><span class="type-badge ${conv[i].type === 'income' ? 'type-income' : 'type-outcome'}">${conv[i].type === 'income' ? 'Income' : 'Outcome'}</span></td>
+                                <td>${conv[i].description}</td>
+                                <td>${conv[i].amount}</td>
+                                <td>${conv[i].category}</td>
+                                <td>${conv[i].receiver}</td>
+                                <td>${conv[i].sender}</td>
+                                <td>${conv[i].method}</td>
+                                <td>${conv[i].week}</td>
+                                <td>${conv[i].term}</td>
+                                <td>${conv[i].session}</td>
+                        `
+                    }
+                    console.log(output);
+                    document.getElementById("display-transcation").innerHTML=output;
+
+                }
+            }
+            catch(error){
+                console.log(error.message);
+            }
+        }
+        //transcation for a particular day
+        async function transcation(){
+            event.preventDefault();
+            const date = document.getElementById("date").value;
+             const d = {'date':date};
+            if(!date|| date===null){
+                alert('no date picked');
+            }
+           else{
+                try{
+                    const api = await fetch('/transcation-day',{
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(d)
+                    });
+                    if(!api.ok){
+                    // throw new Error(`Error discovered${api.status}`);
+                    if(api.status==404){
+                        alert('no payment made');
+                    }
+                    else if(api.status===402){
+                        document.getElementById('display-transcation-error').textContent='no paymnet that term';
+                    }
+                }
+                else{
+                    const response = await api.json();
+                    const conv = JSON.parse(response);
+                    let output = '';
+                    for(let i=0; i<conv.length; i++){
+                        output+=`
+                            <tr>
+                                <td class="sn-cell">${i + 1}</td>
+                                <td>${conv[i].transaction_id}</td>
+                                <td>${conv[i].date}</td>
+                                <td>${conv[i].time}</td>
+                                <td>${conv[i].name}</td>
+                                <td>${conv[i].class}</td>
+                                <td><span class="type-badge ${conv[i].type === 'income' ? 'type-income' : 'type-outcome'}">${conv[i].type === 'income' ? 'Income' : 'Outcome'}</span></td>
+                                <td>${conv[i].description}</td>
+                                <td>${conv[i].amount}</td>
+                                <td>${conv[i].category}</td>
+                                <td>${conv[i].receiver}</td>
+                                <td>${conv[i].sender}</td>
+                                <td>${conv[i].method}</td>
+                                <td>${conv[i].week}</td>
+                                <td>${conv[i].term}</td>
+                                <td>${conv[i].session}</td>
+                                </tr> 
+                        `
+                    }
+                    document.getElementById("display-transcation").innerHTML=output;
+                    let total = 0;
+                         for(let j=0; j<conv.length; j++){
+                             total += parseFloat(conv[j].amount);
+                         }
+                         document.getElementById('total-money-term-session').innerHTML=`<p>Total:</p> ₦${parseFloat(total).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                }
+                }
+                catch(error){
+                    console.log(error.message);
+                }
+           }
+        }
+        //transcation for term and sesson and week 
+    async function transca(){
+            event.preventDefault();
+            const session = document.getElementById('session').value;
+            const term = document.getElementById('term').value;
+            const week = document.getElementById('week').value;
+            if(!session || !term || !week){
+                alert('session or term  or week not selected');
+            }
+            else{
+                const all = {'session':session, 'term':term, 'week':week};
+                try{
+                    const api = await fetch('/particular-term-and-session', {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(all)
+                    });
+                    if(!api.ok){
+                     if(api.status===404){
+                         alert('no payment made that particular term or week');
+                     }
+                }
+                else{
+                    const response = await api.json();
+                    const conv = JSON.parse(response);
+                    let output = '';
+                    for(let i=0; i<conv.length; i++){
+                        output+=`
+                            <tr>
+                                <td class="sn-cell">${i + 1}</td>
+                                <td>${conv[i].transaction_id}</td>
+                                <td>${conv[i].date}</td>
+                                <td>${conv[i].time}</td>
+                                <td>${conv[i].name}</td>
+                                <td>${conv[i].class}</td>
+                                <td><span class="type-badge ${conv[i].type === 'income' ? 'type-income' : 'type-outcome'}">${conv[i].type === 'income' ? 'Income' : 'Outcome'}</span></td>
+                                <td>${conv[i].description}</td>
+                                <td>${conv[i].amount}</td>
+                                <td>${conv[i].category}</td>
+                                <td>${conv[i].receiver}</td>
+                                <td>${conv[i].sender}</td>
+                                <td>${conv[i].method}</td>
+                                <td>${conv[i].week}</td>
+                                <td>${conv[i].term}</td>
+                                <td>${conv[i].session}</td>
+                                </tr> 
+                        `
+                    }
+                    document.getElementById("display-transcation").innerHTML=output;
+                     let total = 0;
+                         for(let j=0; j<conv.length; j++){
+                             total += parseFloat(conv[j].amount);
+                         }
+                         document.getElementById('total-money-term-session').innerHTML=`₦${parseFloat(total).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                        
+                }
+                }
+                catch(error){
+                    console.log(error.message);
+                }
+            }
+        }
+        //dening of staff access
+        async function denedStaff(){
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const e = {'email':email};
+            try{
+                const api = await fetch('/dened-staff-access', {
+                    method:'POST',
+                    headers:{'Content-type':'application/json'},
+                    body:JSON.stringify(e)
+                });
+                if(!api.ok){
+                    throw new Error(`Error ${api.status}`);
+                    if(api.status==404){
+                        alert('teachers account not found');
+                    }
+                    else if(api.status==400){
+                        alert('all field required');
+                    }
+                }
+                else{
+                    const response = api.json();
+                    const conv = JSON.parse(response);
+                    if(api.status==200){
+                        alert(`${conv.name} no loger have access to the school portal`);
+                    }
+                }
+            }
+            catch(error){
+                console.log(error.message);
+            }
+        }
+
+        //total income 
+        async function totalIncome(){
+            try{
+                const api = await fetch('/total-income', {
+                    method:'POST',
+                    headers:{'Content-type':'application/json'}
+                });
+                if(!api.ok){
+                    throw new Error(`Error ${api.status}`);
+                }
+                else{
+                    const response = await api.json();
+                    const conv = JSON.parse(response);
+                    let total=0;
+                    for(let i=0; i<conv.length; i++){
+                        total+=parseFloat(conv[i].amount);
+
+                    }
+                    document.getElementById('total-income').innerHTML=`₦${parseFloat(total).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                }
+            }
+            catch(err){console.log(err.message)}
+        }
+        async function totalSpent(){
+            try{
+                const api = await fetch('/total-spent', {
+                    method:'POST',
+                    headers:{'Content-type':'application/json'}
+                });
+                if(!api.ok){
+                    throw new Error(`Error ${api.status}`);
+                }
+                else{
+                    const response = await api.json();
+                    const conv = JSON.parse(response);
+                    let total=0;
+                    for(let i=0; i<conv.length; i++){
+                        total+=parseFloat(conv[i].amount);
+
+                    }
+                    document.getElementById('total-spent').innerHTML=`₦${parseFloat(total).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                }
+            }
+            catch(err){console.log(err.message)}
+        }
+
+
+        //get total money for each weeks
+
+
+        async function totalIncomeForEachWeeks(){
+            event.preventDefault();
+            const session = document.getElementById('session-week').value;
+            const term = document.getElementById('term-week').value;
+
+            //for week one
+            try{
+                    const e = {session:session, term:term, week:'week-1'};
+                    const api = await fetch("/total-income-week-one", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`;   
+                        }
+                        document.getElementById('income-week-1').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+            try{
+                    const e = {session:session, term:term, week:'week-2'};
+                    const api = await fetch("/total-income-week-two", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`;   
+                        }
+                        document.getElementById('income-week-2').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            try{
+                    const e = {session:session, term:term, week:'week-2'};
+                    const api = await fetch("/total-income-week-three", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`
+                        }
+                        document.getElementById('income-week-3').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+            try{
+                    const e = {session:session, term:term, week:'week-4'};
+                    const api = await fetch("/total-income-week-four", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`  
+                        }
+                        document.getElementById('income-week-4').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            //for week 5
+            try{
+                    const e = {session:session, term:term, week:'week-5'};
+                    const api = await fetch("/total-income-week-five", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`  
+                        }
+                        document.getElementById('income-week-5').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            //for week 6
+
+            try{
+                    const e = {session:session, term:term, week:'week-6'};
+                    const api = await fetch("/total-income-week-six", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`  
+                        }
+                        document.getElementById('income-week-6').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            //for week 7
+            try{
+                    const e = {session:session, term:term, week:'week-7'};
+                    const api = await fetch("/total-income-week-seven", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`  
+                        }
+                        document.getElementById('income-week-7').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            //for week 8
+            try{
+                    const e = {session:session, term:term, week:'week-8'};
+                    const api = await fetch("/total-income-week-eight", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`  
+                        }
+                        document.getElementById('income-week-8').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            //week 9
+            try{
+                    const e = {session:session, term:term, week:'week-9'};
+                    const api = await fetch("/total-income-week-nine", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`  
+                        }
+                        document.getElementById('income-week-9').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            // week10
+            try{
+                    const e = {session:session, term:term, week:'week-10'};
+                    const api = await fetch("/total-income-week-ten", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`  
+                        }
+                        document.getElementById('income-week-10').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            // week 11
+            try{
+                    const e = {session:session, term:term, week:'week-11'};
+                    const api = await fetch("/total-income-week-eleven", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`  
+                        }
+                        document.getElementById('income-week-11').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            // week 12
+            try{
+                    const e = {session:session, term:term, week:'week-12'};
+                    const api = await fetch("/total-income-week-twelve", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`  
+                        }
+                        document.getElementById('income-week-12').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            //week 13
+            try{
+                    const e = {session:session, term:term, week:'week-13'};
+                    const api = await fetch("/total-income-week-thirteen", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`  
+                        }
+                        document.getElementById('income-week-13').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            // week 14
+            try{
+                    const e = {session:session, term:term, week:'week-14'};
+                    const api = await fetch("/total-income-week-fourteen", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`  
+                        }
+                        document.getElementById('income-week-14').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+
+            // week 15
+            try{
+                    const e = {session:session, term:term, week:'week-15'};
+                    const api = await fetch("/total-income-week-fifteen", {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(e)
+                    });
+                    if(!api.ok){
+
+                    }
+                    else{
+                        const response = await api.json();
+                        const convert = JSON.parse(response);
+                        let output='';
+                        for (let index = 0; index < convert.length; index++) {
+                            output +=`${parseFloat(convert[index].amount) || 'NO Transaction '}`  
+                        }
+                        document.getElementById('income-week-8').innerHTML=`₦${parseFloat(output).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+            }
+            catch(error){
+                console.log(error.message)
+            }
+        
+        }
+        function balance(){
+            const income = document.getElementById('total-income');
+            const outcome = document.getElementById('total-spent');
+            const balance = parseFloat(income)+parseFloat(outcome);
+            document.getElementById('balance').textContent=balance;
+        }
+        function staff(){
+            window.location.href="/Create-Account/headOfStaff.html";
+        }
+
+        function stu(){
+            window,location.href="/Create-Account/addstudent.html";
+        }
+    </script>
+     <style>
+      
+    </style>
+</body>
+</html>

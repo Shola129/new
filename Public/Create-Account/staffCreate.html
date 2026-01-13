@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Account Creation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f0;
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Background image with blur effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            z-index: -1;
+            opacity: 0.2;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.92);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(5px);
+        }
+        
+        header {
+            background: linear-gradient(145deg, #f8f8f8 0%, #e8e8e8 100%);
+            padding: 30px 40px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .logo-icon {
+            background-color: #d8d8d8;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #777;
+        }
+        
+        .logo-text {
+            font-size: 26px;
+            font-weight: 700;
+            color: #666;
+        }
+        
+        header h1 {
+            color: #555;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            color: #777;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .form-container {
+            padding: 40px;
+            background-color: #fefefa;
+        }
+        
+        .form-section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            color: #555;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 12px;
+            color: #888;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #666;
+            font-size: 15px;
+        }
+        
+        label.required::after {
+            content: " *";
+            color: #b76e6e;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background-color: #f9f9f9;
+            color: #555;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+            padding-left: 15px;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #aaa;
+            box-shadow: 0 0 0 3px rgba(170, 170, 170, 0.2);
+            background-color: #fff;
+        }
+        
+        /* Radio button styling for status */
+        .status-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .status-option {
+            flex: 1;
+        }
+        
+        .status-option input {
+            display: none;
+        }
+        
+        .status-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: normal;
+            margin: 0;
+            background-color: #f9f9f9;
+        }
+        
+        .status-option label i {
+            font-size: 22px;
+            margin-bottom: 8px;
+            position: static;
+            transform: none;
+        }
+        
+        .status-option input:checked + label {
+            border-color: #999;
+            background-color: rgba(170, 170, 170, 0.1);
+            color: #555;
+            font-weight: 600;
+        }
+        
+        .status-option label i.fa-check-circle {
+            color: #7a9d7e;
+        }
+        
+        .status-option label i.fa-pause-circle {
+            color: #d4a574;
+        }
+        
+        .status-option label i.fa-clock {
+            color: #8a8a8a;
+        }
+        
+        /* Radio button styling for type of work */
+        .work-type-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .work-type-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .work-type-options {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .work-type-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: #f9f9f9;
+        }
+        
+        .work-type-option input {
+            display: none;
+        }
+        
+        .work-type-option span {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .work-type-option i {
+            margin-right: 10px;
+            color: #888;
+        }
+        
+        .work-type-option input:checked + span {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .work-type-option input:checked + span i {
+            color: #7a9d7e;
+        }
+        
+        .work-type-option input:checked ~ .work-type-option {
+            border-color: #999;
+            background-color: rgba(170, 170, 170, 0.1);
+        }
+        
+        /* Checkbox styling */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-weight: normal;
+        }
+        
+        /* Form actions */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e8e8e8;
+            justify-content: center;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(to right, #aaa, #888);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(136, 136, 136, 0.3);
+            background: linear-gradient(to right, #999, #777);
+        }
+        
+        .submit-btn i {
+            margin-right: 10px;
+        }
+        
+        .cancel-btn {
+            background-color: #f0f0f0;
+            color: #777;
+            border: 2px solid #ddd;
+            padding: 16px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cancel-btn:hover {
+            background-color: #e8e8e8;
+            border-color: #ccc;
+        }
+        
+        .cancel-btn i {
+            margin-right: 10px;
+        }
+        
+        /* Decorative elements */
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(248, 248, 248, 0.3);
+            z-index: -1;
+        }
+        
+        .circle-1 {
+            width: 200px;
+            height: 200px;
+            top: -80px;
+            right: -80px;
+        }
+        
+        .circle-2 {
+            width: 150px;
+            height: 150px;
+            bottom: -60px;
+            left: -60px;
+        }
+        
+        /* Help text */
+        .help-text {
+            font-size: 13px;
+            color: #888;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .help-text i {
+            margin-right: 5px;
+        }
+        
+        /* Success message styling (hidden by default) */
+        .success-message {
+            text-align: center;
+            padding: 40px;
+            background-color: #f0f8f0;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid #d0e8d0;
+            display: none;
+        }
+        
+        /* This shows the success message when form is submitted */
+        .form-container:target {
+            display: none;
+        }
+        
+        .form-container:target + .success-message {
+            display: block;
+        }
+        
+        .success-icon {
+            color: #7a9d7e;
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .success-message h2 {
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        .success-message p {
+            color: #777;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 14px;
+            background-color: #f8f8f8;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        footer a {
+            color: #777;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px dotted #aaa;
+        }
+        .profile {
+            border: 2px dashed #bbb;
+            border-radius: 22px;
+            padding: 20px;
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+            background-color: #fafafa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 20px;
+            justify-self: center;
+            margin-top: 10px;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Decorative elements -->
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="logo-text">StaffPortal</div>
+            </div>
+            
+            <h1>Create Staff Account</h1>
+            <p>Fill in the details below to create a new staff account. All fields marked with * are required.</p>
+        </header>
+        
+        <form action="/createstaff" method="post" class="form-container" id="staffForm" enctype="multipart/form-data">
+            <!-- Personal Information Section -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="fas fa-user-circle"></i> Personal Information
+                </h2>
+                
+                <div class="form-grid">
+                    <div id="Profile">
+                        <input type="file" name="profile" id="profile-picture" accept="image/*" class="profile">
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="required">Full Name</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="name" name="name" placeholder="John Smith" required>
+                        </div>
+                        <div class="help-text">
+                            <i class="fas fa-info-circle"></i> Enter staff member's full name
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        <label for="email" class="required">Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="text" id="address" name="address" placeholder="POB 305 fina str" required>
+                        </div>
+                        <div class="help-text">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="required">Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" placeholder="staff@example.com" required>
+                        </div>
+                        <div class="help-text">
+                            <i class="fas fa-info-circle"></i> Official email address for communication
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h2>
+                <i class="fas fa-graduation-cap"></i> Qualification Information
+            </h2>
+            <br>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="qualification" class="required">Highest Qualification</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-certificate"></i>
+                        <input type="text" id="qualification" name="qualification" placeholder="e.g., M.Sc. in Physics" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="institution" class="required">Institution Attended</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-university"></i>
+                        <input type="text" id="institution" name="institution" placeholder="e.g., University of XYZ" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="year" class="required">Year of Graduation</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-calendar"></i>
+                        <input type="number" id="year" name="graduation_year" placeholder="e.g., 2020" required>
+                    </div>
+                </div>
+                
+            </div>
+            <!-- Professional Information Section -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="fas fa-briefcase"></i> Professional Information
+                </h2>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="workplace" class="required">Formal Place of Work</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-building"></i>
+                            <input type="text" id="workplace" name="workplace" placeholder="e.g., Main Campus, Science Building" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject" class="required">Subject to Handle</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-book"></i>
+                            <input type="text" id="subject" name="subject" placeholder="e.g., Mathematics, English, Biology" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="position" class="required">Position</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-id-badge"></i>
+                            <select id="position" name="position" required>
+                                <option value="" disabled selected>Select Position</option>
+                                <option value="teacher">Teacher</option>
+                                <option value="senior-teacher">Senior Teacher</option>
+                                <option value="head-teacher">Head Teacher</option>
+                                <option value="assistant-principal">Assistant Principal</option>
+                                <option value="principal">Principal</option>
+                                <option value="administrator">Administrator</option>
+                                <option value="counselor">Counselor</option>
+                                <option value="librarian">Librarian</option>
+                                <option value="bursar">Bursar</option>
+                                <option value="HOD-primary">HOD-primary</option>
+                                <option value="HOD-secondary">HOD-secondary</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="class" class="required">Class to Head</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-users"></i>
+                            <select id="class" name="class_head" required>
+                                <option value="" disabled selected>Select Class</option>
+                                <option value="none">None</option>
+                                <option value="JSS-1">SS 1</option>
+                                <option value="JSS-2">SS 2</option>
+                                <option value="JSS-3">SS 3</option>
+                                <option value="SS-1">SS 1</option>
+                                <option value="SS-2">SS 2</option>
+                                <option value="SS-3">SS 3</option>
+                                <option value="PRY1">PRY1</option>
+                                <option value="PRY2">PRY2</option>
+                                <option value="PRY3">PRY3</option>
+                                <option value="PRY4">PRY4</option>
+                                <option value="PRY5">PRY5</option>
+                                <option value="Pre-PRY">Pre-PRY</option>
+                                <option value="none">None</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Employment Details Section -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="fas fa-clipboard-list"></i> Employment Details
+                </h2>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="required">Status</label>
+                        <div class="status-options">
+                            <div class="status-option">
+                                <input type="radio" id="active" name="status" value="Permanent" checked>
+                                <label for="active">
+                                    <i class="fas fa-check-circle"></i>
+                                    Permanent
+                                </label>
+                            </div>
+                            <div class="status-option">
+                                <input type="radio" id="inactive" name="status" value="Temporary">
+                                <label for="inactive">
+                                    <i class="fas fa-pause-circle"></i>
+                                    Temporary
+                                </label>
+                            </div>
+                            <div class="status-option">
+                                <input type="radio" id="tive" name="status" value="Don't know yet">
+                                <label for="inactive">
+                                    <i class="fas fa-pause-circle"></i>
+                                     Don't know yet
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="joined" class="required">Joined Date</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                            <input type="date" id="joined" name="joined" required>
+                        </div>
+                        <div class="help-text">
+                            <i class="fas fa-info-circle"></i> Date when staff member joined the institution
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone" class="required">Relative Phone Number</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="phone" name="relative_phone" placeholder="+1 (555) 123-4567" required>
+                        </div>
+                        <div class="help-text">
+                            <i class="fas fa-info-circle"></i> Emergency contact number
+                        </div>
+                    </div>
+                    <div>
+                        <label for="personal-phone">Personal Phone Number</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                            <input type="tel" id="personal-phone" name="personal_phone" placeholder="+1 (555) 987-6543">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="required">Type of Work</label>
+                        <div class="work-type-options">
+                           <input type="text" id="work-type" placeholder="part-time / full time" name="work_type">
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        <label class="required">Teacher id</label>
+                        <div class="work-type-options">
+                           <input type="text" id="work-type" placeholder="SEDC-345" name="teacher_id">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="required">Password</label>
+                        <div class="work-type-options">
+                           <input type="password" id="pwd" placeholder="enter a strong password" name="password">
+                    </div>
+                     <div class="help-text" id="password-strength">
+                             <i class="fas fa-info-circle"></i> Password Strength: 0/5
+                        </div>
+                </div>
+                <style>
+                    #work-type {
+                        width: 500px;
+                        padding: 14px 15px;
+                        border: 2px solid #ddd;
+                        border-radius: 10px;
+                        font-size: 15px;
+                        transition: all 0.3s;
+                        background-color: #f9f9f9;
+                        color: #555;
+                    }
+
+                    #teacher_id{
+                        width: 500px;
+                        padding: 14px 15px;
+                        border: 2px solid #ddd;
+                        border-radius: 10px;
+                        font-size: 15px;
+                        transition: all 0.3s;
+                        background-color: #f9f9f9;
+                        color: #555;
+                    
+                    }
+
+                    #pwd{
+                         width: 500px;
+                        padding: 14px 15px;
+                        border: 2px solid #ddd;
+                        border-radius: 10px;
+                        font-size: 15px;
+                        transition: all 0.3s;
+                        background-color: #f9f9f9;
+                        color: #555;
+                    }
+                </style>
+
+                
+                <div class="form-group">
+                    <label for="notes">Additional Notes</label>
+                    <textarea id="notes" name="notes" placeholder="Any additional information about the staff member..."></textarea>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="agree" name="agree" required>
+                    <label for="agree">I confirm that all information provided is accurate and I have permission to create this staff account.</label>
+                </div>
+            </div>
+            
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="cancel-btn">
+                    Cancel
+                </button>
+                <button type="submit" class="submit-btn">
+                 Create Account
+                </button>
+            </div>
+        </form>
+        
+        <!-- Success message that shows when form is submitted -->
+        <div class="success-message" id="success">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Staff Account Created Successfully!</h2>
+            <p>The staff account has been created and added to the system. A confirmation email has been sent to the provided email address.</p>
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                <a href="#" style="display: inline-block; padding: 12px 30px; background-color: #aaa; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                    <i class="fas fa-eye"></i> View Account
+                </a>
+                <a href="#" style="display: inline-block; padding: 12px 30px; background-color: #f0f0f0; color: #777; text-decoration: none; border-radius: 8px; font-weight: 600; border: 2px solid #ddd;">
+                    <i class="fas fa-plus"></i> Create Another
+                </a>
+            </div>
+        </div>
+        
+        <footer>
+            <p>By creating a staff account, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+            <p style="margin-top: 10px;">Need help? <a href="#">Contact Support</a> or call +1 (800) 123-4567</p>
+        </footer>
+    </div>
+
+    <!-- Set default date to today -->
+    <script>
+          //display image preview
+        const profileInput = document.getElementById('profile-picture');
+        profileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileInput.style.backgroundImage = `url(${e.target.result})`;
+                    profileInput.style.backgroundSize = 'cover';
+                    profileInput.style.backgroundPosition = 'center';
+                    profileInput.textContent = '';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set the joined date to today
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            const formattedDate = `${yyyy}-${mm}-${dd}`;
+            document.getElementById('joined').value = formattedDate;
+        });
+        //ckeck password strength
+        const passwordInput = document.getElementById('pwd');
+        passwordInput.addEventListener('input', function() {
+            const password = passwordInput.value;
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (/[A-K]/.test(password)) strength++;
+            if (/[a-k]/.test(password)) strength++;
+            if (/[0-4]/.test(password)) strength++;
+            if (/[\W]/.test(password)) strength++;
+             //You can display the strength to the user if needed
+            document.getElementById('password-strength').textContent = `Password Strength: ${strength}/5`;
+            console.log('Password strength:', strength);
+        });
+
+        //validate form before submission
+        const staffForm = document.getElementById('staffForm');
+        staffForm.addEventListener('submit', function(event) {
+            // Add any custom validation logic here
+            const password = passwordInput.value;
+            if (password.length < 8) {
+                alert('Password must be at least 8 characters long.');
+                event.preventDefault();
+            }
+            // Additional validations can be added as needed
+        });
+
+    </script>
+</body>
+</html>

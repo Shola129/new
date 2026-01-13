@@ -1,0 +1,3853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bursar Dashboard - Financial Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* ===== VARIABLES ===== */
+        :root {
+            --primary: #2c5aa0;
+            --primary-dark: #1e3a6f;
+            --secondary: #4a6572;
+            --success: #2e7d32;
+            --danger: #c62828;
+            --warning: #f57c00;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --border: #dee2e6;
+        }
+        
+        /* ===== LAYOUT ===== */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .logo {
+            padding: 0 20px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo h2 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .logo h2 i {
+            font-size: 1.8rem;
+        }
+        
+        .nav-menu {
+            padding: 0 15px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-item:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .nav-item.active {
+            background-color: rgba(255,255,255,0.15);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .nav-item i {
+            width: 24px;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            transition: margin-left 0.3s ease;
+        }
+        
+        /* ===== TOP HEADER ===== */
+        .top-header {
+            background-color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-title h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            margin-left: 20px;
+            text-align: center;
+        }
+        
+        .header-title p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .logout-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* ===== CONTENT SECTIONS ===== */
+        .content-wrapper {
+            padding: 30px;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .section-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-header h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .section-content {
+            padding: 30px;
+        }
+        
+        /* ===== DASHBOARD STATS ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            padding: 25px;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .stat-card.income {
+            border-left-color: var(--success);
+        }
+        
+        .stat-card.outcome {
+            border-left-color: var(--danger);
+        }
+        
+        .stat-card.balance {
+            border-left-color: var(--warning);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+        
+        .stat-icon.income {
+            background-color: var(--success);
+        }
+        
+        .stat-icon.outcome {
+            background-color: var(--danger);
+        }
+        
+        .stat-icon.balance {
+            background-color: var(--warning);
+        }
+        
+        .stat-info h3 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .stat-info p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        /* ===== PAYMENT FORMS ===== */
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: var(--gray-light);
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--border);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #1b5e20;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #b71c1c;
+        }
+        
+        /* ===== TRANSACTIONS TABLE ===== */
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+        
+        .transactions-table th {
+            background-color: var(--light);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .transactions-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .transactions-table tr:hover {
+            background-color: var(--gray-light);
+        }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status-completed {
+            background-color: rgba(46, 125, 50, 0.1);
+            color: var(--success);
+        }
+        
+        .status-pending {
+            background-color: rgba(245, 124, 0, 0.1);
+            color: var(--warning);
+        }
+        
+        .type-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .type-income {
+            background-color: rgba(46, 125, 50, 0.1);
+            color: var(--success);
+        }
+        
+        .type-outcome {
+            background-color: rgba(198, 40, 40, 0.1);
+            color: var(--danger);
+        }
+        
+        /* ===== RECEIPT MODAL ===== */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .confirm-modal-content {
+            background-color: white;
+            border-radius: 10px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-btn:hover {
+            background-color: var(--gray-light);
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        /* ===== CONFIRMATION MODAL STYLES ===== */
+        .confirm-details {
+            margin: 20px 0;
+        }
+        
+        .confirm-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .confirm-item:last-child {
+            border-bottom: none;
+        }
+        
+        .confirm-label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .confirm-value {
+            color: var(--primary);
+            font-weight: 500;
+            text-align: right;
+            max-width: 300px;
+            word-break: break-word;
+        }
+        
+        .confirm-highlight {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+            padding: 15px;
+            background-color: rgba(44, 90, 160, 0.1);
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        /* ===== RECEIPT STYLES ===== */
+        .receipt {
+            background-color: white;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .receipt-header h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .receipt-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .receipt-item {
+            margin-bottom: 15px;
+        }
+        
+        .receipt-item label {
+            font-weight: 600;
+            color: var(--dark);
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .receipt-item .value {
+            color: var(--gray);
+        }
+        
+        .receipt-amount {
+            text-align: center;
+            padding: 25px;
+            background-color: var(--light);
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .receipt-amount .amount {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .receipt-footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--gray);
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        /* ===== MOBILE MENU TOGGLE ===== */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .top-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .content-wrapper {
+                padding: 20px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 15px 20px;
+            }
+            
+            .section-content {
+                padding: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .receipt-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .receipt-amount .amount {
+                font-size: 2.5rem;
+            }
+            
+            /* Mobile table improvements */
+            .transactions-table {
+                font-size: 0.85rem;
+                min-width: 800px;
+            }
+            
+            .transactions-table th,
+            .transactions-table td {
+                padding: 10px 8px;
+            }
+            
+            .btn-secondary {
+                padding: 4px 8px;
+                font-size: 0.8rem;
+            }
+            
+            /* Hide less important columns on mobile */
+            .transactions-table th:nth-child(6), /* Type */
+            .transactions-table td:nth-child(6),
+            .transactions-table th:nth-child(10), /* Sender */
+            .transactions-table td:nth-child(10),
+            .transactions-table th:nth-child(12), /* Method */
+            .transactions-table td:nth-child(12),
+            .transactions-table th:nth-child(13), /* Week */
+            .transactions-table td:nth-child(13) {
+                display: none;
+            }
+            
+            /* For outgoing transactions table */
+            #outgoing-transactions-section .transactions-table th:nth-child(6), /* Type */
+            #outgoing-transactions-section .transactions-table td:nth-child(6),
+            #outgoing-transactions-section .transactions-table th:nth-child(9), /* Description */
+            #outgoing-transactions-section .transactions-table td:nth-child(9),
+            #outgoing-transactions-section .transactions-table th:nth-child(11), /* Method */
+            #outgoing-transactions-section .transactions-table td:nth-child(11) {
+                display: none;
+            }
+        }
+        
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            .sidebar,
+            .top-header,
+            .modal-header,
+            .modal-actions,
+            .mobile-menu-toggle {
+                display: none !important;
+            }
+            
+            .modal {
+                position: static;
+                background-color: white;
+                padding: 0;
+            }
+            
+            .modal-content {
+                max-width: 100%;
+                max-height: none;
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+            
+            .receipt {
+                border: none;
+                box-shadow: none;
+            }
+        }
+        
+        /* ===== PASCODE MODAL ===== */
+        .passcode-modal-content {
+            background-color: white;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .passcode-input-group {
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .passcode-input {
+            font-size: 2rem;
+            letter-spacing: 10px;
+            text-align: center;
+            padding: 15px;
+            width: 100%;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            font-family: monospace;
+            margin-bottom: 15px;
+        }
+        
+        .passcode-input:focus {
+            outline: none;
+            border-color: var(--primary-dark);
+            box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+        }
+        
+        .passcode-instructions {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        
+        .passcode-error {
+            color: var(--danger);
+            background-color: rgba(198, 40, 40, 0.1);
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            display: none;
+        }
+        
+        .passcode-error.active {
+            display: block;
+        }
+        
+        .passcode-loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .passcode-loading.active {
+            display: block;
+        }
+        
+        .passcode-loading .loader {
+            border: 3px solid var(--gray-light);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        /* ===== INCOME LOADING SELECTOR ===== */
+        .income-loading-selector {
+            display: none;
+            background-color: var(--light);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .income-loading-selector.active {
+            display: block;
+        }
+        
+        .selector-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .selector-header h4 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        .selector-header p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        .selector-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .selector-form-group {
+            margin-bottom: 15px;
+        }
+        
+        .selector-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .selector-form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: white;
+        }
+        
+        /* ===== LOADING INDICATOR ===== */
+        .loading-indicator {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .loading-indicator.active {
+            display: block;
+        }
+        
+        .loading-indicator .loader {
+            border: 4px solid var(--gray-light);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        /* ===== INCOME LOADING RESULTS ===== */
+        .income-results {
+            display: none;
+            margin-top: 25px;
+        }
+        
+        .income-results.active {
+            display: block;
+        }
+        
+        .results-summary {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .results-table th {
+            background-color: var(--light);
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .results-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        /* ===== SEARCH SECTIONS ===== */
+        .bursar-moblie {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .search-term-session {
+            display: block;
+            float: left;
+        }
+        
+        .search-term-session button {
+            margin-top: 10px;
+            padding: 5px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .search-date {
+            display: block;
+            float: left;
+            margin-right: 20px;
+        }
+        
+        .search-date button {
+            margin-top: 10px;
+            padding: 5px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .search-date input {
+            margin-right: 10px;
+            width: 150px;
+        }
+        
+        .search-term-session select {
+            margin-right: 10px;
+            width: 120px;
+        }
+        
+        .btn2 {
+            width: 120px;
+            height: 25px;
+            background-color: #343a40;
+            color: white;
+        }
+        
+        .but {
+            width: 150px;
+            margin-top: 10px;
+            height: 30px;
+        }
+        
+        .but3 {
+            width: 100px;
+            margin-top: 10px;
+            height: 30px;
+        }
+        
+        /* ===== CURRENT PERIOD DISPLAY ===== */
+        .current-period-display {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .period-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .period-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .period-details {
+            display: flex;
+            gap: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .change-period-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .change-period-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* ===== MOBILE BACKDROP ===== */
+        .sidebar-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        
+        .sidebar-backdrop.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .top-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .content-wrapper {
+                padding: 20px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 15px 20px;
+            }
+            
+            .section-content {
+                padding: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .receipt-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .receipt-amount .amount {
+                font-size: 2.5rem;
+            }
+            
+            /* Search section improvements */
+            .bursar-moblie {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .search-date, 
+            .search-term-session {
+                width: 100%;
+                margin-right: 0;
+            }
+            
+            .search-date input,
+            .search-term-session select {
+                width: 100%;
+                padding: 12px;
+                font-size: 1rem;
+                margin-bottom: 10px;
+            }
+            
+            .but2, .search-date button, .search-term-session button {
+                padding: 12px 20px;
+                height: 45px;
+                min-width: 120px;
+                font-size: 1rem;
+                margin-top: 5px;
+            }
+            
+            .btn3 {
+                width: 100%;
+                margin: 5px 0;
+                padding: 12px;
+                height: 45px;
+            }
+            
+            /* Fix for the overflow issue you added */
+            #transactions-section, 
+            #outgoing-transactions-section {
+                overflow-x: auto;
+                overflow-y: visible;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-wrapper {
+                padding: 15px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .receipt {
+                padding: 20px;
+            }
+            
+            .transactions-table {
+                min-width: 700px;
+                font-size: 0.8rem;
+            }
+            
+            .transactions-table th,
+            .transactions-table td {
+                padding: 8px 6px;
+            }
+            
+            .bursar-moblie {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .search-date, .search-term-session {
+                float: none;
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            #transactions-section, #outgoing-transactions-section {
+                overflow-x: scroll;
+                overflow-y: hidden;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Mobile Backdrop -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeMobileMenu()"></div>
+    
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <h2><i class="fas fa-wallet"></i> Bursar</h2>
+                <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-top: 5px;">Financial Dashboard</p>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#dashboard" class="nav-item active" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#income" class="nav-item" onclick="showSection('income')">
+                    <i class="fas fa-plus-circle"></i> Income Payment
+                </a>
+                <a href="#outcome" class="nav-item" onclick="showSection('outcome')">
+                    <i class="fas fa-minus-circle"></i> Outcome Payment
+                </a>
+                <a href="#transactions" class="nav-item" onclick="showSection('transactions')">
+                    <i class="fas fa-arrow-down" style="color: greenyellow;"></i> Income Transactions
+                </a>
+                <a href="#outgoing-transactions" class="nav-item" onclick="showSection('outgoing-transactions')">
+                    <i class="fas fa-arrow-up" style="color: red;"></i> Outcome Transactions
+                </a>
+                <a href="./trace.html" class="nav-item">
+                    <i class="fas fa-receipt"></i> Transaction Record
+                </a>
+                <a href="./fixed-fees.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i> Fixed Fees
+                </a>
+                <a href="#settings" class="nav-item" onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <div class="top-header">
+                <div class="header-title">
+                    <h3>Bursar Dashboard</h3>
+                    <p id="currentDate">Welcome, Bursar | Financial Year: 2023-2024</p>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="user-profile">
+                        <div class="user-avatar" id="profile-picute">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--primary);" id="profile-name"></h4>
+                            <p style="color: var(--gray); font-size: 0.9rem;">Bursar</p>
+                        </div>
+                    </div>
+                    
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Content Wrapper -->
+            <div class="content-wrapper">
+                <!-- Dashboard Section -->
+                <section class="section active" id="dashboard-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-tachometer-alt"></i> Financial Dashboard</h2>
+                        <div class="section-badge">Today's Summary</div>
+                    </div>
+                    
+                    <div class="section-content">
+                        <!-- <div class="stats-grid">
+                            <div class="stat-card income">
+                                <div class="stat-icon income">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="incomeTotal">₦0.00</h3>
+                                    <p>Total Income</p>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card outcome">
+                                <div class="stat-icon outcome">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="outcomeTotal">₦0.00</h3>
+                                    <p>Total Outcome</p>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card balance">
+                                <div class="stat-icon balance">
+                                    <i class="fas fa-balance-scale"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="balanceTotal">₦0.00</h3>
+                                    <p>Current Balance</p>
+                                </div>
+                            </div>
+                        </div> -->
+                        
+                        <div style="background-color: var(--light); border-radius: 10px; padding: 25px; margin-top: 20px;">
+                            <h3 style="color: var(--primary); margin-bottom: 15px;">Quick Actions</h3>
+                            <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                                <button class="btn btn-success" onclick="showSection('income')">
+                                    <i class="fas fa-plus-circle"></i> Record Income
+                                </button>
+                                <button class="btn btn-danger" onclick="showSection('outcome')">
+                                    <i class="fas fa-minus-circle"></i> Record Outcome
+                                </button>
+                                <button class="btn btn-primary" onclick="showSection('transactions')">
+                                    <i class="fas fa-exchange-alt"></i> View Transactions
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Income Payment Section -->
+                <section class="section" id="income-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-plus-circle"></i> Income Payment</h2>
+                        <div class="section-badge">Record New Income</div>
+                    </div>
+                    
+                    <div class="section-content">
+                        <!-- Authentication Required Message -->
+                        <div id="authMessage" style="background-color: var(--light); border-radius: 8px; padding: 20px; margin-bottom: 25px; border-left: 4px solid var(--warning);">
+                            <h4 style="color: var(--primary); margin-bottom: 10px;">
+                                <i class="fas fa-lock"></i> Authentication Required
+                            </h4>
+                            <p style="color: var(--gray); margin-bottom: 15px;">
+                                To access income payment features, you need to enter a passcode first.
+                            </p>
+                            <button class="btn btn-primary" onclick="showPasscodeModal('income')">
+                                <i class="fas fa-key"></i> Enter Passcode for Income
+                            </button>
+                        </div>
+                        
+                        <!-- Current Period Display (Shown after authentication and period selection) -->
+                        <div class="current-period-display" id="currentPeriodDisplay" style="display: none;">
+                            <div class="period-info">
+                                <h4><i class="fas fa-calendar-check"></i> Current Academic Period</h4>
+                                <div class="period-details">
+                                    <span><strong>Session:</strong> <span id="currentSessionDisplay"></span></span>
+                                    <span><strong>Term:</strong> <span id="currentTermDisplay"></span></span>
+                                    <span><strong>Week:</strong> <span id="currentWeekDisplay"></span></span>
+                                </div>
+                            </div>
+                            <button class="change-period-btn" onclick="changeIncomePeriod()">
+                                <i class="fas fa-exchange-alt"></i> Change Period
+                            </button>
+                        </div>
+                        
+                        <!-- Income Loading Selector (Shown after passcode validation) -->
+                        <div class="income-loading-selector" id="incomeLoadingSelector">
+                            <div class="selector-header">
+                                <h4><i class="fas fa-calendar-alt"></i> Select Academic Period</h4>
+                                <p>Please select session, term, and week to continue with income transactions</p>
+                            </div>
+                            
+                            <div class="selector-form">
+                                <div class="selector-form-group">
+                                    <label for="loadSession">Session</label>
+                                    <select id="loadSession" class="form-control" required>
+                                        <option value="">Select Session</option>
+                                        <option value="2025/2026">2025/2026</option>
+                                        <option value="2026/2027">2026/2027</option>
+                                        <option value="2027/2028">2027/2028</option>
+                                        <option value="2028/2029">2028/2029</option>
+                                        <option value="2029/2030">2029/2030</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="selector-form-group">
+                                    <label for="loadTerm">Term</label>
+                                    <select id="loadTerm" class="form-control" required>
+                                        <option value="">Select Term</option>
+                                        <option value="first">First Term</option>
+                                        <option value="second">Second Term</option>
+                                        <option value="third">Third Term</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="selector-form-group">
+                                    <label for="loadWeek">Week</label>
+                                    <select id="loadWeek" class="form-control" required>
+                                        <option value="">Select Week</option>
+                                        <option value="all weeks">All Weeks</option>
+                                        <option value="week-1">Week 1</option>
+                                        <option value="week-2">Week 2</option>
+                                        <option value="week-3">Week 3</option>
+                                        <option value="week-4">Week 4</option>
+                                        <option value="week-5">Week 5</option>
+                                        <option value="week-6">Week 6</option>
+                                        <option value="week-7">Week 7</option>
+                                        <option value="week-8">Week 8</option>
+                                        <option value="week-9">Week 9</option>
+                                        <option value="week-10">Week 10</option>
+                                        <option value="week-11">Week 11</option>
+                                        <option value="week-12">Week 12</option>
+                                        <option value="week-13">Week 13</option>
+                                        <option value="week-14">Week 14</option>
+                                        <option value="week-15">Week 15</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-primary" onclick="setIncomePeriod()">
+                                    <i class="fas fa-check-circle"></i> Set Period & Continue
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Income Payment Form -->
+                        <div class="form-container" id="incomeFormContainer">
+                            <form id="incomeForm" onsubmit="recordPayment(event, 'income')" style="display: none;">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="admission_number">Admission Number</label>
+                                        <input type="text" id="admission_number" name="admission_number" step="0.01" min="0" required placeholder="NSD-78378/848">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">Name</label>
+                                        <input type="text" id="name" name="name" step="0.01" min="0" required placeholder="Fin Kelly">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="class">Class</label>
+                                        <select class="filter-select" id="class" required>
+                                            <option value="">Select class</option>
+                                            <option value="SS3-Science">SS3-Science</option>
+                                            <option value="SS3-Commercial">SS3-Commercial</option>
+                                            <option value="SS3-ART">SS3-ART</option>
+                                            <option value="SS2-Science">SS2-Science</option>
+                                            <option value="SS3-Commercial">SS2-Commercial</option>
+                                            <option value="SS2-ART">SS2-ART</option>
+                                            <option value="SS1-Science">SS1-Science</option>
+                                            <option value="SS1-Commercial">SS1-Commercial</option>
+                                            <option value="SS1-ART">SS1-ART</option>
+                                            <option value="JSS3">JSS3</option>
+                                            <option value="JSS2">JSS2</option>
+                                            <option value="JSS1">JSS1</option>
+                                            <option value="PRY5">PRY5</option>
+                                            <option value="PRY4">PRY4</option>
+                                            <option value="PRY3">PRY3</option>
+                                            <option value="PRY2">PRY2</option>
+                                            <option value="PRY1">PRY1</option>
+                                            <option value="NUR2">NUR2</option>
+                                            <option value="NUR1">NUR1</option>
+                                            <option value="KG1">KG1</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="incomeAmount">Amount (#)</label>
+                                        <input type="number" id="incomeAmount" step="0.01" min="0" required placeholder="0.00">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="incomePayer">Payer Name</label>
+                                        <input type="text" id="incomePayer" required placeholder="Enter payer name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="receiver">Receiver</label>
+                                        <select name="receiver" id="receiver" required>
+                                            <option value="">select receiver</option>
+                                            <option value="Bursar">Bursar</option>
+                                            <option value="Subordinate">Subordinate</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Surbordinate-name">If Subordinate</label>
+                                        <input type="text" id="Surbordinate-name" placeholder="Enter Subordinate name">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="incomeCategory">Category</label>
+                                        <select id="incomeCategory" required>
+                                            <option value="">Select category</option>
+                                            <option value="School-fee">School Fees</option>
+                                            <option value="school-uniform">School Uniform</option>
+                                            <option value="school-sporty-ware">school sporty ware</option>
+                                            <option value="end-of-the-year-party">End of the year party</option>
+                                            <option value="accodation-fee">Accodation Fee</option>
+                                            <option value="Lab-fee">Laboratory fee</option>
+                                            <option value="registration">Registration Fees</option>
+                                            <option value="exam">Examination Fees</option>
+                                            <option value="external-exam">external-exam</option>
+                                            <option value="other">Other fees</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="incomePaymentMethod">Payment Method</label>
+                                        <select id="incomePaymentMethod" required>
+                                            <option value="">Select method</option>
+                                            <option value="cash">Cash</option>
+                                            <option value="bank">Bank Transfer</option>
+                                            <option value="check">Check</option>
+                                            <option value="card">Card</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="incomeDescription">Description</label>
+                                    <textarea id="incomeDescription" rows="3" placeholder="Payment description"></textarea>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-secondary" onclick="resetForm('incomeForm')">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-save"></i> Record Payment
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Outcome Payment Section -->
+                <section class="section" id="outcome-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-minus-circle"></i> Outcome Payment</h2>
+                        <div class="section-badge">Record New Outcome</div>
+                    </div>
+                    
+                    <div class="section-content">
+                        <div class="form-container">
+                            <form id="outcomeForm" enctype="multipart/form-data" onsubmit="recordOutComePayment(event, 'outcome')">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="outcomeAmount">Amount (#)</label>
+                                        <input type="number" id="outcomeAmount" step="0.01" min="0" required placeholder="0.00">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="outcomePayee">Payer Name</label>
+                                        <select name="receiver" id="outcomePayee" required>
+                                            <option value="">select receiver</option>
+                                            <option value="Bursar">Bursar</option>
+                                            <option value="Subordinate">Subordinate</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Proval_name">Approval Name</label>
+                                        <input type="text" id="Proval_name" required placeholder="Enter approval name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="outComereceiver">Receiver</label>
+                                    <input type="text" id="outComereceiver" required placeholder="Enter receiver name">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="outcomeCategory">Category</label>
+                                        <select id="outcomeCategory" required>
+                                            <option value="">Select category</option>
+                                            <option value="salaries">Salaries</option>
+                                            <option value="utilities">Utilities</option>
+                                            <option value="supplies">Supplies</option>
+                                            <option value="maintenance">Maintenance</option>
+                                            <option value="services">Services</option>
+                                            <option value="other">Other Expense</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="outComeweek">Week</label>
+                                        <select name="week" id="outComeweek" class="btn" required>
+                                            <option value="">select current week</option>
+                                            <option value="week-1">Week 1</option>
+                                            <option value="week-2">Week 2</option>
+                                            <option value="week-3">Week 3</option>
+                                            <option value="week-4">Week 4</option>
+                                            <option value="week-5">Week 5</option>
+                                            <option value="week-6">Week 6</option>
+                                            <option value="week-7">Week 7</option>
+                                            <option value="week-8">Week 8</option>
+                                            <option value="week-9">Week 9</option>
+                                            <option value="week-10">Week 10</option>
+                                            <option value="week-11">Week 11</option>
+                                            <option value="week-12">Week 12</option>
+                                            <option value="week-13">Week 13</option>
+                                            <option value="week-14">Week 14</option>
+                                            <option value="week-15">Week 15</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="outcomesession">Current Session</label>
+                                        <select name="session" id="outcomesession" class="btn" required>
+                                            <option value="">Select Current session</option>
+                                            <option value="2025/2026">2025/2026</option>
+                                            <option value="2026/2027">2026/2027</option>
+                                            <option value="2027/2028">2027/2028</option>
+                                            <option value="2028/2029">2028/2029</option>
+                                            <option value="2029/2030">2029/2030</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="outcometerm">Term</label>
+                                        <select name="term" id="outcometerm" class="btn" required>
+                                            <option value="">select current term</option>
+                                            <option value="first">First Term</option>
+                                            <option value="second">Second Term</option>
+                                            <option value="third">Third Term</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="outcomePaymentMethod">Payment Method</label>
+                                        <select id="outcomePaymentMethod" required>
+                                            <option value="">Select method</option>
+                                            <option value="cash">Cash</option>
+                                            <option value="bank">Bank Transfer</option>
+                                            <option value="check">Check</option>
+                                            <option value="card">Card</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="receipt">Upload Receipt (Optional)</label>
+                                        <input type="file" id="receipt" name="receipt" accept="image/*,.pdf">
+                                        <small style="color: var(--gray);">Max file size: 5MB (Images: JPG, PNG, GIF, PDF)</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="outcomeDescription">Description</label>
+                                    <textarea id="outcomeDescription" rows="3" placeholder="Payment description"></textarea>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-secondary" onclick="resetForm('outcomeForm')">
+                                        <i class="fas fa-redo"></i> Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-save"></i> Record Payment
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Transactions Section -->
+                <section class="section" id="transactions-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-arrow-down" style="color: greenyellow;"></i> Income Transactions</h2>
+                        <div class="section-badge">Recent Income Transactions</div>
+                    </div>
+                    
+                    <div class="bursar-moblie">
+                        <div class="search-date">
+                            <label for="date">Enter a particular day</label><br>
+                            <input type="text" name="date" id="date" class="btn3" placeholder="enter a date" style="border-style: solid; border-width: thin;"><br>
+                            <span>Use this format <i>2026-6-9</i></span><br>
+                            <button onclick="transcation()" class=" but2" style="background-color: #1e3a6f;width: 120px; height: 25px;" >Search</button>
+                        </div>
+                        <div id="display-transcation-error"></div>
+                        <div class="search-term-session">
+                            <label for="">Search for particular term and session</label> <br>
+                            <select name="session" id="session-search" class="btn3">
+                                <option value="">Select session</option>
+                                <option value="2025/2026">2025/2026</option>
+                                <option value="2026/2027">2026/2027</option>
+                                <option value="2027/2028">2027/2028</option>
+                                <option value="2028/2029">2028/2029</option>
+                                <option value="2029/2030">2029/2030</option>
+                            </select>
+                            <select name="term" id="term-search" class="btn3">
+                                <option value="">select term</option>
+                                <option value="first">First Term</option>
+                                <option value="second">Second Term</option>
+                                <option value="third">Third Term</option>
+                            </select><br>
+                            <select name="week" id="week-search" class="btn3">
+                                <option value="">select week</option>
+                                <option value="all weeks">All weeks</option>
+                                <option value="week-1">Week 1</option>
+                                <option value="week-2">Week 2</option>
+                                <option value="week-3">Week 3</option>
+                                <option value="week-4">Week 4</option>
+                                <option value="week-5">Week 5</option>
+                                <option value="week-6">Week 6</option>
+                                <option value="week-7">Week 7</option>
+                                <option value="week-8">Week 8</option>
+                                <option value="week-9">Week 9</option>
+                                <option value="week-10">Week 10</option>
+                                <option value="week-11">Week 11</option>
+                                <option value="week-12">Week 12</option>
+                                <option value="week-13">Week 13</option>
+                                <option value="week-14">Week 14</option>
+                                <option value="week-15">Week 15</option>
+                            </select><br>
+                            <button onclick="transca()" class="but2" style="background-color: #1e3a6f;width: 120px; height: 25px;">Search</button>
+                        </div>
+                    </div>
+
+                    <div class="section-content">
+                        <div class="table-container">
+                            <table class="transactions-table">
+                                <thead>
+                                    <tr>
+                                        <th>S/N</th>
+                                        <th>Transaction ID</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Name</th>
+                                        <th>Class</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                        <th>Amount</th>
+                                        <th>Category</th>
+                                        <th>Party</th>
+                                        <th>Sender</th>
+                                        <th>Method</th>
+                                        <th>Week</th>
+                                        <th>Term</th>
+                                        <th>Session</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactionsTable">
+                                    <!-- Transactions will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="total-money-term-session-display">
+                            <h4 id="total-money-term-session"></h4>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 30px;">
+                            <button class="btn btn-primary" id="loadmorebtn">
+                                <i class="fas fa-sync-alt"></i> Load More
+                            </button>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Outcome Transactions Section -->
+                <section class="section" id="outgoing-transactions-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-arrow-up" style="color: red;"></i> Outcome Transactions</h2>
+                        <div class="section-badge">Recent Outcome Transactions</div>
+                    </div>
+                    
+                    <div class="bursar-moblie">
+                        <div class="search-date">
+                            <label for="date-expenses">Enter a particular day</label><br>
+                            <input type="text" name="date" id="date-expenses" class="btn3" placeholder="enter a date" style="border-style: solid; border-width: thin;"><br>
+                            <span>Use this format <i>2026-6-9</i></span><br>
+                            <button onclick="transcationExpenses()" class=" but2" style="background-color: #1e3a6f;width: 120px; height: 25px;" >Search</button>
+                        </div>
+                        <div id="display-transcation-error"></div>
+                        <div class="search-term-session">
+                            <label for="">Search for particular term and session</label> <br>
+                            <select name="session" id="session-search-expenses"class="btn3">
+                                <option value="">Select session</option>
+                                <option value="2025/2026">2025/2026</option>
+                                <option value="2026/2027">2026/2027</option>
+                                <option value="2027/2028">2027/2028</option>
+                                <option value="2028/2029">2028/2029</option>
+                                <option value="2029/2030">2029/2030</option>
+                            </select>
+                            <select name="term" id="term-search-expenses" class="btn3">
+                                <option value="">select term</option>
+                                <option value="first">First Term</option>
+                                <option value="second">Second Term</option>
+                                <option value="third">Third Term</option>
+                            </select><br>
+                            <select name="week" id="week-search-expenses" class="btn3">
+                                <option value="">select week</option>
+                                <option value="all weeks">All weeks</option>
+                                <option value="week-1">Week 1</option>
+                                <option value="week-2">Week 2</option>
+                                <option value="week-3">Week 3</option>
+                                <option value="week-4">Week 4</option>
+                                <option value="week-5">Week 5</option>
+                                <option value="week-6">Week 6</option>
+                                <option value="week-7">Week 7</option>
+                                <option value="week-8">Week 8</option>
+                                <option value="week-9">Week 9</option>
+                                <option value="week-10">Week 10</option>
+                                <option value="week-11">Week 11</option>
+                                <option value="week-12">Week 12</option>
+                                <option value="week-13">Week 13</option>
+                                <option value="week-14">Week 14</option>
+                                <option value="week-15">Week 15</option>
+                            </select><br>
+                            <button onclick="transcaExpenses()" class="but2" style="background-color: #1e3a6f;width: 120px; height: 25px;">Search</button>
+                        </div>
+                    </div>
+                    
+                    <div class="section-content">
+                        <div class="table-container">
+                            <table class="transactions-table">
+                                <thead>
+                                    <tr>
+                                        <th>S/N</th>
+                                        <th>Transaction ID</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Approval</th>
+                                        <th>Amount</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                        <th>Category</th>
+                                        <th>Receiver</th>
+                                        <th>Sender</th>
+                                        <th>Method</th>
+                                        <th>Week</th>
+                                        <th>Term</th>
+                                        <th>Session</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="outgoingTransactionsTable">
+                                    <!-- Outcome Transactions will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="total-money-term-session-display">
+                            <h4 id="total-money-term-session-expenses"></h4>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 30px;">
+                            <button class="btn btn-primary" id="loadmoreOutgoingBtn">
+                                <i class="fas fa-sync-alt"></i> Load More
+                            </button>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Settings Section -->
+                <section class="section" id="settings-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-cog"></i> Settings</h2>
+                        <div class="section-badge">System Settings</div>
+                    </div>
+                    
+                    <div class="section-content">
+                        <div style="max-width: 600px; margin: 0 auto;">
+                            <div style="background-color: var(--light); border-radius: 10px; padding: 25px; margin-bottom: 20px;">
+                                <h3 style="color: var(--primary); margin-bottom: 20px;">Account Settings</h3>
+                                <div class="form-group">
+                                    <label>Bursar Name</label>
+                                    <input type="text" value="Mr. James Wilson" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email Address</label>
+                                    <input type="email" value="bursar@newdich.edu" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Financial Year</label>
+                                    <input type="text" value="2023-2024" class="form-control">
+                                </div>
+                                <button class="btn btn-primary" style="margin-top: 10px;">
+                                    <i class="fas fa-save"></i> Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Receipt Modal -->
+    <div class="modal" id="receiptModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Payment Receipt</h3>
+                <button class="close-btn" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="receipt" id="receiptContent">
+                    <!-- Receipt content will be inserted here -->
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeModal()">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                    <button class="btn btn-primary" onclick="printReceipt()">
+                        <i class="fas fa-print"></i> Print Receipt
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content confirm-modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-check-circle"></i> Confirm Payment</h3>
+                <button class="close-btn" onclick="closeConfirmModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <i class="fas fa-question-circle" style="font-size: 4rem; color: var(--warning);"></i>
+                    <h3 style="color: var(--primary); margin: 15px 0;">Please Confirm Payment Details</h3>
+                    <p style="color: var(--gray);">Review the details below before proceeding</p>
+                </div>
+                
+                <div class="confirm-details" id="confirmDetails">
+                    <!-- Confirmation details will be inserted here -->
+                </div>
+                
+                <div class="confirm-highlight" id="confirmAmount">
+                    <!-- Amount will be inserted here -->
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeConfirmModal()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button class="btn btn-success" id="confirmSaveBtn">
+                        <i class="fas fa-check"></i> Confirm & Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Passcode Modal -->
+    <div class="modal" id="passcodeModal">
+        <div class="modal-content passcode-modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-lock"></i> Passcode Required</h3>
+                <button class="close-btn" onclick="closePasscodeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <i class="fas fa-key" style="font-size: 3rem; color: var(--primary); margin-bottom: 15px;"></i>
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">Enter Your Passcode</h3>
+                    <p style="color: var(--gray);">Please enter your secure passcode to continue</p>
+                </div>
+                
+                <div class="passcode-input-group">
+                    <input type="password" id="passcodeInput" class="passcode-input" maxlength="6" placeholder="******" autocomplete="off">
+                    <div class="passcode-instructions">Enter 6-digit passcode</div>
+                </div>
+                
+                <div class="passcode-error" id="passcodeError">
+                    <i class="fas fa-exclamation-circle"></i> Invalid passcode. Please try again.
+                </div>
+                
+                <div class="passcode-loading" id="passcodeLoading">
+                    <div class="loader"></div>
+                    <p>Verifying passcode...</p>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closePasscodeModal()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button class="btn btn-primary" onclick="submitPasscode()">
+                        <i class="fas fa-check"></i> Verify Passcode
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Global variables
+        let currentAction = ''; // 'income' or 'income-loading'
+        let isAuthenticated = false;
+        let passcodeSession = null;
+        let pendingSectionId = ''; // Store section ID that's pending authentication
+        let currentSession = '';
+        let currentTerm = '';
+        let currentWeek = '';
+        let currentTransactionType = ''; // 'income' or 'outcome' - to track which receipt to generate
+        
+        // When page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set today's date in header
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            document.getElementById('currentDate').textContent = `Welcome, Bursar | Today: ${dateStr}`;
+            
+            // Initialize mobile menu functionality
+            initMobileMenu();
+            
+            // Setup passcode input
+            document.getElementById('passcodeInput').addEventListener('input', function(e) {
+                // Auto-submit when 6 digits entered
+                if (e.target.value.length === 6) {
+                    submitPasscode();
+                }
+            });
+            
+        o    // Load profile info
+            getinfo();
+            
+            // Initialize income section
+            setupIncomeSection();
+            
+            // Load initial transaction data
+            transcationHistory();
+            transcationHistoryExpenses();
+            
+            // Set up load more buttons
+            document.getElementById('loadmorebtn').addEventListener('click', transcationHistory);
+            document.getElementById('loadmoreOutgoingBtn').addEventListener('click', transcationHistoryExpenses);
+        });
+        
+        // Mobile menu functionality
+        function initMobileMenu() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+            
+            // Toggle mobile menu
+            if (mobileMenuToggle && sidebar) {
+                mobileMenuToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleMobileMenu();
+                });
+                
+                // Close menu when clicking on backdrop
+                if (sidebarBackdrop) {
+                    sidebarBackdrop.addEventListener('click', closeMobileMenu);
+                }
+                
+                // Close menu when clicking on nav links (for mobile)
+                const navLinks = document.querySelectorAll('.nav-item');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 992) {
+                            closeMobileMenu();
+                        }
+                    });
+                });
+                
+                // Close menu on window resize if it's now desktop
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth > 992) {
+                        closeMobileMenu();
+                    }
+                });
+            }
+        }
+        
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+            
+            if (sidebar) {
+                sidebar.classList.toggle('active');
+            }
+            
+            if (sidebarBackdrop) {
+                sidebarBackdrop.classList.toggle('active');
+            }
+        }
+        
+        // Close mobile menu
+        function closeMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+            
+            if (sidebar) {
+                sidebar.classList.remove('active');
+            }
+            
+            if (sidebarBackdrop) {
+                sidebarBackdrop.classList.remove('active');
+            }
+        }
+        
+     // Setup income section based on authentication status
+function setupIncomeSection() {
+    const authMessage = document.getElementById('authMessage');
+    const incomeForm = document.getElementById('incomeForm');
+    const incomeLoadingSelector = document.getElementById('incomeLoadingSelector');
+    const currentPeriodDisplay = document.getElementById('currentPeriodDisplay');
+    
+    // Check if authenticated
+    if (!isAuthenticated) {
+        // Show authentication message
+        authMessage.style.display = 'block';
+        incomeForm.style.display = 'none';
+        incomeLoadingSelector.classList.remove('active');
+        currentPeriodDisplay.style.display = 'none';
+    } else {
+        // If period is already set, show the form and period display
+        if (currentSession && currentTerm && currentWeek) {
+            authMessage.style.display = 'none';
+            incomeForm.style.display = 'block';
+            incomeLoadingSelector.classList.remove('active');
+            currentPeriodDisplay.style.display = 'flex';
+            
+            // Update period display
+            document.getElementById('currentSessionDisplay').textContent = currentSession;
+            document.getElementById('currentTermDisplay').textContent = capitalizeFirstLetter(currentTerm);
+            document.getElementById('currentWeekDisplay').textContent = currentWeek === 'all weeks' ? 'All Weeks' : capitalizeFirstLetter(currentWeek);
+        } else {
+            // Show period selector
+            authMessage.style.display = 'none';
+            incomeForm.style.display = 'none';
+            incomeLoadingSelector.classList.add('active');
+            currentPeriodDisplay.style.display = 'none';
+        }
+    }
+}
+        
+        // Capitalize first letter
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+        
+ // Switch between sections
+function showSection(sectionId) {
+    // Check if it's the income section and not authenticated
+    if (sectionId === 'income' && !isAuthenticated) {
+        pendingSectionId = sectionId;
+        showPasscodeModal('income');
+        return;
+    }
+    
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Show selected section
+    document.getElementById(sectionId + '-section').classList.add('active');
+    
+    // Update active menu item
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    document.querySelectorAll('.nav-item').forEach(item => {
+        if (item.getAttribute('href') === '#' + sectionId) {
+            item.classList.add('active');
+        }
+    });
+    
+    // Close mobile menu on mobile
+    if (window.innerWidth <= 992) {
+        closeMobileMenu();
+    }
+    
+    // Setup income section if showing
+    if (sectionId === 'income') {
+        setupIncomeSection();
+    }
+    
+    // Load transaction data if showing transaction sections
+    if (sectionId === 'transactions') {
+        transcationHistory();
+    } else if (sectionId === 'outgoing-transactions') {
+        transcationHistoryExpenses();
+    }
+}
+
+        // Set income period from selector
+        function setIncomePeriod() {
+            const session = document.getElementById('loadSession').value;
+            const term = document.getElementById('loadTerm').value;
+            const week = document.getElementById('loadWeek').value;
+            
+            if (!session || !term || !week) {
+                alert('Please select session, term, and week');
+                return;
+            }
+            
+            // Set current period
+            currentSession = session;
+            currentTerm = term;
+            currentWeek = week;
+            
+            // Show success message
+            alert(`Academic period set to: ${session} - ${capitalizeFirstLetter(term)} Term - ${week === 'all weeks' ? 'All Weeks' : capitalizeFirstLetter(week)}`);
+            
+            // Update UI
+            setupIncomeSection();
+        }
+        
+        // Change income period
+        function changeIncomePeriod() {
+            currentSession = '';
+            currentTerm = '';
+            currentWeek = '';
+            setupIncomeSection();
+        }
+        
+        // Show passcode modal
+        function showPasscodeModal(action) {
+            currentAction = action;
+            document.getElementById('passcodeModal').classList.add('active');
+            document.getElementById('passcodeInput').focus();
+            document.getElementById('passcodeInput').value = '';
+            document.getElementById('passcodeError').classList.remove('active');
+            document.getElementById('passcodeLoading').classList.remove('active');
+        }
+        
+        // Close passcode modal
+        function closePasscodeModal() {
+            document.getElementById('passcodeModal').classList.remove('active');
+            currentAction = '';
+            
+            // If user cancels and there was a pending section, go back to dashboard
+            if (pendingSectionId && !isAuthenticated) {
+                showSection('dashboard');
+                pendingSectionId = '';
+            }
+        }
+        
+    // Submit passcode for verification
+async function submitPasscode() {
+    const passcode = document.getElementById('passcodeInput').value;
+    
+    if (passcode.length !== 6) {
+        document.getElementById('passcodeError').textContent = 'Passcode must be 6 digits';
+        document.getElementById('passcodeError').classList.add('active');
+        return;
+    }
+    
+    // Show loading
+    document.getElementById('passcodeLoading').classList.add('active');
+    document.getElementById('passcodeError').classList.remove('active');
+    
+    try {
+        // Call your backend API to verify passcode
+        const api = await fetch("/income-pass-code", {
+            method: "POST",
+            headers: {"Content-type": 'application/json'},
+            body: JSON.stringify({passcode: passcode})
+        });
+
+        if(api.status === 200){
+            // Success - close passcode modal
+            document.getElementById('passcodeModal').classList.remove('active');
+            document.getElementById('passcodeLoading').classList.remove('active');
+            
+            // Show period selector (week, term, session)
+            document.getElementById('authMessage').style.display = 'none';
+            document.getElementById('incomeForm').style.display = 'none';
+            document.getElementById('incomeLoadingSelector').classList.add('active');
+            
+            // Set authenticated
+            isAuthenticated = true;
+            passcodeSession = Date.now().toString();
+            
+            // Clear any pending section
+            pendingSectionId = '';
+        } else {
+            // Handle error
+            document.getElementById('passcodeError').textContent = 'Invalid passcode. Please try again.';
+            document.getElementById('passcodeError').classList.add('active');
+            document.getElementById('passcodeLoading').classList.remove('active');
+        }
+    } catch (error) {
+        console.error('Passcode verification error:', error);
+        document.getElementById('passcodeError').textContent = 'Network error. Please try again.';
+        document.getElementById('passcodeError').classList.add('active');
+        document.getElementById('passcodeLoading').classList.remove('active');
+    }
+}
+
+
+
+        
+        // Show income section after authentication
+        // function showAuthenticatedIncomeSection() {
+        //     // Hide all sections
+        //     document.querySelectorAll('.section').forEach(section => {
+        //         section.classList.remove('active');
+        //     });
+            
+        //     // Show income section
+        //     document.getElementById('income-section').classList.add('active');
+            
+        //     // Update active menu item
+        //     document.querySelectorAll('.nav-item').forEach(item => {
+        //         item.classList.remove('active');
+        //     });
+            
+        //     document.querySelectorAll('.nav-item').forEach(item => {
+        //         if (item.getAttribute('href') === '#income') {
+        //             item.classList.add('active');
+        //         }
+        //     });
+            
+        //     // Close mobile menu on mobile
+        //     if (window.innerWidth <= 992) {
+        //         closeMobileMenu();
+        //     }
+            
+        //     // Setup authenticated income section - show the period selector
+        //     setupIncomeSection();
+            
+        //     // Reset pending section
+        //     pendingSectionId = '';
+        // }
+        
+        // Reset form
+        function resetForm(formId) {
+            document.getElementById(formId).reset();
+        }
+        
+        // Show confirmation modal when form is submitted - INCOME
+        function recordPayment(event, type) {
+            event.preventDefault();
+            
+            // Check if authenticated
+            if (!isAuthenticated || !passcodeSession) {
+                alert('Please authenticate first using passcode');
+                showPasscodeModal('income');
+                return;
+            }
+            
+            // Check if period is set
+            if (!currentSession || !currentTerm || !currentWeek) {
+                alert('Please set academic period first');
+                setupIncomeSection();
+                return;
+            }
+            
+            // Get form data
+            let amount, party, category, description, paymentMethod, classes, name, admission_number, receiver, Surbordinate_name;
+            
+            if (type === 'income') {
+                amount = document.getElementById('incomeAmount').value;
+                party = document.getElementById('incomePayer').value;
+                category = document.getElementById('incomeCategory').value;
+                description = document.getElementById('incomeDescription').value || 'No description';
+                paymentMethod = document.getElementById('incomePaymentMethod').value;
+                classes = document.getElementById('class').value;
+                name = document.getElementById('name').value;
+                admission_number = document.getElementById('admission_number').value;
+                receiver = document.getElementById('receiver').value;
+                Surbordinate_name = document.getElementById("Surbordinate-name").value || 'None';
+            }
+            
+            // Basic validation
+            if (parseFloat(amount) <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+            
+            if (!amount || !party || !category || !paymentMethod || !classes || !name || !admission_number || !receiver) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Set current transaction type for receipt generation
+            currentTransactionType = 'income';
+            
+            // Show confirmation modal
+            showConfirmationModal({
+                type: type,
+                amount: amount,
+                party: party,
+                category: category,
+                description: description,
+                paymentMethod: paymentMethod,
+                classes: classes,
+                name: name,
+                admission_number: admission_number,
+                session: currentSession,
+                term: currentTerm,
+                week: currentWeek,
+                receiver: receiver,
+                Surbordinate_name: Surbordinate_name,
+                passcodeSession: passcodeSession
+            });
+        }
+        
+        // Record outcome payment
+        function recordOutComePayment(event, type) {
+            event.preventDefault();
+            
+            // Get form data
+            const amount = document.getElementById('outcomeAmount').value;
+            const payer = document.getElementById('outcomePayee').value;
+            const approvalName = document.getElementById('Proval_name').value;
+            const receiver = document.getElementById('outComereceiver').value;
+            const category = document.getElementById('outcomeCategory').value;
+            const week = document.getElementById('outComeweek').value;
+            const session = document.getElementById('outcomesession').value;
+            const term = document.getElementById('outcometerm').value;
+            const paymentMethod = document.getElementById('outcomePaymentMethod').value;
+            const description = document.getElementById('outcomeDescription').value || 'No description';
+            const receiptFile = document.getElementById('receipt').files[0];
+            
+            // Basic validation
+            if (parseFloat(amount) <= 0 || isNaN(parseFloat(amount))) {
+                alert('Please enter a valid amount greater than 0');
+                return;
+            }
+            
+            if (!amount || !payer || !approvalName || !receiver || !category || !week || !session || !term || !paymentMethod) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Validate amount format
+            if (!/^\d+(\.\d{1,2})?$/.test(amount)) {
+                alert('Please enter a valid amount with up to 2 decimal places');
+                return;
+            }
+            
+            // File validation (optional)
+            if (receiptFile) {
+                // Check file size (max 5MB)
+                const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+                if (receiptFile.size > maxSize) {
+                    alert('Receipt file is too large. Maximum size is 5MB.');
+                    return;
+                }
+                
+                // Check file type
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'application/pdf'];
+                if (!allowedTypes.includes(receiptFile.type)) {
+                    alert('Please upload an image (JPEG, PNG, GIF) or PDF file.');
+                    return;
+                }
+            }
+            
+            // Set current transaction type for receipt generation
+            currentTransactionType = 'outcome';
+            
+            // Show confirmation modal for outcome
+            showConfirmationModalOutCome({
+                type: type,
+                amount: amount,
+                payer: payer,
+                approvalName: approvalName,
+                receiver: receiver,
+                category: category,
+                week: week,
+                session: session,
+                term: term,
+                paymentMethod: paymentMethod,
+                description: description,
+                receiptFile: receiptFile
+            });
+        }
+        
+        // Show confirmation modal for INCOME payments
+        function showConfirmationModal(data) {
+            // Build confirmation details
+            const detailsHtml = `
+                <div class="confirm-item">
+                    <span class="confirm-label">Transaction Type:</span>
+                    <span class="confirm-value">INCOME</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Student Name:</span>
+                    <span class="confirm-value">${data.name}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Admission Number:</span>
+                    <span class="confirm-value">${data.admission_number}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Class:</span>
+                    <span class="confirm-value">${data.classes}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Category:</span>
+                    <span class="confirm-value">${data.category}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Payer:</span>
+                    <span class="confirm-value">${data.party}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Receiver:</span>
+                    <span class="confirm-value">${data.receiver}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Subordinate:</span>
+                    <span class="confirm-value">${data.Surbordinate_name}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Payment Method:</span>
+                    <span class="confirm-value">${capitalizeFirstLetter(data.paymentMethod)}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Academic Period:</span>
+                    <span class="confirm-value">${data.session} - ${capitalizeFirstLetter(data.term)} Term - ${data.week === 'all weeks' ? 'All Weeks' : capitalizeFirstLetter(data.week)}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Description:</span>
+                    <span class="confirm-value">${data.description}</span>
+                </div>
+            `;
+            
+            document.getElementById('confirmDetails').innerHTML = detailsHtml;
+            document.getElementById('confirmAmount').innerHTML = `
+                <div>Amount</div>
+                <div style="font-size: 2rem; margin-top: 10px;">₦${parseFloat(data.amount).toLocaleString('en-NG', {minimumFractionDigits: 2})}</div>
+            `;
+            
+            // Set up confirmation button
+            const confirmBtn = document.getElementById('confirmSaveBtn');
+            confirmBtn.onclick = function() {
+                savePayment(data);
+            };
+            
+            // Show modal
+            document.getElementById('confirmModal').classList.add('active');
+        }
+        
+        // Show confirmation modal for OUTCOME payments
+        function showConfirmationModalOutCome(data) {
+            // Build confirmation details
+            const formattedAmount = parseFloat(data.amount).toLocaleString('en-NG', { minimumFractionDigits: 2 });
+            const receiptInfo = data.receiptFile ? 
+                `<span style="color: var(--success);"><i class="fas fa-check-circle"></i> Receipt will be uploaded</span>` : 
+                `<span style="color: var(--gray);"><i class="fas fa-times-circle"></i> No receipt uploaded</span>`;
+            
+            const detailsHtml = `
+                <div class="confirm-item">
+                    <span class="confirm-label">Transaction Type:</span>
+                    <span class="confirm-value" style="color: var(--danger); font-weight: bold;">OUTCOME / EXPENDITURE</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Amount:</span>
+                    <span class="confirm-value" style="font-weight: bold;">₦${formattedAmount}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Payer (Authorized By):</span>
+                    <span class="confirm-value">${data.payer}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Approval Name:</span>
+                    <span class="confirm-value">${data.approvalName}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Receiver:</span>
+                    <span class="confirm-value">${data.receiver}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Category:</span>
+                    <span class="confirm-value">${capitalizeFirstLetter(data.category)}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Academic Period:</span>
+                    <span class="confirm-value">${data.session} - ${capitalizeFirstLetter(data.term)} Term - ${capitalizeFirstLetter(data.week.replace('week-', 'Week '))}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Payment Method:</span>
+                    <span class="confirm-value">${capitalizeFirstLetter(data.paymentMethod)}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Description:</span>
+                    <span class="confirm-value">${data.description}</span>
+                </div>
+                <div class="confirm-item">
+                    <span class="confirm-label">Receipt Upload:</span>
+                    <span class="confirm-value">${receiptInfo}</span>
+                </div>
+            `;
+            
+            document.getElementById('confirmDetails').innerHTML = detailsHtml;
+            document.getElementById('confirmAmount').innerHTML = `
+                <div style="font-size: 1rem; margin-bottom: 10px;">Amount to be Paid</div>
+                <div style="font-size: 2.5rem; margin-top: 10px; color: var(--danger); font-weight: 700;">₦${formattedAmount}</div>
+            `;
+            
+            // Set up confirmation button
+            const confirmBtn = document.getElementById('confirmSaveBtn');
+            confirmBtn.onclick = function() {
+                saveOutcomePayment(data);
+            };
+            
+            // Show modal
+            document.getElementById('confirmModal').classList.add('active');
+        }
+        
+        // Close confirmation modal
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.remove('active');
+        }
+        
+        // Save INCOME payment
+        async function savePayment(data) {
+            const date = new Date();
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            const all = `${year}-${month}-${day}`;
+            const time = new Date();
+            const hours = time.getHours().toString().padStart(2, '0');
+            const minute = time.getMinutes().toString().padStart(2, '0');
+            const allTime = `${hours}:${minute}`;
+            const dataAdin = data.admission_number;
+            const subAdmin = dataAdin.substr(5,8);
+            const mili = time.getSeconds();
+            const transaction_id = 'INC' + Date.now().toString().slice(-8) + mili;
+            
+            const storedata = {
+                type: data.type,
+                amount: data.amount,
+                party: data.party,
+                category: data.category,
+                description: data.description,
+                paymentMethod: data.paymentMethod,
+                classes: data.classes,
+                name: data.name,
+                admission_number: data.admission_number,
+                session: data.session,
+                term: data.term,
+                week: data.week,
+                receiver: data.receiver,
+                Surbordinate_name: data.Surbordinate_name,
+                date: all,
+                time: allTime,
+                transaction_id: transaction_id
+            };
+            
+            try {
+                // Close confirmation modal first
+                closeConfirmModal();
+                
+                const api = await fetch('/payment-income', {
+                    method: 'POST',
+                    headers: {'Content-type':'application/json'},
+                    body: JSON.stringify(storedata)
+                });
+                
+                if(!api.ok){
+                    if(api.status == 404){
+                        alert('Admission or name not correct');
+                        return;
+                    }
+                    if(api.status == 400){
+                        alert('All field required');
+                        return;
+                    }
+                } else {
+                    const result = await api.json();
+                    let converted;
+                    try {
+                        converted = JSON.parse(result);
+                    } catch (e) {
+                        converted = result;
+                    }
+                    
+                    if(api.status == 200){
+                        alert('Payment saved successfully!');
+                        
+                        // Update local data
+                        updateStats('income', parseFloat(data.amount));
+                        
+                        // Generate and show receipt
+                        generateIncomeReceipt(storedata);
+                        
+                        // Reset form
+                        resetForm('incomeForm');
+                    } else {
+                        alert('Transaction failed');
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.error('Error saving payment:', error);
+                alert('Error recording payment. Please try again.');
+            }
+        }
+        
+        // Save OUTCOME payment
+        async function saveOutcomePayment(data) {
+            const date = new Date();
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            const formattedDate = `${year}-${month}-${day}`;
+            const time = new Date();
+            const hours = time.getHours().toString().padStart(2, '0');
+            const minute = time.getMinutes().toString().padStart(2, '0');
+            const formattedTime = `${hours}:${minute}`;
+            const mili = time.getSeconds();
+            const transaction_id = 'OUT' + Date.now().toString().slice(-8) + mili;
+            
+            console.log('Saving outcome payment with data:', data);
+            
+            try {
+                // Close confirmation modal first
+                closeConfirmModal();
+                
+                // Create FormData object for file upload
+                const formData = new FormData();
+                
+                // Add all form fields to FormData
+                formData.append('type', data.type);
+                formData.append('amount', data.amount);
+                formData.append('party', data.payer); // This is the payer field
+                formData.append('approval', data.approvalName);
+                formData.append('receiver', data.receiver);
+                formData.append('category', data.category);
+                formData.append('description', data.description || 'No description');
+                formData.append('method', data.paymentMethod);
+                formData.append('session', data.session);
+                formData.append('term', data.term);
+                formData.append('week', data.week);
+                formData.append('date', formattedDate);
+                formData.append('time', formattedTime);
+                formData.append('transaction_id', transaction_id);
+                
+               
+                if (data.receiptFile && data.receiptFile instanceof File) {
+                    console.log('Adding receipt file to FormData:', data.receiptFile.name);
+                    formData.append('receipt', data.receiptFile);
+                } else {
+                    console.log('No receipt file provided or invalid file object');
+                    formData.append('receipt', ''); // Empty string if no file
+                }
+                
+                  // Create data object for receipt generation
+                    const receiptData = {
+                        transaction_id: transaction_id,
+                        type: data.type,
+                        amount: data.amount,
+                        party: data.payer,
+                        approval: data.approvalName,
+                        receiver: data.receiver,
+                        category: data.category,
+                        description: data.description || 'No description',
+                        method: data.paymentMethod,
+                        session: data.session,
+                        term: data.term,
+                        week: data.week,
+                        date: formattedDate,
+                        time: formattedTime,
+                        receipt_file: data.receiptFile ? data.receiptFile.name : 'No receipt uploaded'
+                    };
+
+                // Send FormData to backend
+                const api = await fetch('/OutCome-payment', {
+                    method: 'POST',
+                    body: formData
+                    // Note: Do NOT set Content-Type header for FormData
+                    // The browser will set it automatically with boundary
+                });
+                
+                console.log('API Response status:', api.status);
+                
+                if (!api.ok) {
+                    
+                    if (api.status === 400) {
+                        alert('Bad request. Please check all fields are filled correctly.');
+                    } 
+                    else if (api.status === 404) {
+                        alert('Server endpoint not found.');
+                    } 
+                    else if (api.status === 413) {
+                        alert('File too large. Please upload a smaller receipt image.');
+                    } 
+                    else if (api.status === 500) {
+                        alert('Server error. Please try again later.');
+                    }
+                }                
+               else{
+                    const result = await api.json();
+                    const converted = JSON.parse(result);
+                    if(api.status==200){
+                        alert('Payment saved successfully!');
+                        console.log(converted);
+                         generateOutcomeReceipt(receiptData);
+                          // Reload outcome transactions
+                        transcationHistoryExpenses();
+                           resetForm('outcomeForm');
+                    }
+                    else{
+                        alert('transaction failed');
+                        return;
+                    }
+            } 
+        }
+        catch (error) {
+                console.error('Error saving outcome payment:', error.message);
+                // alert('Network error. Please check your connection and try again.');
+            }
+        }
+        
+        // Helper function to update dashboard stats
+        function updateStats(type, amount) {
+            if (type === 'income') {
+                // Update income stats
+                const incomeTotal = document.getElementById('incomeTotal');
+                const currentIncome = parseFloat(incomeTotal.textContent.replace(/[^0-9.-]+/g, "")) || 0;
+                incomeTotal.textContent = `₦${(currentIncome + amount).toLocaleString('en-NG', {minimumFractionDigits: 2})}`;
+            } else if (type === 'outcome') {
+                // Update outcome stats
+                const outcomeTotal = document.getElementById('outcomeTotal');
+                const currentOutcome = parseFloat(outcomeTotal.textContent.replace(/[^0-9.-]+/g, "")) || 0;
+                outcomeTotal.textContent = `₦${(currentOutcome + amount).toLocaleString('en-NG', {minimumFractionDigits: 2})}`;
+            }
+            
+            // Update balance
+            const incomeTotal = parseFloat(document.getElementById('incomeTotal').textContent.replace(/[^0-9.-]+/g, "")) || 0;
+            const outcomeTotal = parseFloat(document.getElementById('outcomeTotal').textContent.replace(/[^0-9.-]+/g, "")) || 0;
+            const balanceTotal = document.getElementById('balanceTotal');
+            balanceTotal.textContent = `₦${(incomeTotal - outcomeTotal).toLocaleString('en-NG', {minimumFractionDigits: 2})}`;
+        }
+        
+        // Generate income receipt
+        function generateIncomeReceipt(data) {
+            const receiptContent = document.getElementById('receiptContent');
+            
+            // Format amount
+            const formattedAmount = parseFloat(data.amount).toLocaleString('en-NG', { 
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2 
+            });
+            
+            const receiptHtml = `
+                <div class="receipt-header">
+                    <h2><i class="fas fa-file-invoice-dollar"></i> INCOME PAYMENT RECEIPT</h2>
+                    <p>New Dich School - Bursar Department</p>
+                </div>
+                
+                <div class="receipt-details">
+                    <div>
+                        <div class="receipt-item">
+                            <label>Receipt Number:</label>
+                            <div class="value">${data.transaction_id}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Date:</label>
+                            <div class="value">${data.date}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Time:</label>
+                            <div class="value">${data.time}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Transaction Type:</label>
+                            <div class="value" style="color: var(--success); font-weight: bold;">INCOME</div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="receipt-item">
+                            <label>Student Name:</label>
+                            <div class="value">${data.name}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Admission Number:</label>
+                            <div class="value">${data.admission_number}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Class:</label>
+                            <div class="value">${data.classes}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Payer:</label>
+                            <div class="value">${data.party}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="receipt-amount">
+                    <div class="amount">₦${formattedAmount}</div>
+                    <p>Amount Received</p>
+                </div>
+                
+                <div class="receipt-details">
+                    <div>
+                        <div class="receipt-item">
+                            <label>Category:</label>
+                            <div class="value">${data.category}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Payment Method:</label>
+                            <div class="value">${capitalizeFirstLetter(data.paymentMethod)}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Received By:</label>
+                            <div class="value">${data.receiver}</div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="receipt-item">
+                            <label>Academic Period:</label>
+                            <div class="value">${data.session}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Term:</label>
+                            <div class="value">${capitalizeFirstLetter(data.term)}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Week:</label>
+                            <div class="value">${data.week === 'all weeks' ? 'All Weeks' : capitalizeFirstLetter(data.week)}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Description:</label>
+                            <div class="value">${data.description}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="receipt-footer">
+                    <p><strong>Thank you for your payment!</strong></p>
+                    <p>This receipt serves as confirmation of your payment</p>
+                    <p>Generated on: ${new Date().toLocaleString()}</p>
+                </div>
+            `;
+            
+            receiptContent.innerHTML = receiptHtml;
+            
+            // Show receipt modal
+            document.getElementById('receiptModal').classList.add('active');
+        }
+        
+        // Generate outcome receipt
+        function generateOutcomeReceipt(data) {
+            const receiptContent = document.getElementById('receiptContent');
+            
+            // Format amount
+            const formattedAmount = parseFloat(data.amount).toLocaleString('en-NG', { 
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2 
+            });
+            
+            // Format category name
+            const categoryNames = {
+                'salaries': 'Salaries',
+                'utilities': 'Utilities',
+                'supplies': 'Supplies',
+                'maintenance': 'Maintenance',
+                'services': 'Services',
+                'other': 'Other Expense'
+            };
+            
+            // Format payment method
+            const methodNames = {
+                'cash': 'Cash',
+                'bank': 'Bank Transfer',
+                'check': 'Check',
+                'card': 'Credit/Debit Card'
+            };
+            
+            // Format term
+            const termNames = {
+                'first': 'First Term',
+                'second': 'Second Term',
+                'third': 'Third Term'
+            };
+            
+            // Format week
+            const weekDisplay = data.week.replace('week-', 'Week ') || data.week;
+            
+            const receiptHtml = `
+                <div class="receipt-header">
+                    <h2><i class="fas fa-file-invoice-dollar"></i> OUTCOME PAYMENT RECEIPT</h2>
+                    <p>New Dich School - Bursar Department</p>
+                    <p style="font-size: 0.9rem; color: var(--gray);">Official Payment Authorization</p>
+                </div>
+                
+                <div class="receipt-details">
+                    <div>
+                        <div class="receipt-item">
+                            <label>Receipt Number:</label>
+                            <div class="value">${data.transaction_id}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Date:</label>
+                            <div class="value">${data.date}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Time:</label>
+                            <div class="value">${data.time}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Transaction Type:</label>
+                            <div class="value" style="color: var(--danger); font-weight: bold;">OUTCOME / EXPENDITURE</div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="receipt-item">
+                            <label>Amount Paid:</label>
+                            <div class="value" style="font-weight: bold; font-size: 1.2rem;">₦${formattedAmount}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Paid By (Payer):</label>
+                            <div class="value">${data.party}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Approved By:</label>
+                            <div class="value">${data.approval}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Received By:</label>
+                            <div class="value">${data.receiver}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="receipt-amount" style="background-color: rgba(198, 40, 40, 0.1); border: 2px dashed var(--danger);">
+                    <div class="amount" style="color: var(--danger); font-size: 2.5rem;">₦${formattedAmount}</div>
+                    <p style="color: var(--danger); font-weight: bold;">AMOUNT AUTHORIZED FOR PAYMENT</p>
+                </div>
+                
+                <div class="receipt-details">
+                    <div>
+                        <div class="receipt-item">
+                            <label>Category:</label>
+                            <div class="value">${categoryNames[data.category] || data.category}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Payment Method:</label>
+                            <div class="value">${methodNames[data.method] || data.method}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Receipt Uploaded:</label>
+                            <div class="value">${data.receipt_file && data.receipt_file !== 'No receipt uploaded' ? 'Yes' : 'No'}</div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="receipt-item">
+                            <label>Academic Session:</label>
+                            <div class="value">${data.session}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Term:</label>
+                            <div class="value">${termNames[data.term] || data.term}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Week:</label>
+                            <div class="value">${weekDisplay}</div>
+                        </div>
+                        <div class="receipt-item">
+                            <label>Description:</label>
+                            <div class="value">${data.description}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background-color: var(--light); border-radius: 8px;">
+                    <div class="receipt-item">
+                        <label style="font-weight: bold; color: var(--primary);">Payment Authorization Note:</label>
+                        <div class="value" style="margin-top: 10px;">
+                            This payment has been properly authorized and recorded in the school's financial system.
+                            All necessary approvals have been obtained as per school financial policy.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="receipt-footer">
+                    <p><strong>Payment Authorization Confirmed</strong></p>
+                    <p>This receipt serves as confirmation of authorized expenditure</p>
+                    <p style="margin-top: 20px; border-top: 1px dashed var(--border); padding-top: 15px;">
+                        <strong>Generated on:</strong> ${new Date().toLocaleString()}<br>
+                        <strong>Generated by:</strong> Bursar Department
+                    </p>
+                </div>
+            `;
+            
+            receiptContent.innerHTML = receiptHtml;
+            
+            // Show receipt modal
+            document.getElementById('receiptModal').classList.add('active');
+        }
+        
+        // Load profile info
+        async function getinfo() {
+            // In real implementation, fetch user info from backend
+            document.getElementById("profile-name").textContent = "Bursar Admin";
+        }
+        
+        // Close modals
+        function closeModal() {
+            document.getElementById('receiptModal').classList.remove('active');
+        }
+        
+        // Print receipt
+        function printReceipt() {
+            window.print();
+        }
+        
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Reset authentication
+                isAuthenticated = false;
+                passcodeSession = null;
+                pendingSectionId = '';
+                currentSession = '';
+                currentTerm = '';
+                currentWeek = '';
+                alert('Logged out successfully. In a real application, this would redirect to landing page.');
+                // Redirect to login
+                window.location.href = '/';
+                localStorage.clear();
+            }
+        }
+        
+        // Transaction history functions
+        async function transcationHistory(){
+            const tableBody = document.getElementById('transactionsTable');
+            event.preventDefault();
+            const offset = 0;
+            const limit = 10;
+            const e = {'offset':offset, 'limit':limit};
+            try{
+                const api = await fetch('/last-20-transcation', {
+                    method:'POST',
+                    headers:{'Content-type':'application/json'},
+                    body:JSON.stringify(e)
+                });
+                if(!api.ok){
+                    throw new Error(`Error discovered${api.status}`);
+                }
+                else{
+                    const response = await api.json();
+                    const conv = JSON.parse(response);
+                    let output = '';
+                    for(let i=0; i<conv.length; i++){
+                        output+=`
+                            <tr>
+                                <td class="sn-cell">${i + 1}</td>
+                                <td>${conv[i].transaction_id}</td>
+                                <td>${conv[i].date}</td>
+                                <td>${conv[i].time}</td>
+                                <td>${conv[i].name}</td>
+                                <td>${conv[i].class}</td>
+                                <td><span class="type-badge ${conv[i].type === 'income' ? 'type-income' : 'type-outcome'}">${conv[i].type === 'income' ? 'Income' : 'Outcome'}</span></td>
+                                <td>${conv[i].description}</td>
+                                <td>${conv[i].amount}</td>
+                                <td>${conv[i].category}</td>
+                                <td>${conv[i].receiver}</td>
+                                <td>${conv[i].sender}</td>
+                                <td>${conv[i].method}</td>
+                                <td>${conv[i].week}</td>
+                                <td>${conv[i].term}</td>
+                                <td>${conv[i].session}</td>
+                                <td><button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.9rem;" onclick="viewReceipt('${conv[i].transaction_id}', '${conv[i].type}')"><i class="fas fa-eye"></i> View</button></td>
+                            </tr> 
+                        `
+                    }
+                   tableBody.innerHTML=output;
+                }
+            }
+            catch(error){
+                console.log(error.message);
+            }
+        }
+
+        document.getElementById('loadmorebtn').addEventListener("click", transcationHistory);
+        
+        //transcation for a particular day
+        async function transcation(){
+            event.preventDefault();
+            const tableBody = document.getElementById('transactionsTable');
+            const date = document.getElementById("date").value;
+            console.log(date);
+             const d = {'date':date};
+            if(!date|| date===null){
+                alert('no date picked');
+            }
+           else{
+                try{
+                    const api = await fetch('/transcation-day',{
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(d)
+                    });
+                    if(!api.ok){
+                    // throw new Error(`Error discovered${api.status}`);
+                    if(api.status==404){
+                        alert('no payment made');
+                    }
+                    else if(api.status===402){
+                        document.getElementById('display-transcation-error').textContent='no paymnet that term';
+                    }
+                }
+                else{
+                    const response = await api.json();
+                    const conv = JSON.parse(response);
+                    let output = '';
+                    for(let i=0; i<conv.length; i++){
+                        output+=`
+                           <tr>
+                                <td class="sn-cell">${i + 1}</td>
+                                <td>${conv[i].transaction_id}</td>
+                                <td>${conv[i].date}</td>
+                                <td>${conv[i].time}</td>
+                                <td>${conv[i].name}</td>
+                                <td>${conv[i].class}</td>
+                                <td><span class="type-badge ${conv[i].type === 'income' ? 'type-income' : 'type-outcome'}">${conv[i].type === 'income' ? 'Income' : 'Outcome'}</span></td>
+                                <td>${conv[i].description}</td>
+                                <td>${conv[i].amount}</td>
+                                <td>${conv[i].category}</td>
+                                <td>${conv[i].receiver}</td>
+                                <td>${conv[i].sender}</td>
+                                <td>${conv[i].method}</td>
+                                <td>${conv[i].week}</td>
+                                <td>${conv[i].term}</td>
+                                <td>${conv[i].session}</td>
+                                <td><button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.9rem;" onclick="viewReceipt('${conv[i].transaction_id}', '${conv[i].type}')"><i class="fas fa-eye"></i> View</button></td>
+                            </tr>
+                        `
+                    }
+                    tableBody.innerHTML=output;
+                    let total = 0;
+                    for(let j=0; j<conv.length; j++){
+                        total += parseFloat(conv[j].amount);
+                    }
+                    document.getElementById('total-money-term-session').innerHTML=`<p>Total:</p> ₦${parseFloat(total).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                }
+                }
+                catch(error){
+                    console.log(error.message);
+                }
+           }
+        }
+        
+        //transcation for term and session and week 
+        async function transca(){
+            event.preventDefault();
+            const tableBody = document.getElementById('transactionsTable');
+            const session = document.getElementById('session-search').value;
+            const term = document.getElementById('term-search').value;
+            const week = document.getElementById('week-search').value;
+            
+            if(!session || !term || !week){
+                alert('session or term  or week not selected');
+            }
+            else{
+                const all = {'session':session, 'term':term, 'week':week};
+                try{
+                    const api = await fetch('/particular-term-and-session', {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(all)
+                    });
+                    if(!api.ok){
+                        if(api.status===404){
+                            alert('no payment made that particular term or week');
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const conv = JSON.parse(response);
+                        let output = '';
+                        for(let i=0; i<conv.length; i++){
+                            output+=`
+                                <tr>
+                                    <td class="sn-cell">${i + 1}</td>
+                                    <td>${conv[i].transaction_id}</td>
+                                    <td>${conv[i].date}</td>
+                                    <td>${conv[i].time}</td>
+                                    <td>${conv[i].name}</td>
+                                    <td>${conv[i].class}</td>
+                                    <td><span class="type-badge ${conv[i].type === 'income' ? 'type-income' : 'type-outcome'}">${conv[i].type === 'income' ? 'Income' : 'Outcome'}</span></td>
+                                    <td>${conv[i].description}</td>
+                                    <td>${conv[i].amount}</td>
+                                    <td>${conv[i].category}</td>
+                                    <td>${conv[i].receiver}</td>
+                                    <td>${conv[i].sender}</td>
+                                    <td>${conv[i].method}</td>
+                                    <td>${conv[i].week}</td>
+                                    <td>${conv[i].term}</td>
+                                    <td>${conv[i].session}</td>
+                                    <td><button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.9rem;" onclick="viewReceipt('${conv[i].transaction_id}', '${conv[i].type}')"><i class="fas fa-eye"></i> View</button></td>
+                                </tr>`
+                        }
+                        tableBody.innerHTML=output;
+                        let total = 0;
+                        for(let j=0; j<conv.length; j++){
+                            total += parseFloat(conv[j].amount);
+                        }
+                        document.getElementById('total-money-term-session').innerHTML=`<p>Total</p>₦${parseFloat(total).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+                }
+                catch(error){
+                    console.log(error.message);
+                }
+            }
+        }
+
+        async function transcationHistoryExpenses(){
+            const tableBody = document.getElementById('outgoingTransactionsTable');
+            event.preventDefault();
+            const offset = 0;
+            const limit = 10;
+            const e = {'offset':offset, 'limit':limit};
+            try{
+                const api = await fetch('/last-20-expenses', {
+                    method:'POST',
+                    headers:{'Content-type':'application/json'},
+                    body:JSON.stringify(e)
+                });
+                if(!api.ok){
+                    throw new Error(`Error discovered${api.status}`);
+                }
+                else{
+                    const response = await api.json();
+                    const conv = JSON.parse(response);
+                    let output = '';
+                    for(let i=0; i<conv.length; i++){
+                        output+=`
+                            <tr>
+                                <td class="sn-cell">${i + 1}</td>
+                                <td>${conv[i].transaction_id}</td>
+                                <td>${conv[i].date}</td>
+                                <td>${conv[i].time}</td>
+                                <td>${conv[i].approval}</td>
+                                <td>${conv[i].amount}</td>
+                                <td><span class="type-badge ${conv[i].type === 'income' ? 'type-income' : 'type-outcome'}">${conv[i].type === 'income' ? 'Income' : 'Outcome'}</span></td>
+                                <td>${conv[i].description}</td>
+                                <td>${conv[i].category}</td>
+                                <td>${conv[i].receiver}</td>
+                                <td>${conv[i].party}</td>
+                                <td>${conv[i].method}</td>
+                                <td>${conv[i].week}</td>
+                                <td>${conv[i].term}</td>
+                                <td>${conv[i].session}</td>
+                                <td><button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.9rem;" onclick="viewReceipt('${conv[i].transaction_id}', '${conv[i].type}')"><i class="fas fa-eye"></i> View</button></td>
+                            </tr>
+                        `
+                    }
+                   tableBody.innerHTML=output;
+                }
+            }
+            catch(error){
+                console.log(error.message);
+            }
+        }
+
+        //transcation for a particular day
+        async function transcationExpenses(){
+            event.preventDefault();
+            const tableBody = document.getElementById('outgoingTransactionsTable');
+            const date = document.getElementById("date-expenses").value;
+             const d = {'date':date};
+            if(!date|| date===null || date=='' || date==undefined){
+                alert('no date picked');
+            }
+           else{
+                try{
+                    const api = await fetch('/expenses-for-a-particular-day',{
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(d)
+                    });
+                    if(!api.ok){
+                    if(api.status==404){
+                        alert('no payment made');
+                    }
+                    else if(api.status===402){
+                        document.getElementById('display-transcation-error').textContent='no paymnet that term';
+                    }
+                }
+                else{
+                    const response = await api.json();
+                    const conv = JSON.parse(response);
+                    let output = '';
+                    for(let i=0; i<conv.length; i++){
+                        output+=`
+                           <tr>
+                                <td class="sn-cell">${i + 1}</td>
+                                <td>${conv[i].transaction_id}</td>
+                                <td>${conv[i].date}</td>
+                                <td>${conv[i].time}</td>
+                                <td>${conv[i].approval}</td>
+                                <td>${conv[i].amount}</td>
+                                <td><span class="type-badge ${conv[i].type === 'income' ? 'type-income' : 'type-outcome'}">${conv[i].type === 'income' ? 'Income' : 'Outcome'}</span></td>
+                                <td>${conv[i].description}</td>
+                                <td>${conv[i].category}</td>
+                                <td>${conv[i].receiver}</td>
+                                <td>${conv[i].party}</td>
+                                <td>${conv[i].method}</td>
+                                <td>${conv[i].week}</td>
+                                <td>${conv[i].term}</td>
+                                <td>${conv[i].session}</td>
+                                <td><button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.9rem;" onclick="viewReceipt('${conv[i].transaction_id}', '${conv[i].type}')"><i class="fas fa-eye"></i> View</button></td>
+                            </tr>
+                        `
+                    }
+                    tableBody.innerHTML=output;
+                    let total = 0;
+                    for(let j=0; j<conv.length; j++){
+                        total += parseFloat(conv[j].amount);
+                    }
+                    document.getElementById('total-money-term-session-expenses').innerHTML=`<p>Total:</p> ₦${parseFloat(total).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                }
+                }
+                catch(error){
+                    console.log(error.message);
+                }
+           }
+        }
+        
+        //transcation for term and session and week 
+        async function transcaExpenses(){
+            event.preventDefault();
+            const tableBody = document.getElementById('outgoingTransactionsTable');
+            const session = document.getElementById('session-search-expenses').value;
+            const term = document.getElementById('term-search-expenses').value;
+            const week = document.getElementById('week-search-expenses').value;
+            
+            if(!session || !term || !week){
+                alert('session or term  or week not selected');
+            }
+            else{
+                const all = {'session':session, 'term':term, 'week':week};
+                try{
+                    const api = await fetch('/expenses-particular-term-and-session', {
+                        method:'POST',
+                        headers:{'Content-type':'application/json'},
+                        body:JSON.stringify(all)
+                    });
+                    if(!api.ok){
+                        if(api.status===404){
+                            alert('no payment made that particular term or week');
+                        }
+                    }
+                    else{
+                        const response = await api.json();
+                        const conv = JSON.parse(response);
+                        let output = '';
+                        for(let i=0; i<conv.length; i++){
+                            output+=`
+                                <tr>
+                                    <td class="sn-cell">${i + 1}</td>
+                                    <td>${conv[i].transaction_id}</td>
+                                    <td>${conv[i].date}</td>
+                                    <td>${conv[i].time}</td>
+                                    <td>${conv[i].approval}</td>
+                                    <td>${conv[i].amount}</td>
+                                    <td><span class="type-badge ${conv[i].type === 'income' ? 'type-income' : 'type-outcome'}">${conv[i].type === 'income' ? 'Income' : 'Outcome'}</span></td>
+                                    <td>${conv[i].description}</td>
+                                    <td>${conv[i].category}</td>
+                                    <td>${conv[i].receiver}</td>
+                                    <td>${conv[i].party}</td>
+                                    <td>${conv[i].method}</td>
+                                    <td>${conv[i].week}</td>
+                                    <td>${conv[i].term}</td>
+                                    <td>${conv[i].session}</td>
+                                    <td><button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.9rem;" onclick="viewReceipt('${conv[i].transaction_id}', '${conv[i].type}')"><i class="fas fa-eye"></i> View</button></td>
+                                </tr>`
+                        }
+                        tableBody.innerHTML=output;
+                        let total = 0;
+                        for(let j=0; j<conv.length; j++){
+                            total += parseFloat(conv[j].amount);
+                        }
+                        document.getElementById('total-money-term-session-expenses').innerHTML=`<p>Total</p>₦${parseFloat(total).toLocaleString('NGN-ng', {minimumFractionDigits:2})}k`;
+                    }
+                }
+                catch(error){
+                    console.log(error.message);
+                }
+            }
+        }
+
+        async function viewReceipt(transaction_id,type) {
+            if(type=='income'){
+                const data = {transaction_id:transaction_id, type:type};
+                const api = await fetch('/generate-receipt', {
+                    method:'POST',
+                    headers:{'Content-type':'application/json'},
+                    body:JSON.stringify(data)
+                });
+                if(!api.ok){
+                    alert('Error fetching receipt data');
+                    return;
+                }
+                else{
+                    const response = await api.json();
+                    const convert = JSON.parse(response);
+                    const categoryNames = {
+                        tuition: 'Tuition Fees',
+                        registration: 'Registration Fees',
+                        exam: 'Examination Fees',
+                        donation: 'Donation',
+                        grant: 'Grant',
+                        salaries: 'Salaries',
+                        utilities: 'Utilities',
+                        supplies: 'Supplies',
+                        maintenance: 'Maintenance',
+                        services: 'Services',
+                        other: convert.type === 'income' ? 'Other Income' : 'Other Expense'
+                    };
+                    
+                    // Method names
+                    const methodNames = {
+                        cash: 'Cash',
+                        bank: 'Bank Transfer',
+                        check: 'Check',
+                        card: 'Credit/Debit Card'
+                    };
+                    
+                    const nameToUse = document.getElementById('profile-name').innerHTML;
+                    const receiptHTML = `
+                        <div class="receipt-header">
+                            <h2>OFFICIAL PAYMENT RECEIPT</h2>
+                            <h4> Abundant Light Mega Academy - Finance Department</h4>
+                            <p>4, OPEMIPO STREET, NEW GARAGE OKITIPUPA, ONDO STATE, NIGERIA.</p>
+                            <i>MOTTO: THE LIGHT OF THE WORLD</i>
+                        </div>
+                        
+                        <div class="receipt-details">
+                            <div>
+                                <div class="receipt-item">
+                                    <label>Transaction ID </label>
+                                    <div class="value">${convert.transaction_id}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>Date & Time</label>
+                                    <div class="value">${convert.date}<br>${convert.time}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>${convert.receiver === 'income' ? 'Received From' : 'Paid To'}</label>
+                                    <div class="value">${convert.receiver}</div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="receipt-item">
+                                    <label>Transaction Type</label>
+                                    <div class="value">${convert.type === 'income' ? 'INCOME' : 'OUTCOME'}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>Sender</label>
+                                    <div class="value">${convert.sender}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>Class</label>
+                                    <div class="value">${convert.class}</div>
+                                </div> 
+                                <div class="receipt-item">
+                                    <label>Admission number</label>
+                                    <div class="value">${convert.admission_number}</div>
+                                </div> 
+                                <div class="receipt-item">
+                                    <label>Method</label>
+                                    <div class="value">${convert.method}</div>
+                                </div> 
+                                <div class="receipt-item">
+                                    <label>Category</label>
+                                    <div class="value">${convert.category}</div>
+                                </div> 
+                                <div class="receipt-item">
+                                    <label>Subordinate</label>
+                                    <div class="value">${convert.surbordinate}</div>
+                                </div> 
+                                <div class="receipt-item">
+                                    <label>Receiver</label>
+                                    <div class="value">${convert.receiver}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>Week</label>
+                                    <div class="value">${convert.week}</div>
+                                </div> 
+                                <div class="receipt-item">
+                                    <label>Term</label>
+                                    <div class="value">${convert.term}</div>
+                                </div> 
+                                <div class="receipt-item">
+                                    <label>Session</label>
+                                    <div class="value">${convert.session}</div>
+                                </div>        
+                                <div class="receipt-item">
+                                    <label>Category</label>
+                                    <div class="value">${categoryNames[convert.category] || convert.category}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>Payment Method</label>
+                                    <div class="value">${methodNames[convert.paymentMethod] || convert.paymentMethod}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="receipt-amount">
+                            <div class="amount">₦${parseFloat(convert.amount).toLocaleString('NGN-ng', {minimumFractionDigits: 2})}k</div>
+                            <div class="value">${convert.type === 'income' ? 'AMOUNT PAID':''}</div>
+                        </div>
+                        
+                        <div style="margin-bottom: 25px;">
+                            <div class="receipt-item">
+                                <label>Description</label>
+                                <div class="value">${convert.description}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="receipt-footer">
+                            <p>This is an official receipt for accounting purposes.</p>
+                            <p style="margin-top: 20px; padding-top: 20px; border-top: 1px dashed var(--border);">
+                                <strong>Authorized Signature:</strong> ___________________________
+                            </p>
+                            <p><em>${nameToUse}, Bursar</em></p>
+                        </div>
+                    `;
+                    document.getElementById('receiptContent').innerHTML = receiptHTML;
+                    document.getElementById('receiptModal').classList.add('active');
+                }
+            } else {
+                const data = {transaction_id:transaction_id, type:type};
+                
+                const api = await fetch('/generate-receipt-outcome', {
+                    method:'POST',
+                    headers:{'Content-type':'application/json'},
+                    body:JSON.stringify(data)
+                });
+                if(!api.ok){
+                    alert('Error fetching receipt data');
+                    return;
+                }
+                else{
+                    const response = await api.json();
+                    const convert = JSON.parse(response);
+                    const categoryNames = {
+                        tuition: 'Tuition Fees',
+                        registration: 'Registration Fees',
+                        exam: 'Examination Fees',
+                        donation: 'Donation',
+                        grant: 'Grant',
+                        salaries: 'Salaries',
+                        utilities: 'Utilities',
+                        supplies: 'Supplies',
+                        maintenance: 'Maintenance',
+                        services: 'Services',
+                        other: convert.type === 'income' ? 'Other Income' : 'Other Expense'
+                    };
+                    
+                    // Method names
+                    const methodNames = {
+                        cash: 'Cash',
+                        bank: 'Bank Transfer',
+                        check: 'Check',
+                        card: 'Credit/Debit Card'
+                    };
+                    
+                    const nameToUse = document.getElementById('profile-name').innerHTML;
+                    const receiptHTML = `
+                        <div class="receipt-header">
+                            <h2>OFFICIAL PAYMENT RECEIPT</h2>
+                            <h4> Abundant Light Mega Academy - Finance Department</h4>
+                            <p>4, OPEMIPO STREET, NEW GARAGE OKITIPUPA, ONDO STATE, NIGERIA.</p>
+                            <i>MOTTO: THE LIGHT OF THE WORLD</i>
+                        </div>
+                        
+                        <div class="receipt-details">
+                            <div>
+                                <div class="receipt-item">
+                                    <label>Transaction ID </label>
+                                    <div class="value">${convert.transaction_id}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>Date & Time</label>
+                                    <div class="value">${convert.date}<br>${convert.time}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>${convert.type === 'income' ? 'Received From' : 'Paid To'}</label>
+                                    <div class="value">${convert.receiver}</div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="receipt-item">
+                                    <label>Transaction Type</label>
+                                    <div class="value">${convert.type === 'income' ? 'INCOME' : 'OUTCOME'}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>Sender</label>
+                                    <div class="value">${convert.party}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>Receiver</label>
+                                    <div class="value">${convert.receiver}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>Approval </label>
+                                    <div class="value">${convert.approval}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>Subordinate Name</label>
+                                    <div class="value">${convert.Surbordinate_name}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>Session</label>
+                                    <div class="value">${convert.session}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>Term</label>
+                                    <div class="value">${convert.term}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>Category</label>
+                                    <div class="value">${categoryNames[convert.category] || convert.category}</div>
+                                </div>
+                                <div class="receipt-item">
+                                    <label>Payment Method</label>
+                                    <div class="value">${methodNames[convert.method] || convert.method}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="receipt-amount">
+                            <div class="amount">₦${parseFloat(convert.amount).toLocaleString('NGN-ng', {minimumFractionDigits: 2})}k</div>
+                            <div class="value">${convert.type === 'income' ? 'AMOUNT PAID':''}</div>
+                        </div>
+                        
+                        <div style="margin-bottom: 25px;">
+                            <div class="receipt-item">
+                                <label>Description</label>
+                                <div class="value">${convert.description}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="receipt-footer">
+                            <p>This is an official receipt for accounting purposes.</p>
+                            <p style="margin-top: 20px; padding-top: 20px; border-top: 1px dashed var(--border);">
+                                <strong>Authorized Signature:</strong> ___________________________
+                            </p>
+                            <p><em>${nameToUse}, Bursar</em></p>
+                        </div>
+                    `;
+                    document.getElementById('receiptContent').innerHTML = receiptHTML;
+                    document.getElementById('receiptModal').classList.add('active');
+                }
+            }
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", ()=>{
+            getinfo();
+        });
+        
+        async function getinfo(){
+            const getEmail = localStorage.getItem('Alma');
+            const e = {'email':getEmail};
+            if(!getEmail){
+                // window.location.href='/';
+            }
+            else{
+                const api = await fetch('/bursar-info', {
+                    method:'POST',
+                    headers:{'Content-type':'application/json'},
+                    body:JSON.stringify(e)
+                })
+                
+                if(!api.ok){
+                    console.error('Failed to fetch bursar info');
+                }
+                else{
+                    const result = await api.json();
+                    const conv = JSON.parse(result);
+                    document.getElementById("profile-name").textContent=conv.name;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

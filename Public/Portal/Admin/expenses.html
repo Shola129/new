@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
+    <h1 style="color: var(--color-accent); margin-bottom: 15px;">Expenses Record</h1><br><br>
+    <div id="show-transaction-session-term" style="justify-self: center;"></div>
+     <div class="bursar-moblie">
+                            <div class="search-date">
+                                <label for="">Enter a particular day</label><br>
+                                <input type="text" name="date" id="date" class="btn" placeholder="2005-7-28">
+                                 <span>Use this formart <i>2026-6-9</i></span><br>
+                                <button onclick="expenses()" class="but">search</button>
+                            </div>
+                            <div class="search-term-session">
+                                <label for="">Search for particular term and session</label> <br>
+                                <select name="session" id="session" class="btn">
+                                    <option value="">Select session</option>
+                                    <option value="2025/2026">2025/2026</option>
+                                    <option value="2026/2027">2026/2027</option>
+                                    <option value="2027/2028">2027/2028</option>
+                                    <option value="2028/2029">2028/2029</option>
+                                    <option value="2029/2030">2029/2030</option>
+                                </select>
+                                <select name="term" id="term" class="btn">
+                                    <option value="">select term</option>
+                                    <option value="first">first term</option>
+                                    <option value="second">second term</option>
+                                    <option value="third">third term</option>
+                                </select><br>
+                                <button onclick="expensesTerm()" class="but">search</button>
+                           </div>
+                 
+                     </div>
+                     <h3>Recent Expenses Transactions</h3>
+                    <div class="transactions-table-container">
+                        <table class="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>Transaction ID</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Approval</th>
+                                        <th>Amount</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                        <th>Category</th>
+                                        <th>Receiver</th>
+                                         <th>Sender</th>
+                                        <th>Method</th>
+                                        <th>Week</th>
+                                        <th>Receipt(Optional)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="display-transcation">
+                                 
+                            </tbody>
+                        </table>
+                        <div>
+                            <h4 id="total-spent"></h4>
+                        </div>
+                    </div>
+                    <script>
+             document.addEventListener("DOMContentLoaded", function(){
+                            // transcationHistory();
+                        })
+                    async function transcationHistory(){
+                                event.preventDefault();
+                                try{
+                                    const api = await fetch('/last-20-expenses', {
+                                        method:'POST',
+                                        headers:{'Content-type':'application/json'}
+                                    });
+                                    if(!api.ok){
+
+                                    }
+                                    else{
+                                        const response = await api.json();
+                                        const conv = JSON.parse(response);
+                                        let output = '';
+                                        let display='';
+                                        for(let i=0; i<conv.length; i++){
+                                        output+=`
+                                                <tr>
+                                                        <td class="sn-cell">${i + 1}</td>
+                                                        <td>${conv[i].transaction_id}</td>
+                                                        <td>${conv[i].date}</td>
+                                                        <td>${conv[i].time}</td>
+                                                        <td>${conv[i].approval}</td>
+                                                        <td>${conv[i].amount}</td>
+                                                        <td><span class="type-badge ${conv[i].type === 'income' ? 'type-income' : 'type-outcome'}">${conv[i].type === 'income' ? 'Income' : 'Outcome'}</span></td>
+                                                        <td>${conv[i].description}</td>
+                                                        <td>${conv[i].category}</td>
+                                                        <td>${conv[i].receiver}</td>
+                                                        <td>${conv[i].party}</td>
+                                                        <td>${conv[i].method}</td>
+                                                        <td>${conv[i].week}</td>
+                                                        <td>${conv[i].term}</td>
+                                                        <td>${conv[i].session}</td>
+                                                </tr> 
+                                            `
+                                        }
+                                        document.getElementById("display-transcation").innerHTML=output;
+                                        document.getElementById("show-transaction-session-term").innerHTML=conv.session;
+                                    }
+                                }
+                                catch(error){
+                                    console.log(error.message);
+                                }
+                            }
+                            //transcation for a particular day
+                            async function expenses(){
+                                event.preventDefault();
+                                const date = document.getElementById("date").value;
+                                if(!date|| date===null){
+                                    alert('no date picked');
+                                }
+                            else{
+                                    const d = {'date':date};
+                                    try{
+                                        const api = await fetch('/expenses-for-a-particular-day',{
+                                            method:'POST',
+                                            headers:{'Content-type':'application/json'},
+                                            body:JSON.stringify(d)
+                                        });
+                                        if(!api.ok){
+                                            if(api.status==404){
+                                                alert('no transcation perform on that particular date');
+                                            }
+                                        }
+                                        else{
+                                            const response = api.json();
+                                            const conv = JSON.parse(response);
+                                            let output = '';
+                                            for(let k=0; k<conv.length; k++){
+                                                output+`
+                                                    <tr>
+                                                        <td class="sn-cell">${i + 1}</td>
+                                                        <td>${conv[i].transaction_id}</td>
+                                                        <td>${conv[i].date}</td>
+                                                        <td>${conv[i].time}</td>
+                                                        <td>${conv[i].approval}</td>
+                                                        <td>${conv[i].amount}</td>
+                                                        <td><span class="type-badge ${conv[i].type === 'income' ? 'type-income' : 'type-outcome'}">${conv[i].type === 'income' ? 'Income' : 'Outcome'}</span></td>
+                                                        <td>${conv[i].description}</td>
+                                                        <td>${conv[i].category}</td>
+                                                        <td>${conv[i].receiver}</td>
+                                                        <td>${conv[i].party}</td>
+                                                        <td>${conv[i].method}</td>
+                                                        <td>${conv[i].week}</td>
+                                                    </tr>
+                                                `
+                                            }
+                                            let total=0;
+                                            for(let r=0; r<conv.length; r++)[
+                                                total+=parseFloat(conv[r].amount)
+                                            ]
+                                            document.getElementById('total-spent').textContent=total;
+                                        }
+                                    }
+                                    catch(error){
+                                        console.log(error.message);
+                                    }
+                            }
+                            }
+
+                            //transcation for term and sesson 
+                            async function expensesTerm(){
+                                event.preventDefault();
+                                const session = document.getElementById('session').value;
+                                const term = document.getElementById('term').value;
+                                if(!session || !term){
+                                    alert('session or term not selected');
+                                }
+                                else{
+                                    const all = {'session':session, 'term':term};
+                                    try{
+                                        const api = await fetch('/expenses-particular-term-and-session', {
+                                            method:'POST',
+                                            headers:{'Content-type':'application/json'},
+                                            body:JSON.stringify(all)
+                                        });
+                                        if(!api.ok){
+                                            if(api.status==402){
+                                                alert('no payment made that particular term or week');
+                                            }
+                                          
+                                        }
+                                        else{
+                                            const response = await api.json();
+                                            const conv = JSON.parse(response);
+                                            let output = '';
+                                            for(let i=0; i<conv.length; i++){
+                                                output+=`
+                                                   <tr>
+                                                        <td class="sn-cell">${i + 1}</td>
+                                                        <td>${conv[i].transaction_id}</td>
+                                                        <td>${conv[i].date}</td>
+                                                        <td>${conv[i].time}</td>
+                                                        <td>${conv[i].approval}</td>
+                                                        <td>${conv[i].amount}</td>
+                                                        <td><span class="type-badge ${conv[i].type === 'income' ? 'type-income' : 'type-outcome'}">${conv[i].type === 'income' ? 'Income' : 'Outcome'}</span></td>
+                                                        <td>${conv[i].description}</td>
+                                                        <td>${conv[i].category}</td>
+                                                        <td>${conv[i].receiver}</td>
+                                                        <td>${conv[i].party}</td>
+                                                        <td>${conv[i].method}</td>
+                                                        <td>${conv[i].week}</td>
+                                                    </tr>
+                                                `
+                                            }
+                                            document.getElementById('display-transcation').innerHTML=output;
+                                            let total = 0;
+                                            for(let q=0; q<conv.length; q++){
+                                                total+=parseFloat(conv[q].amount)
+                                            }
+                                            document.getElementById('total-spent').innerHTML=`<p>Total: <br /> ${total}</p>`;
+                                            document.getElementById("show-transaction-session-term").innerHTML=`<h1>Outcome Transaction for ${session} and ${term} term </h1>`
+                                        }
+                                    }
+                                    catch(error){
+                                        console.log(error.message);
+                                    }
+                                }
+                            }
+                    </script>
+                    <style>
+                        .transactions-table-container{
+                                overflow-x: auto;
+                                background-color: white;
+                                border-radius: 8px;
+                                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+                            }
+                        .transactions-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            min-width: 800px;
+                            padding: 50px;
+                        }
+                        
+                        .transactions-table th {
+                            background-color:beige;
+                            color: var(--color-accent);
+                            padding: 15px;
+                            text-align: left;
+                            font-weight: 600;
+                            border-bottom: 1px solid var(--color-ashes-light);
+                        }
+                        
+                        .transactions-table td {
+                            padding: 15px;
+                            border-bottom: 1px solid var(--color-ashes-light);
+                        }
+                        
+                        .transactions-table tr:last-child td {
+                            border-bottom: none;
+                        }
+                        
+                        .transactions-table tr:hover {
+                            background-color: var(--color-cream);
+                        }
+                        .bursar-moblie{
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 20px;
+                        }
+                        .search-term-session{
+                            display: block;
+                            float: left;
+
+                        }
+                        .search-term-session button{
+                            margin-top: 10px;
+                            padding: 5px;
+                            background-color:black;
+                            color: white;
+                            border: none;
+                            border-radius: 3px;
+                            cursor: pointer;
+                        }
+                        .search-date{ 
+                            display: block;
+                            float: left;
+                            margin-right: 20px;
+                        }
+                        .search-date button{
+                            margin-top: 10px;
+                            padding: 5px;
+                            background-color: black;
+                            color:  white;
+                            border: none;
+                            border-radius: 3px;
+                            cursor: pointer;
+                        }
+                        .search-date input{
+                            margin-right: 10px;
+                            width: 150px;
+                        }
+                        .search-term-session select{
+                            margin-right: 10px;
+                            width: 120px;
+                            
+                        }
+                         .btn{width: 120px; height: 25px;}
+                        .but{width: 150px; margin-top: 10px; height: 30px;}
+                    </style>
+</body>
+</html>

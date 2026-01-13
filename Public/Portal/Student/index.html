@@ -1,0 +1,2588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Portal - NewDich Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --cream-bg: #fefefa;
+            --cream-light: #f8f8f8;
+            --cream-dark: #f5f5f0;
+            --ash-light: #e8e8e8;
+            --ash: #d8d8d8;
+            --ash-dark: #888;
+            --ash-darker: #666;
+            --primary: #7a9d7e;
+            --primary-dark: #5a7d5e;
+            --secondary: #4a6fa5;
+            --secondary-dark: #3a5f95;
+            --tertiary: #d4a574;
+            --tertiary-dark: #c49564;
+            --report-color: #d47b7b;
+            --report-color-dark: #b86a6a;
+        }
+        
+        body {
+            background-color: var(--cream-dark);
+            color: #333;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Background image with blur effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: blur(6px);
+            z-index: -1;
+            opacity: 0.15;
+        }
+        
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        /* Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(145deg, var(--cream-light) 0%, var(--ash-light) 100%);
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: fixed;
+            z-index: 999;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            background-color: var(--ash);
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: var(--ash-darker);
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--ash-darker);
+        }
+        
+        .nav-menu {
+            padding: 20px 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .nav-item {
+            display: block;
+            padding: 16px 25px;
+            color: var(--ash-darker);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-item i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(0, 0, 0, 0.03);
+            color: var(--primary-dark);
+            border-left-color: var(--primary);
+        }
+        
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            font-size: 13px;
+            color: var(--ash-dark);
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 0;
+            background-color: var(--cream-bg);
+            transition: margin-left 0.3s ease;
+        }
+        
+        /* Top Header */
+        .top-header {
+            background: linear-gradient(145deg, var(--cream-light) 0%, var(--ash-light) 100%);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+        
+        .header-title h1 {
+            color: var(--ash-darker);
+            font-size: 24px;
+        }
+        
+        .header-title p {
+            color: var(--ash-dark);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 15px;
+            background-color: var(--cream-bg);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--ash);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ash-darker);
+            font-size: 18px;
+        }
+        
+        .user-info h4 {
+            color: var(--ash-darker);
+            font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .user-info p {
+            color: var(--ash-dark);
+            font-size: 13px;
+        }
+        
+        .logout-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* Content Sections */
+        .content-wrapper {
+            padding: 30px;
+        }
+        
+        .content-section {
+            margin-bottom: 40px;
+            background-color: var(--cream-light);
+            border-radius: 15px;
+            border: 1px solid var(--ash-light);
+            overflow: hidden;
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .section-header {
+            padding: 20px 30px;
+            background: linear-gradient(145deg, var(--cream-light) 0%, var(--ash-light) 100%);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-header h2 {
+            color: var(--ash-darker);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-header h2 i {
+            color: var(--primary);
+        }
+        
+        .section-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .section-content {
+            padding: 30px;
+        }
+        
+        /* Profile Dashboard */
+        .profile-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        
+        .profile-card {
+            background-color: var(--cream-bg);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid var(--ash-light);
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: var(--ash);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: var(--ash-darker);
+            font-size: 60px;
+            border: 5px solid var(--cream-light);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .profile-card h3 {
+            color: var(--ash-darker);
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .profile-card p {
+            color: var(--ash-dark);
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .profile-card .title {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .stat-item {
+            background-color: var(--cream-light);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid var(--ash-light);
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: var(--ash-dark);
+            font-weight: 600;
+        }
+        
+        .profile-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .detail-item {
+            background-color: var(--cream-bg);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--ash-light);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .detail-item h4 {
+            color: var(--ash-darker);
+            font-size: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .detail-item h4 i {
+            color: var(--primary);
+        }
+        
+        .detail-item p {
+            color: var(--ash-darker);
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+        
+        .detail-item ul {
+            list-style-type: none;
+            margin-top: 10px;
+        }
+        
+        .detail-item li {
+            color: var(--ash-dark);
+            padding: 8px 0;
+            border-bottom: 1px solid var(--ash-light);
+            font-size: 15px;
+        }
+        
+        .detail-item li:last-child {
+            border-bottom: none;
+        }
+        
+        /* Category Selection */
+        .category-selection {
+            margin-bottom: 30px;
+        }
+        
+        .category-selection h3 {
+            color: var(--ash-darker);
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .category-selection h3 i {
+            color: var(--primary);
+        }
+        
+        .category-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .category-btn {
+            background: linear-gradient(145deg, var(--cream-light) 0%, var(--ash-light) 100%);
+            border: 2px solid var(--ash);
+            border-radius: 12px;
+            padding: 25px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .category-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+        
+        .category-btn.active {
+            background: linear-gradient(145deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-color: var(--primary);
+            color: white;
+        }
+        
+        .category-btn.active .category-icon,
+        .category-btn.active .category-title,
+        .category-btn.active .category-desc {
+            color: white;
+        }
+        
+        .category-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 10px;
+            background-color: var(--cream-bg);
+            color: var(--primary);
+        }
+        
+        .category-btn.active .category-icon {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        .category-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ash-darker);
+            margin: 0;
+        }
+        
+        .category-desc {
+            font-size: 14px;
+            color: var(--ash-dark);
+            margin: 0;
+            line-height: 1.4;
+        }
+        
+        /* Pre-primary specific */
+        .category-btn:nth-child(1) .category-icon {
+            color: #e67e22;
+        }
+        
+        .category-btn:nth-child(1).active {
+            background: linear-gradient(145deg, #e67e22 0%, #d35400 100%);
+            border-color: #e67e22;
+        }
+        
+        /* Primary specific */
+        .category-btn:nth-child(2) .category-icon {
+            color: #3498db;
+        }
+        
+        .category-btn:nth-child(2).active {
+            background: linear-gradient(145deg, #3498db 0%, #2980b9 100%);
+            border-color: #3498db;
+        }
+        
+        /* Junior Secondary specific */
+        .category-btn:nth-child(3) .category-icon {
+            color: #9b59b6;
+        }
+        
+        .category-btn:nth-child(3).active {
+            background: linear-gradient(145deg, #9b59b6 0%, #8e44ad 100%);
+            border-color: #9b59b6;
+        }
+        
+        /* Senior Secondary specific */
+        .category-btn:nth-child(4) .category-icon {
+            color: var(--primary);
+        }
+        
+        /* Result Upload Form */
+        .result-form {
+            background-color: var(--cream-bg);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--ash-light);
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .result-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--ash-darker);
+            font-size: 15px;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--ash);
+            border-radius: 8px;
+            font-size: 15px;
+            background-color: var(--cream-bg);
+            color: var(--ash-darker);
+            transition: all 0.3s;
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(122, 157, 126, 0.2);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        /* Results Table Container - Enhanced for responsiveness */
+        .result-table-container {
+            overflow-x: auto;
+            background-color: var(--cream-bg);
+            border-radius: 10px;
+            border: 1px solid var(--ash-light);
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+        }
+        
+        .result-table-container.active {
+            display: block;
+        }
+        
+        /* Table wrapper for better scrolling */
+        .table-wrapper {
+            overflow-x: auto;
+            width: 100%;
+            max-width: 100%;
+            position: relative;
+        }
+        
+        /* Scroll indicator for mobile */
+        .scroll-indicator {
+            display: none;
+            text-align: center;
+            padding: 10px;
+            background-color: rgba(122, 157, 126, 0.1);
+            color: var(--primary);
+            font-size: 14px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px; /* Reduced from 2000px for better mobile */
+            table-layout: auto;
+        }
+        
+        .result-table thead {
+            background: linear-gradient(145deg, var(--cream-light) 0%, var(--ash-light) 100%);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .result-table th {
+            padding: 12px 8px;
+            text-align: center;
+            color: var(--ash-darker);
+            font-weight: 600;
+            font-size: 12px; /* Smaller font for mobile */
+            border: 1px solid var(--ash-light);
+            vertical-align: middle;
+            line-height: 1.3;
+            white-space: nowrap;
+            min-width: 70px;
+        }
+        
+        .result-table th.roll-col {
+            width: 50px;
+            min-width: 50px;
+        }
+        
+        .result-table th.name-col {
+            width: 150px;
+            min-width: 120px;
+        }
+        
+        .result-table th.admission-col {
+            width: 100px;
+            min-width: 90px;
+        }
+        
+        .result-table th.scores-col {
+            width: 70px;
+            min-width: 60px;
+        }
+        
+        .result-table th.cum-col {
+            width: 80px;
+            min-width: 70px;
+        }
+        
+        .result-table th.avg-col {
+            width: 70px;
+            min-width: 60px;
+        }
+        
+        .result-table th.position-col {
+            width: 70px;
+            min-width: 60px;
+        }
+        
+        .result-table th.grade-col {
+            width: 60px;
+            min-width: 50px;
+        }
+        
+        .result-table th.sign-col {
+            width: 60px;
+            min-width: 50px;
+        }
+        
+        .result-table td {
+            padding: 8px 6px;
+            color: var(--ash-darker);
+            border: 1px solid var(--ash-light);
+            text-align: center;
+            vertical-align: middle;
+            font-size: 13px;
+        }
+        
+        .result-table input {
+            width: 100%;
+            padding: 6px 4px;
+            border: 1px solid var(--ash);
+            border-radius: 4px;
+            background-color: var(--cream-bg);
+            color: var(--ash-darker);
+            text-align: center;
+            font-size: 13px;
+            transition: all 0.2s;
+            min-width: 40px;
+        }
+        
+        .result-table input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(122, 157, 126, 0.2);
+        }
+        
+        .result-table input[type="text"] {
+            text-align: left;
+            padding: 6px 8px;
+        }
+        
+        .result-table tbody tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+        
+        .result-table tbody tr:hover {
+            background-color: rgba(122, 157, 126, 0.05);
+        }
+        
+        .student-name-input {
+            min-width: 120px;
+            text-align: left !important;
+        }
+        
+        .admission-input {
+            min-width: 90px;
+        }
+        
+        .grade-cell {
+            font-weight: 700;
+            border-radius: 4px;
+            padding: 4px 6px;
+            display: inline-block;
+            font-size: 11px;
+            min-width: 30px;
+        }
+        
+        .grade-A {
+            background-color: rgba(122, 157, 126, 0.2);
+            color: var(--primary);
+        }
+        
+        .grade-B {
+            background-color: rgba(106, 140, 184, 0.2);
+            color: #6a8cb8;
+        }
+        
+        .grade-C {
+            background-color: rgba(212, 165, 116, 0.2);
+            color: #d4a574;
+        }
+        
+        .grade-D {
+            background-color: rgba(212, 123, 123, 0.2);
+            color: #d47b7b;
+        }
+        
+        .grade-F {
+            background-color: rgba(136, 136, 136, 0.2);
+            color: var(--ash-dark);
+        }
+        
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            border: none;
+            font-size: 15px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: var(--ash);
+            color: var(--ash-darker);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--ash-dark);
+            color: white;
+        }
+        
+        .btn-report {
+            background-color: var(--report-color);
+            color: white;
+        }
+        
+        .btn-report:hover {
+            background-color: var(--report-color-dark);
+        }
+        
+        .btn-wide {
+            min-width: 150px;
+        }
+        
+        /* Instructions Box */
+        .instructions-box {
+            margin-bottom: 20px;
+            background-color: rgba(122, 157, 126, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(122, 157, 126, 0.2);
+        }
+        
+        .instructions-box h4 {
+            color: var(--ash-darker);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions-box h4 i {
+            color: var(--primary);
+        }
+        
+        .instructions-box p {
+            color: var(--ash-dark);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .instructions-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .instructions-list li {
+            color: var(--ash-dark);
+            font-size: 13px;
+        }
+        
+        /* Success Message */
+        .success-message {
+            text-align: center;
+            padding: 40px;
+            background-color: rgba(122, 157, 126, 0.1);
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid var(--primary);
+            display: none;
+        }
+        
+        .success-message.active {
+            display: block;
+        }
+        
+        .success-icon {
+            color: var(--primary);
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .success-message h3 {
+            color: var(--ash-darker);
+            margin-bottom: 15px;
+        }
+        
+        .success-message p {
+            color: var(--ash-dark);
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+        
+        /* Report Issues Section */
+        .report-form {
+            background-color: var(--cream-bg);
+            border-radius: 10px;
+            padding: 30px;
+            border: 1px solid var(--ash-light);
+        }
+        
+        .report-form-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--ash-light);
+        }
+        
+        .report-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(212, 123, 123, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--report-color);
+            font-size: 24px;
+        }
+        
+        .report-form-header h3 {
+            color: var(--ash-darker);
+            font-size: 22px;
+        }
+        
+        .report-form-header p {
+            color: var(--ash-dark);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .priority-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .priority-option {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .priority-option input[type="radio"] {
+            display: none;
+        }
+        
+        .priority-option label {
+            display: block;
+            padding: 15px;
+            background-color: var(--cream-light);
+            border: 2px solid var(--ash);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .priority-option input[type="radio"]:checked + label {
+            border-color: var(--report-color);
+            background-color: rgba(212, 123, 123, 0.1);
+            color: var(--report-color);
+        }
+        
+        .priority-option label.low {
+            color: #7a9d7e;
+        }
+        
+        .priority-option label.medium {
+            color: #d4a574;
+        }
+        
+        .priority-option label.high {
+            color: var(--report-color);
+        }
+        
+        .file-upload {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: var(--cream-light);
+            border-radius: 8px;
+            border: 2px dashed var(--ash);
+        }
+        
+        .file-upload input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        
+        .file-upload p {
+            color: var(--ash-dark);
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        /* Report Issues Success Message */
+        .report-success-message {
+            text-align: center;
+            padding: 40px;
+            background-color: rgba(212, 123, 123, 0.1);
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid var(--report-color);
+            display: none;
+        }
+        
+        .report-success-message.active {
+            display: block;
+        }
+        
+        .report-success-icon {
+            color: var(--report-color);
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        /* Footer */
+        .page-footer {
+            text-align: center;
+            padding: 25px;
+            color: var(--ash-dark);
+            font-size: 14px;
+            background-color: var(--cream-light);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            margin-top: 40px;
+        }
+        
+        .page-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        /* Grading System Reference */
+        .grading-system {
+            margin-top: 25px;
+            background-color: rgba(122, 157, 126, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(122, 157, 126, 0.2);
+        }
+        
+        .grading-system h4 {
+            color: var(--ash-darker);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .grading-system h4 i {
+            color: var(--primary);
+        }
+        
+        .grade-scale {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .grade-scale div {
+            font-size: 14px;
+            color: var(--ash-darker);
+        }
+        
+        /* Row Management */
+        .row-management {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: var(--cream-bg);
+            border-radius: 10px;
+            border: 1px solid var(--ash-light);
+        }
+        
+        .row-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .row-btn {
+            padding: 8px 15px;
+            background-color: var(--ash);
+            color: var(--ash-darker);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .row-btn:hover {
+            background-color: var(--ash-dark);
+            color: white;
+        }
+        
+        .row-btn.add {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .row-btn.add:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 250px;
+            }
+            
+            .main-content {
+                margin-left: 250px;
+            }
+            
+            .profile-dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .form-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .instructions-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .profile-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .result-table {
+                min-width: 1100px;
+            }
+            
+            .result-table th {
+                font-size: 11px;
+                padding: 10px 6px;
+            }
+            
+            .result-table td {
+                font-size: 12px;
+                padding: 6px 4px;
+            }
+            
+            .scroll-indicator {
+                display: block;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .top-header {
+                padding: 15px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .header-title h1 {
+                font-size: 20px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .content-wrapper {
+                padding: 20px;
+            }
+            
+            .section-content {
+                padding: 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .category-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .row-management {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+            
+            .row-controls {
+                justify-content: center;
+            }
+            
+            .result-table {
+                min-width: 1000px;
+            }
+            
+            .priority-selector {
+                flex-direction: column;
+            }
+            
+            .priority-option {
+                min-width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .header-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .user-profile {
+                justify-content: center;
+            }
+            
+            .logout-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .section-badge {
+                align-self: flex-start;
+            }
+            
+            .result-table-container {
+                padding: 10px;
+            }
+            
+            .result-form {
+                padding: 20px;
+            }
+            
+            .grade-scale {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .profile-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .row-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .result-table {
+                min-width: 900px;
+                font-size: 11px;
+            }
+            
+            .result-table th {
+                font-size: 10px;
+                padding: 8px 4px;
+            }
+            
+            .result-table td {
+                font-size: 11px;
+                padding: 6px 3px;
+            }
+            
+            .result-table input {
+                font-size: 11px;
+                padding: 4px 3px;
+            }
+            
+            .report-form {
+                padding: 20px;
+            }
+            
+            .report-form-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .content-wrapper {
+                padding: 15px;
+            }
+            
+            .section-content {
+                padding: 15px;
+            }
+            
+            .header-title h1 {
+                font-size: 18px;
+            }
+            
+            .logo-text {
+                font-size: 18px;
+            }
+            
+            .profile-card {
+                padding: 20px;
+            }
+            
+            .profile-avatar {
+                width: 120px;
+                height: 120px;
+                font-size: 50px;
+            }
+            
+            .profile-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-table {
+                min-width: 850px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .category-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                padding: 10px 15px;
+            }
+            
+            .result-table {
+                min-width: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="logo-text">Staff Portal</div>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="#profile" class="nav-item active" data-section="profile">
+                    <i class="fas fa-user"></i>
+                    <span>My Profile</span>
+                </a>
+                <a href="#results" class="nav-item" data-section="results">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload Results</span>
+                </a>
+                <a href="#report-issues" class="nav-item" data-section="report-issues">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Report Issues</span>
+                </a>
+            </div>
+            
+            <div class="sidebar-footer">
+                NewDich Academy &copy; 2023
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <div class="top-header">
+                <div class="header-title">
+                    <h1>NewDich Academy Staff Portal</h1>
+                    <p>Welcome back! | Last login: Today at 09:42 AM</p>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="user-info">
+                            <h4>Mrs. Sarah Williams</h4>
+                            <p>Science Teacher</p>
+                        </div>
+                    </div>
+                    
+                    <button class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Content Wrapper -->
+            <div class="content-wrapper">
+                <!-- Profile Dashboard Section -->
+                <div class="content-section active" id="profile-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-user-circle"></i> My Profile Dashboard</h2>
+                        <div class="section-badge">Active</div>
+                    </div>
+                    
+                    <div class="section-content">
+                        <div class="profile-dashboard">
+                            <div class="profile-card">
+                                <div class="profile-avatar">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <h3>Mrs. Sarah Williams</h3>
+                                <p class="title">Senior Science Teacher</p>
+                                <p>Grade 11 - Science</p>
+                                <p>Blue House Head</p>
+                                <p>Joined: September 2018</p>
+                                
+                                <div class="profile-stats">
+                                    <div class="stat-item">
+                                        <div class="stat-value">32</div>
+                                        <div class="stat-label">Students</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value">5</div>
+                                        <div class="stat-label">Years</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value">3</div>
+                                        <div class="stat-label">Subjects</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="profile-details">
+                                <div class="detail-item">
+                                    <h4><i class="fas fa-graduation-cap"></i> Academic Information</h4>
+                                    <ul>
+                                        <li><strong>Qualification:</strong> M.Sc. in Physics</li>
+                                        <li><strong>Certification:</strong> Teaching License (Grade 9-12)</li>
+                                        <li><strong>Specialization:</strong> Physics & Chemistry</li>
+                                        <li><strong>Professional Development:</strong> 120+ hours completed</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="detail-item">
+                                    <h4><i class="fas fa-book"></i> Subjects Handling</h4>
+                                    <ul>
+                                        <li>Physics (Grade 11)</li>
+                                        <li>Chemistry (Grade 11)</li>
+                                        <li>Mathematics (Grade 10)</li>
+                                        <li>Science Club Coordinator</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="detail-item">
+                                    <h4><i class="fas fa-envelope"></i> Contact Information</h4>
+                                    <ul>
+                                        <li><strong>Email:</strong> sarah.williams@newdich.edu</li>
+                                        <li><strong>Phone:</strong> +1 (555) 789-0123</li>
+                                        <li><strong>Extension:</strong> 456</li>
+                                        <li><strong>Office:</strong> Science Block, Room 203</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="detail-item">
+                                    <h4><i class="fas fa-calendar-alt"></i> Current Schedule</h4>
+                                    <ul>
+                                        <li><strong>Mon-Wed:</strong> 8:00 AM - 3:00 PM</li>
+                                        <li><strong>Thu-Fri:</strong> 8:00 AM - 2:00 PM</li>
+                                        <li><strong>Office Hours:</strong> Mon & Wed 3:00-4:00 PM</li>
+                                        <li><strong>Next Review:</strong> December 2023</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Result Upload Section -->
+                <div class="content-section" id="results-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-upload"></i> Upload Student Results</h2>
+                        <div class="section-badge">Academic Records</div>
+                    </div>
+                    
+                    <div class="section-content">
+                        <!-- Category Selection -->
+                        <div class="category-selection">
+                            <h3><i class="fas fa-layer-group"></i> Select Educational Category</h3>
+                            <p style="color: var(--ash-dark); margin-bottom: 20px; font-size: 14px;">
+                                Choose the appropriate category for the results you want to upload. Each category has different class options.
+                            </p>
+                            
+                            <div class="category-buttons">
+                                <div class="category-btn active" data-category="pre-primary">
+                                    <div class="category-icon">
+                                        <i class="fas fa-child"></i>
+                                    </div>
+                                    <h4 class="category-title">Pre-Primary</h4>
+                                    <p class="category-desc">Nursery & Kindergarten levels</p>
+                                </div>
+                                
+                                <div class="category-btn" data-category="primary">
+                                    <div class="category-icon">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </div>
+                                    <h4 class="category-title">Primary School</h4>
+                                    <p class="category-desc">Grades 1-6</p>
+                                </div>
+                                
+                                <div class="category-btn" data-category="junior-secondary">
+                                    <div class="category-icon">
+                                        <i class="fas fa-graduation-cap"></i>
+                                    </div>
+                                    <h4 class="category-title">Junior Secondary</h4>
+                                    <p class="category-desc">Grades 7-9 (JSS)</p>
+                                </div>
+                                
+                                <div class="category-btn" data-category="senior-secondary">
+                                    <div class="category-icon">
+                                        <i class="fas fa-university"></i>
+                                    </div>
+                                    <h4 class="category-title">Senior Secondary</h4>
+                                    <p class="category-desc">Grades 10-12 (SSS)</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Instructions -->
+                        <div class="instructions-box">
+                            <h4><i class="fas fa-info-circle"></i> Instructions for Result Upload</h4>
+                            <p>Select a category above, then fill in the required information. Enter student names and admission numbers manually in the table.</p>
+                            <div class="instructions-list">
+                                <li><strong>Student Name:</strong> Enter full name of student</li>
+                                <li><strong>Admission No:</strong> Enter admission number</li>
+                                <li><strong>Test 1 & Test 2:</strong> Enter scores (out of 20 each)</li>
+                                <li><strong>End of Term Exam:</strong> Enter exam score (out of 60)</li>
+                                <li><strong>Last Term Cumulative:</strong> Previous term's cumulative</li>
+                                <li><strong>Class Average:</strong> Class average score</li>
+                                <li><strong>Position:</strong> Student's rank in class</li>
+                                <li><strong>Grade:</strong> Automatically calculated</li>
+                                <li><strong>Sign:</strong> Teacher's initials</li>
+                            </div>
+                        </div>
+                        
+                        <!-- Result Form for Pre-Primary -->
+                        <form class="result-form active" id="pre-primary-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="pre-primary-term">Term *</label>
+                                    <select id="pre-primary-term" name="term" required>
+                                        <option value="">Select Term</option>
+                                        <option value="term1">First Term</option>
+                                        <option value="term2">Second Term</option>
+                                        <option value="term3">Third Term</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="pre-primary-class">Class *</label>
+                                    <select id="pre-primary-class" name="class" required>
+                                        <option value="">Select Class</option>
+                                        <option value="nursery1">Nursery 1</option>
+                                        <option value="nursery2">Nursery 2</option>
+                                        <option value="kg1">Kindergarten 1</option>
+                                        <option value="kg2">Kindergarten 2</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="pre-primary-session">Academic Session *</label>
+                                    <select id="pre-primary-session" name="session" required>
+                                        <option value="">Select Session</option>
+                                        <option value="2022-2023">2022-2023</option>
+                                        <option value="2023-2024">2023-2024</option>
+                                        <option value="2024-2025">2024-2025</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="pre-primary-subject">Subject/Learning Area *</label>
+                                    <input type="text" id="pre-primary-subject" name="subject" placeholder="e.g., Basic Science, Number Work" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="clearForm('pre-primary')">
+                                    <i class="fas fa-redo"></i> Clear Form
+                                </button>
+                                <button type="button" class="btn btn-primary btn-wide" onclick="generateResultsTable('pre-primary')">
+                                    <i class="fas fa-table"></i> Generate Results Table
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Result Form for Primary -->
+                        <form class="result-form" id="primary-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="primary-term">Term *</label>
+                                    <select id="primary-term" name="term" required>
+                                        <option value="">Select Term</option>
+                                        <option value="term1">First Term</option>
+                                        <option value="term2">Second Term</option>
+                                        <option value="term3">Third Term</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="primary-class">Class *</label>
+                                    <select id="primary-class" name="class" required>
+                                        <option value="">Select Class</option>
+                                        <option value="grade1">Grade 1</option>
+                                        <option value="grade2">Grade 2</option>
+                                        <option value="grade3">Grade 3</option>
+                                        <option value="grade4">Grade 4</option>
+                                        <option value="grade5">Grade 5</option>
+                                        <option value="grade6">Grade 6</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="primary-session">Academic Session *</label>
+                                    <select id="primary-session" name="session" required>
+                                        <option value="">Select Session</option>
+                                        <option value="2022-2023">2022-2023</option>
+                                        <option value="2023-2024">2023-2024</option>
+                                        <option value="2024-2025">2024-2025</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="primary-subject">Subject *</label>
+                                    <input type="text" id="primary-subject" name="subject" placeholder="e.g., Mathematics, English Language" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="clearForm('primary')">
+                                    <i class="fas fa-redo"></i> Clear Form
+                                </button>
+                                <button type="button" class="btn btn-primary btn-wide" onclick="generateResultsTable('primary')">
+                                    <i class="fas fa-table"></i> Generate Results Table
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Result Form for Junior Secondary -->
+                        <form class="result-form" id="junior-secondary-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="junior-term">Term *</label>
+                                    <select id="junior-term" name="term" required>
+                                        <option value="">Select Term</option>
+                                        <option value="term1">First Term</option>
+                                        <option value="term2">Second Term</option>
+                                        <option value="term3">Third Term</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="junior-class">Class *</label>
+                                    <select id="junior-class" name="class" required>
+                                        <option value="">Select Class</option>
+                                        <option value="grade7">Grade 7 (JSS 1)</option>
+                                        <option value="grade8">Grade 8 (JSS 2)</option>
+                                        <option value="grade9">Grade 9 (JSS 3)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="junior-session">Academic Session *</label>
+                                    <select id="junior-session" name="session" required>
+                                        <option value="">Select Session</option>
+                                        <option value="2022-2023">2022-2023</option>
+                                        <option value="2023-2024">2023-2024</option>
+                                        <option value="2024-2025">2024-2025</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="junior-subject">Subject *</label>
+                                    <input type="text" id="junior-subject" name="subject" placeholder="e.g., Basic Science, Mathematics" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="clearForm('junior-secondary')">
+                                    <i class="fas fa-redo"></i> Clear Form
+                                </button>
+                                <button type="button" class="btn btn-primary btn-wide" onclick="generateResultsTable('junior-secondary')">
+                                    <i class="fas fa-table"></i> Generate Results Table
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Result Form for Senior Secondary -->
+                        <form class="result-form" id="senior-secondary-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="senior-term">Term *</label>
+                                    <select id="senior-term" name="term" required>
+                                        <option value="">Select Term</option>
+                                        <option value="term1">First Term</option>
+                                        <option value="term2">Second Term</option>
+                                        <option value="term3">Third Term</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="senior-class">Class *</label>
+                                    <select id="senior-class" name="class" required>
+                                        <option value="">Select Class</option>
+                                        <option value="grade10">Grade 10 (SSS 1)</option>
+                                        <option value="grade11">Grade 11 (SSS 2)</option>
+                                        <option value="grade12">Grade 12 (SSS 3)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="senior-session">Academic Session *</label>
+                                    <select id="senior-session" name="session" required>
+                                        <option value="">Select Session</option>
+                                        <option value="2022-2023">2022-2023</option>
+                                        <option value="2023-2024">2023-2024</option>
+                                        <option value="2024-2025">2024-2025</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="senior-subject">Subject *</label>
+                                    <input type="text" id="senior-subject" name="subject" placeholder="e.g., Physics, Chemistry, Mathematics" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="clearForm('senior-secondary')">
+                                    <i class="fas fa-redo"></i> Clear Form
+                                </button>
+                                <button type="button" class="btn btn-primary btn-wide" onclick="generateResultsTable('senior-secondary')">
+                                    <i class="fas fa-table"></i> Generate Results Table
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Results Table Container -->
+                        <div class="result-table-container" id="resultsTableContainer">
+                            <!-- Scroll indicator for mobile -->
+                            <div class="scroll-indicator">
+                                <i class="fas fa-arrows-left-right"></i> Scroll horizontally to view all columns
+                            </div>
+                            
+                            <!-- Row Management -->
+                            <div class="row-management">
+                                <div>
+                                    <strong>Number of Students:</strong> <span id="rowCount">5</span>
+                                </div>
+                                <div class="row-controls">
+                                    <button type="button" class="row-btn add" onclick="addTableRow()">
+                                        <i class="fas fa-plus"></i> Add Row
+                                    </button>
+                                    <button type="button" class="row-btn" onclick="removeTableRow()">
+                                        <i class="fas fa-minus"></i> Remove Row
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Table wrapper for better scrolling -->
+                            <div class="table-wrapper">
+                                <table class="result-table" id="resultsTable">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2" class="roll-col">Roll No.</th>
+                                            <th rowspan="2" class="name-col">Student Name</th>
+                                            <th rowspan="2" class="admission-col">Admission No.</th>
+                                            <th colspan="11">Assessment Scores</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="scores-col">(a)<br>Test 1<br><small>20</small></th>
+                                            <th class="scores-col">(b)<br>Test 2<br><small>20</small></th>
+                                            <th class="scores-col">(c)<br>Total Test<br>a + b<br><small>40</small></th>
+                                            <th class="scores-col">(d)<br>End of Term<br>Exam<br><small>60</small></th>
+                                            <th class="scores-col">(e)<br>Overall<br>c + d<br><small>100</small></th>
+                                            <th class="cum-col">(f)<br>Last Term<br>Cum.</th>
+                                            <th class="cum-col">(g)<br>Cum.<br>e + f</th>
+                                            <th class="avg-col">(h)<br>Class Avg</th>
+                                            <th class="position-col">(i)<br>Position</th>
+                                            <th class="grade-col">(j)<br>Grade</th>
+                                            <th class="sign-col">(k)<br>Sign</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="resultsTableBody">
+                                        <!-- Student rows will be generated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Table Actions -->
+                            <div class="form-actions" style="margin-top: 30px;">
+                                <button type="button" class="btn btn-secondary" onclick="clearTable()">
+                                    <i class="fas fa-times"></i> Clear Table
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="saveResults()">
+                                    <i class="fas fa-save"></i> Save Results
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Grading System Reference -->
+                        <div class="grading-system">
+                            <h4><i class="fas fa-info-circle"></i> Grading System</h4>
+                            <div class="grade-scale">
+                                <div><strong>A1:</strong> 90-100%</div>
+                                <div><strong>B2:</strong> 80-89%</div>
+                                <div><strong>B3:</strong> 70-79%</div>
+                                <div><strong>C4:</strong> 65-69%</div>
+                                <div><strong>C5:</strong> 60-64%</div>
+                                <div><strong>C6:</strong> 55-59%</div>
+                                <div><strong>D7:</strong> 50-54%</div>
+                                <div><strong>E8:</strong> 45-49%</div>
+                                <div><strong>F9:</strong> 0-44%</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Success Message -->
+                        <div class="success-message" id="successMessage">
+                            <div class="success-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h3>Results Saved Successfully!</h3>
+                            <p>All student results have been saved to the database. You can now generate reports or upload another set of results.</p>
+                            <button class="btn btn-primary" onclick="resetForm()">
+                                <i class="fas fa-plus"></i> Upload More Results
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Report Issues Section -->
+                <div class="content-section" id="report-issues-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-exclamation-circle"></i> Report Issues to Administration</h2>
+                        <div class="section-badge">Support</div>
+                    </div>
+                    
+                    <div class="section-content">
+                        <!-- Report Form -->
+                        <form class="report-form" id="reportForm">
+                            <div class="report-form-header">
+                                <div class="report-icon">
+                                    <i class="fas fa-life-ring"></i>
+                                </div>
+                                <div>
+                                    <h3>Report Technical or Administrative Issues</h3>
+                                    <p>Use this form to report any problems, concerns, or suggestions to the administration.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="report-type">Issue Type *</label>
+                                    <select id="report-type" name="report-type" required>
+                                        <option value="">Select Issue Type</option>
+                                        <option value="technical">Technical Issue</option>
+                                        <option value="administrative">Administrative Concern</option>
+                                        <option value="curriculum">Curriculum/Teaching Issue</option>
+                                        <option value="facility">Facility/Resource Problem</option>
+                                        <option value="student">Student-Related Issue</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="report-subject">Subject *</label>
+                                    <input type="text" id="report-subject" name="report-subject" placeholder="Brief description of the issue" required>
+                                </div>
+                            </div>
+                            
+                            <div class="priority-selector">
+                                <h4 style="width: 100%; margin-bottom: 10px; color: var(--ash-darker);">Priority Level:</h4>
+                                <div class="priority-option">
+                                    <input type="radio" id="priority-low" name="priority" value="low">
+                                    <label for="priority-low" class="low">Low Priority</label>
+                                </div>
+                                <div class="priority-option">
+                                    <input type="radio" id="priority-medium" name="priority" value="medium" checked>
+                                    <label for="priority-medium" class="medium">Medium Priority</label>
+                                </div>
+                                <div class="priority-option">
+                                    <input type="radio" id="priority-high" name="priority" value="high">
+                                    <label for="priority-high" class="high">High Priority</label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="report-description">Detailed Description *</label>
+                                <textarea id="report-description" name="report-description" placeholder="Please provide a detailed description of the issue, including any steps to reproduce the problem, when it started, and how it affects your work..." required></textarea>
+                                <p style="color: var(--ash-dark); font-size: 13px; margin-top: 5px;">Minimum 50 characters. Be as specific as possible to help us resolve the issue quickly.</p>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="report-suggestion">Suggestions/Expected Solution (Optional)</label>
+                                <textarea id="report-suggestion" name="report-suggestion" placeholder="If you have any suggestions for how this issue could be resolved or what your expected outcome would be..."></textarea>
+                            </div>
+                            
+                            <!-- File Upload -->
+                            <div class="file-upload">
+                                <h4 style="color: var(--ash-darker); margin-bottom: 10px;">
+                                    <i class="fas fa-paperclip"></i> Attach Files (Optional)
+                                </h4>
+                                <p>You can attach screenshots, documents, or any other files that might help us understand the issue better.</p>
+                                <input type="file" id="report-attachment" name="report-attachment" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx">
+                                <p style="font-size: 12px; color: var(--ash-dark); margin-top: 10px;">
+                                    <i class="fas fa-info-circle"></i> Maximum file size: 5MB. Allowed formats: JPG, PNG, PDF, DOC, DOCX
+                                </p>
+                            </div>
+                            
+                            <!-- Form Actions -->
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="clearReportForm()">
+                                    <i class="fas fa-redo"></i> Clear Form
+                                </button>
+                                <button type="button" class="btn btn-report" onclick="submitReport()">
+                                    <i class="fas fa-paper-plane"></i> Submit Report
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Report Success Message -->
+                        <div class="report-success-message" id="reportSuccessMessage">
+                            <div class="report-success-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h3>Report Submitted Successfully!</h3>
+                            <p>Your issue has been reported to the administration. You will receive a response via email within 24-48 hours.</p>
+                            <p style="margin-top: 15px; font-size: 14px;">
+                                <strong>Reference Number:</strong> <span id="referenceNumber">REF-2023-0876</span>
+                            </p>
+                            <button class="btn btn-report" onclick="resetReportForm()" style="margin-top: 20px;">
+                                <i class="fas fa-plus"></i> Report Another Issue
+                            </button>
+                        </div>
+                        
+                        <!-- Recent Reports -->
+                        <div style="margin-top: 40px;">
+                            <h3 style="color: var(--ash-darker); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-history"></i> Recent Reports
+                            </h3>
+                            
+                            <div style="background-color: var(--cream-bg); border-radius: 10px; border: 1px solid var(--ash-light); overflow: hidden;">
+                                <div style="padding: 20px; border-bottom: 1px solid var(--ash-light);">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                        <h4 style="color: var(--ash-darker);">Technical: Portal Loading Issue</h4>
+                                        <span style="background-color: rgba(212, 165, 116, 0.2); color: #d4a574; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">In Progress</span>
+                                    </div>
+                                    <p style="color: var(--ash-dark); font-size: 14px; margin-bottom: 10px;">Submitted: Oct 15, 2023 | Ref: REF-2023-0875</p>
+                                    <p style="color: var(--ash-darker); font-size: 14px;">The portal takes too long to load results table. Issue occurs mostly in the morning hours.</p>
+                                </div>
+                                
+                                <div style="padding: 20px; border-bottom: 1px solid var(--ash-light);">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                        <h4 style="color: var(--ash-darker);">Administrative: Classroom Resources</h4>
+                                        <span style="background-color: rgba(122, 157, 126, 0.2); color: var(--primary); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Resolved</span>
+                                    </div>
+                                    <p style="color: var(--ash-dark); font-size: 14px; margin-bottom: 10px;">Submitted: Oct 10, 2023 | Ref: REF-2023-0874</p>
+                                    <p style="color: var(--ash-darker); font-size: 14px;">Request for additional science lab equipment for Grade 11 students.</p>
+                                </div>
+                                
+                                <div style="padding: 20px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                        <h4 style="color: var(--ash-darker);">Curriculum: Textbook Availability</h4>
+                                        <span style="background-color: rgba(122, 157, 126, 0.2); color: var(--primary); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Resolved</span>
+                                    </div>
+                                    <p style="color: var(--ash-dark); font-size: 14px; margin-bottom: 10px;">Submitted: Oct 5, 2023 | Ref: REF-2023-0873</p>
+                                    <p style="color: var(--ash-darker); font-size: 14px;">Physics textbooks for Grade 11 are insufficient for all students.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="page-footer">
+                    <p>NewDich Academy Staff Portal &copy; 2023 | <a href="#">Privacy Policy</a></p>
+                    <p style="margin-top: 10px;">For technical support, contact IT Department | Email: support@newdich.edu</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+        
+        // Navigation between sections
+        const navItems = document.querySelectorAll('.nav-item');
+        const contentSections = document.querySelectorAll('.content-section');
+        
+        navItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                
+                // Update active nav item
+                navItems.forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show selected section
+                contentSections.forEach(sec => sec.classList.remove('active'));
+                document.getElementById(`${section}-section`).classList.add('active');
+                
+                // Close mobile menu on item click
+                if (window.innerWidth <= 768) {
+                    document.getElementById('sidebar').classList.remove('active');
+                }
+            });
+        });
+        
+        // Category selection
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const resultForms = document.querySelectorAll('.result-form');
+        
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const category = this.getAttribute('data-category');
+                
+                // Update active category button
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Hide all forms first
+                resultForms.forEach(form => form.classList.remove('active'));
+                
+                // Show the selected category form
+                document.getElementById(`${category}-form`).classList.add('active');
+                
+                // Hide results table and success message
+                document.getElementById('resultsTableContainer').classList.remove('active');
+                document.getElementById('successMessage').classList.remove('active');
+            });
+        });
+        
+        // Variables for table management
+        let currentCategory = 'pre-primary';
+        let studentRows = 5;
+        
+        // Update current category based on active button
+        function updateCurrentCategory() {
+            const activeButton = document.querySelector('.category-btn.active');
+            currentCategory = activeButton.getAttribute('data-category');
+        }
+        
+        // Generate results table when button is clicked
+        function generateResultsTable(category) {
+            updateCurrentCategory();
+            
+            let term, classLevel, session, subject;
+            
+            switch(category) {
+                case 'pre-primary':
+                    term = document.getElementById('pre-primary-term').value;
+                    classLevel = document.getElementById('pre-primary-class').value;
+                    session = document.getElementById('pre-primary-session').value;
+                    subject = document.getElementById('pre-primary-subject').value.trim();
+                    break;
+                case 'primary':
+                    term = document.getElementById('primary-term').value;
+                    classLevel = document.getElementById('primary-class').value;
+                    session = document.getElementById('primary-session').value;
+                    subject = document.getElementById('primary-subject').value.trim();
+                    break;
+                case 'junior-secondary':
+                    term = document.getElementById('junior-term').value;
+                    classLevel = document.getElementById('junior-class').value;
+                    session = document.getElementById('junior-session').value;
+                    subject = document.getElementById('junior-subject').value.trim();
+                    break;
+                case 'senior-secondary':
+                    term = document.getElementById('senior-term').value;
+                    classLevel = document.getElementById('senior-class').value;
+                    session = document.getElementById('senior-session').value;
+                    subject = document.getElementById('senior-subject').value.trim();
+                    break;
+            }
+            
+            if (!term || !classLevel || !session || !subject) {
+                alert('Please fill in all required fields for the selected category');
+                return;
+            }
+            
+            // Clear existing table rows
+            const tbody = document.getElementById('resultsTableBody');
+            tbody.innerHTML = '';
+            
+            // Add rows for each student (default 5 rows)
+            for (let i = 0; i < studentRows; i++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${i + 1}</td>
+                    <td><input type="text" class="student-name-input" placeholder="Enter student name" id="name-${i}" oninput="updateRollNumbers()"></td>
+                    <td><input type="text" class="admission-input" placeholder="Admission No" id="admission-${i}"></td>
+                    <td><input type="number" min="0" max="20" value="0" oninput="calculateRow(${i})" id="test1-${i}"></td>
+                    <td><input type="number" min="0" max="20" value="0" oninput="calculateRow(${i})" id="test2-${i}"></td>
+                    <td><span id="totalTest-${i}">0</span></td>
+                    <td><input type="number" min="0" max="60" value="0" oninput="calculateRow(${i})" id="exam-${i}"></td>
+                    <td><span id="overall-${i}">0</span></td>
+                    <td><input type="number" min="0" max="100" value="0" oninput="calculateRow(${i})" id="lastTermCum-${i}"></td>
+                    <td><span id="cumulative-${i}">0</span></td>
+                    <td><input type="number" min="0" max="100" value="0" id="classAvg-${i}"></td>
+                    <td><input type="number" min="1" value="0" id="position-${i}"></td>
+                    <td><span id="grade-${i}" class="grade-cell grade-F">F9</span></td>
+                    <td><input type="text" maxlength="3" placeholder="SW" id="sign-${i}"></td>
+                `;
+                tbody.appendChild(row);
+            }
+            
+            // Update row count display
+            document.getElementById('rowCount').textContent = studentRows;
+            
+            // Show the table
+            document.getElementById('resultsTableContainer').classList.add('active');
+            
+            // Scroll to table
+            document.getElementById('resultsTableContainer').scrollIntoView({ behavior: 'smooth' });
+            
+            // Show scroll indicator on mobile
+            if (window.innerWidth <= 992) {
+                const scrollIndicator = document.querySelector('.scroll-indicator');
+                scrollIndicator.style.display = 'block';
+            }
+        }
+        
+        // Add new row to table
+        function addTableRow() {
+            const tbody = document.getElementById('resultsTableBody');
+            const newIndex = studentRows;
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${newIndex + 1}</td>
+                <td><input type="text" class="student-name-input" placeholder="Enter student name" id="name-${newIndex}" oninput="updateRollNumbers()"></td>
+                <td><input type="text" class="admission-input" placeholder="Admission No" id="admission-${newIndex}"></td>
+                <td><input type="number" min="0" max="20" value="0" oninput="calculateRow(${newIndex})" id="test1-${newIndex}"></td>
+                <td><input type="number" min="0" max="20" value="0" oninput="calculateRow(${newIndex})" id="test2-${newIndex}"></td>
+                <td><span id="totalTest-${newIndex}">0</span></td>
+                <td><input type="number" min="0" max="60" value="0" oninput="calculateRow(${newIndex})" id="exam-${newIndex}"></td>
+                <td><span id="overall-${newIndex}">0</span></td>
+                <td><input type="number" min="0" max="100" value="0" oninput="calculateRow(${newIndex})" id="lastTermCum-${newIndex}"></td>
+                <td><span id="cumulative-${newIndex}">0</span></td>
+                <td><input type="number" min="0" max="100" value="0" id="classAvg-${newIndex}"></td>
+                <td><input type="number" min="1" value="0" id="position-${newIndex}"></td>
+                <td><span id="grade-${newIndex}" class="grade-cell grade-F">F9</span></td>
+                <td><input type="text" maxlength="3" placeholder="SW" id="sign-${newIndex}"></td>
+            `;
+            tbody.appendChild(row);
+            
+            studentRows++;
+            document.getElementById('rowCount').textContent = studentRows;
+        }
+        
+        // Remove last row from table
+        function removeTableRow() {
+            if (studentRows > 1) {
+                const tbody = document.getElementById('resultsTableBody');
+                tbody.deleteRow(-1); // Remove last row
+                studentRows--;
+                document.getElementById('rowCount').textContent = studentRows;
+            } else {
+                alert('At least one student row is required');
+            }
+        }
+        
+        // Update roll numbers after changes
+        function updateRollNumbers() {
+            const rows = document.querySelectorAll('#resultsTableBody tr');
+            rows.forEach((row, index) => {
+                row.cells[0].textContent = index + 1;
+            });
+        }
+        
+        // Calculate totals for a row
+        function calculateRow(index) {
+            const test1 = parseFloat(document.getElementById(`test1-${index}`).value) || 0;
+            const test2 = parseFloat(document.getElementById(`test2-${index}`).value) || 0;
+            const exam = parseFloat(document.getElementById(`exam-${index}`).value) || 0;
+            const lastTermCum = parseFloat(document.getElementById(`lastTermCum-${index}`).value) || 0;
+            
+            // Calculate total test
+            const totalTest = test1 + test2;
+            document.getElementById(`totalTest-${index}`).textContent = totalTest;
+            
+            // Calculate overall (total test + exam)
+            const overall = totalTest + exam;
+            document.getElementById(`overall-${index}`).textContent = overall;
+            
+            // Calculate cumulative (overall + last term cumulative)
+            const cumulative = overall + lastTermCum;
+            document.getElementById(`cumulative-${index}`).textContent = cumulative;
+            
+            // Calculate and update grade
+            updateGrade(index, overall);
+        }
+        
+        // Update grade based on overall score
+        function updateGrade(index, overall) {
+            const gradeCell = document.getElementById(`grade-${index}`);
+            
+            if (overall >= 90) {
+                gradeCell.textContent = 'A1';
+                gradeCell.className = 'grade-cell grade-A';
+            } else if (overall >= 80) {
+                gradeCell.textContent = 'B2';
+                gradeCell.className = 'grade-cell grade-A';
+            } else if (overall >= 70) {
+                gradeCell.textContent = 'B3';
+                gradeCell.className = 'grade-cell grade-B';
+            } else if (overall >= 65) {
+                gradeCell.textContent = 'C4';
+                gradeCell.className = 'grade-cell grade-B';
+            } else if (overall >= 60) {
+                gradeCell.textContent = 'C5';
+                gradeCell.className = 'grade-cell grade-B';
+            } else if (overall >= 55) {
+                gradeCell.textContent = 'C6';
+                gradeCell.className = 'grade-cell grade-C';
+            } else if (overall >= 50) {
+                gradeCell.textContent = 'D7';
+                gradeCell.className = 'grade-cell grade-C';
+            } else if (overall >= 45) {
+                gradeCell.textContent = 'E8';
+                gradeCell.className = 'grade-cell grade-D';
+            } else {
+                gradeCell.textContent = 'F9';
+                gradeCell.className = 'grade-cell grade-F';
+            }
+        }
+        
+        // Clear the form
+        function clearForm(category) {
+            switch(category) {
+                case 'pre-primary':
+                    document.getElementById('pre-primary-term').value = '';
+                    document.getElementById('pre-primary-class').value = '';
+                    document.getElementById('pre-primary-session').value = '';
+                    document.getElementById('pre-primary-subject').value = '';
+                    break;
+                case 'primary':
+                    document.getElementById('primary-term').value = '';
+                    document.getElementById('primary-class').value = '';
+                    document.getElementById('primary-session').value = '';
+                    document.getElementById('primary-subject').value = '';
+                    break;
+                case 'junior-secondary':
+                    document.getElementById('junior-term').value = '';
+                    document.getElementById('junior-class').value = '';
+                    document.getElementById('junior-session').value = '';
+                    document.getElementById('junior-subject').value = '';
+                    break;
+                case 'senior-secondary':
+                    document.getElementById('senior-term').value = '';
+                    document.getElementById('senior-class').value = '';
+                    document.getElementById('senior-session').value = '';
+                    document.getElementById('senior-subject').value = '';
+                    break;
+            }
+            
+            document.getElementById('resultsTableContainer').classList.remove('active');
+            document.getElementById('successMessage').classList.remove('active');
+        }
+        
+        // Clear the table
+        function clearTable() {
+            for (let i = 0; i < studentRows; i++) {
+                document.getElementById(`name-${i}`).value = '';
+                document.getElementById(`admission-${i}`).value = '';
+                document.getElementById(`test1-${i}`).value = '0';
+                document.getElementById(`test2-${i}`).value = '0';
+                document.getElementById(`exam-${i}`).value = '0';
+                document.getElementById(`lastTermCum-${i}`).value = '0';
+                document.getElementById(`classAvg-${i}`).value = '0';
+                document.getElementById(`position-${i}`).value = '0';
+                document.getElementById(`sign-${i}`).value = '';
+                
+                // Trigger calculation to update totals and grades
+                calculateRow(i);
+            }
+        }
+        
+        // Save results
+        function saveResults() {
+            updateCurrentCategory();
+            
+            let term, classLevel, session, subject;
+            
+            switch(currentCategory) {
+                case 'pre-primary':
+                    term = document.getElementById('pre-primary-term').value;
+                    classLevel = document.getElementById('pre-primary-class').value;
+                    session = document.getElementById('pre-primary-session').value;
+                    subject = document.getElementById('pre-primary-subject').value.trim();
+                    break;
+                case 'primary':
+                    term = document.getElementById('primary-term').value;
+                    classLevel = document.getElementById('primary-class').value;
+                    session = document.getElementById('primary-session').value;
+                    subject = document.getElementById('primary-subject').value.trim();
+                    break;
+                case 'junior-secondary':
+                    term = document.getElementById('junior-term').value;
+                    classLevel = document.getElementById('junior-class').value;
+                    session = document.getElementById('junior-session').value;
+                    subject = document.getElementById('junior-subject').value.trim();
+                    break;
+                case 'senior-secondary':
+                    term = document.getElementById('senior-term').value;
+                    classLevel = document.getElementById('senior-class').value;
+                    session = document.getElementById('senior-session').value;
+                    subject = document.getElementById('senior-subject').value.trim();
+                    break;
+            }
+            
+            if (!term || !classLevel || !session || !subject) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Validate at least one student has a name
+            let hasValidData = false;
+            for (let i = 0; i < studentRows; i++) {
+                if (document.getElementById(`name-${i}`).value.trim() !== '') {
+                    hasValidData = true;
+                    break;
+                }
+            }
+            
+            if (!hasValidData) {
+                alert('Please enter at least one student name');
+                return;
+            }
+            
+            // Collect all data
+            const resultsData = [];
+            for (let i = 0; i < studentRows; i++) {
+                const name = document.getElementById(`name-${i}`).value.trim();
+                const admission = document.getElementById(`admission-${i}`).value.trim();
+                
+                // Only include rows with student names
+                if (name !== '') {
+                    const test1 = document.getElementById(`test1-${i}`).value;
+                    const test2 = document.getElementById(`test2-${i}`).value;
+                    const totalTest = document.getElementById(`totalTest-${i}`).textContent;
+                    const exam = document.getElementById(`exam-${i}`).value;
+                    const overall = document.getElementById(`overall-${i}`).textContent;
+                    const lastTermCum = document.getElementById(`lastTermCum-${i}`).value;
+                    const cumulative = document.getElementById(`cumulative-${i}`).textContent;
+                    const classAvg = document.getElementById(`classAvg-${i}`).value;
+                    const position = document.getElementById(`position-${i}`).value;
+                    const grade = document.getElementById(`grade-${i}`).textContent;
+                    const sign = document.getElementById(`sign-${i}`).value;
+                    
+                    resultsData.push({
+                        roll: i + 1,
+                        name: name,
+                        admission: admission || 'N/A',
+                        test1: test1,
+                        test2: test2,
+                        totalTest: totalTest,
+                        exam: exam,
+                        overall: overall,
+                        lastTermCum: lastTermCum,
+                        cumulative: cumulative,
+                        classAvg: classAvg,
+                        position: position,
+                        grade: grade,
+                        sign: sign
+                    });
+                }
+            }
+            
+            // Hide table and show success message
+            document.getElementById('resultsTableContainer').classList.remove('active');
+            document.getElementById('successMessage').classList.add('active');
+            
+            // Scroll to success message
+            document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+            
+            console.log('Results saved:', {
+                category: currentCategory,
+                term: term,
+                class: classLevel,
+                session: session,
+                subject: subject,
+                results: resultsData
+            });
+        }
+        
+        // Reset form after success
+        function resetForm() {
+            // Clear the current form
+            clearForm(currentCategory);
+            
+            // Hide success message
+            document.getElementById('successMessage').classList.remove('active');
+        }
+        
+        // Report Issues Functions
+        function clearReportForm() {
+            document.getElementById('report-type').value = '';
+            document.getElementById('report-subject').value = '';
+            document.getElementById('report-description').value = '';
+            document.getElementById('report-suggestion').value = '';
+            document.getElementById('report-attachment').value = '';
+            
+            // Reset radio buttons
+            document.getElementById('priority-medium').checked = true;
+        }
+        
+        function submitReport() {
+            const reportType = document.getElementById('report-type').value;
+            const reportSubject = document.getElementById('report-subject').value.trim();
+            const reportDescription = document.getElementById('report-description').value.trim();
+            const priority = document.querySelector('input[name="priority"]:checked').value;
+            
+            if (!reportType || !reportSubject || !reportDescription) {
+                alert('Please fill in all required fields (Issue Type, Subject, and Description)');
+                return;
+            }
+            
+            if (reportDescription.length < 50) {
+                alert('Please provide a more detailed description (at least 50 characters)');
+                return;
+            }
+            
+            // Generate a random reference number
+            const referenceNumber = 'REF-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('referenceNumber').textContent = referenceNumber;
+            
+            // Hide form and show success message
+            document.getElementById('reportForm').style.display = 'none';
+            document.getElementById('reportSuccessMessage').classList.add('active');
+            
+            // Scroll to success message
+            document.getElementById('reportSuccessMessage').scrollIntoView({ behavior: 'smooth' });
+            
+            console.log('Report submitted:', {
+                type: reportType,
+                subject: reportSubject,
+                description: reportDescription,
+                priority: priority,
+                reference: referenceNumber,
+                timestamp: new Date().toISOString()
+            });
+        }
+        
+        function resetReportForm() {
+            // Show form and hide success message
+            document.getElementById('reportForm').style.display = 'block';
+            document.getElementById('reportSuccessMessage').classList.remove('active');
+            
+            // Clear form
+            clearReportForm();
+            
+            // Scroll to form
+            document.getElementById('reportForm').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Initialize the profile section as active on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show profile section by default
+            document.getElementById('profile-section').classList.add('active');
+            
+            // Set current date for any date fields if needed
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Initialize scroll indicator based on screen size
+            if (window.innerWidth <= 992) {
+                const scrollIndicator = document.querySelector('.scroll-indicator');
+                if (scrollIndicator) {
+                    scrollIndicator.style.display = 'block';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

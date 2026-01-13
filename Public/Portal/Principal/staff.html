@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="../Principal/index.html">
+        <button>
+            Back
+        </button>
+    </a>
+     <h1>List of staffs that have worked in ALMA</h1>
+    <div class="tab-content" id="staff-content">
+                    <div class="staff-grid" id="staff-contents">
+                        <!-- <div class="staff-card">
+                            <div class="staff-header">
+                                <div class="staff-avatar">RS</div>
+                                <div class="staff-info">
+                                    <h3>Robert Smith</h3>
+                                    <p>Mathematics Teacher</p>
+                                </div>
+                            </div>
+                            <div class="staff-details">
+                                <div class="detail-row">
+                                    <span class="detail-label">Employee ID:</span>
+                                    <span class="detail-value">EMP-0034</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Joined:</span>
+                                    <span class="detail-value">January 2018</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Email:</span>
+                                    <span class="detail-value">r.smith@willowcreek.edu</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Status:</span>
+                                    <span class="detail-value" style="color: var(--color-success);">Active</span>
+                                </div>
+                            </div>
+                        </div> -->                    
+                </div>
+         </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function(){
+                staffInfo();
+            })
+    async function staffInfo(){
+            event.preventDefault();
+            try{
+                const response = await fetch('/teacher-info', {
+                    method:"POST",
+                    headers:{'Content-type':'application/json'}
+                    // body:JSON.stringify(data)
+                });
+                if(!response.ok){
+                    throw new Error (`Error discussed ${response.status}`); 
+                }
+                else{
+                    const result= await response.json();
+                    const conv = JSON.parse(result);
+                    let output='';
+                    for(let i=0; i < conv.length; i++){
+                        output+=`
+                        <div class="staff-card">
+                            <div class="staff-header">
+                                <div class="staff-avatar"><img class="upload-profile" src="${'/uploads/'+conv[i].profile}" alt="""></div>
+                                <div class="staff-info">
+                                    <h3>${conv[i].name}</h3>
+                                </div>
+                            </div>
+                            <div class="staff-details">
+                                <div class="detail-row">
+                                    <span class="detail-label">Employee ID:</span>
+                                    <span class="detail-value">${conv[i].teacher_id}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Joined:</span>
+                                    <span class="detail-value">${conv[i].time_joined}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Email:</span>
+                                    <span class="detail-value">${conv[i].email}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Address:</span>
+                                    <span class="detail-value">${conv[i].address}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Status:</span>
+                                    <span class="detail-value" style="color: var(--color-success);">${conv[i].status}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Position</span>
+                                    <span class="detail-value">${conv[i].position}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Subject</span>
+                                    <span class="detail-value">${conv[i].subject}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Teacher to Which Class</span>
+                                    <span class="detail-value">${conv[i].class_head}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Relative Phone No</span>
+                                    <span class="detail-value">${conv[i].relative_phone}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">qualification</span>
+                                    <span class="detail-value">${conv[i].qualification}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Phone Number</span>
+                                    <span class="detail-value">${conv[i].personal_phone}</span>
+                                </div>
+                                 <div class="detail-row">
+                                    <span class="detail-label">Work type</span>
+                                    <span class="detail-value">${conv[i].work_type}</span>
+                                </div>
+                                 
+                            </div>
+                        </div>
+                        `
+                    }
+                    document.getElementById('staff-contents').innerHTML=output;
+                }
+            }
+            catch(error){
+                console.log(error.message);
+            }
+        }
+        </script>
+        <style>
+             .tab-content {
+           
+            padding: 30px;
+        }
+         .staff-card {
+            background-color: rgb(233, 220, 220);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            width: 15%;
+            padding: 40px;
+            
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+          .staff-grid {
+               display: flex;
+               flex-wrap: wrap;
+               gap: 35px;
+            }
+            @media (max-width: 992px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .profile-sidebar {
+                width: 100%;
+                padding: 20px;
+            }
+            
+            .profile-stats {
+                justify-content: space-between;
+            }
+            
+            .mobile-navbar {
+                display: block;
+            }
+            
+            /* .tabs-header {
+                display: none;
+            } */
+            
+            .tab-content {
+                padding: 20px;
+            }
+          
+        
+        .staff-card {
+            background-color: rgb(233, 220, 220);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            width: 100%;
+            padding: 40px;
+            
+        }
+        
+        .staff-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .staff-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--color-cream-dark);
+        }
+        
+        .staff-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: var(--color-ashes);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .staff-info h3 {
+            color: var(--color-accent);
+            margin-bottom: 5px;
+        }
+        
+        .staff-info p {
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+        }
+        
+        .staff-details {
+            padding: 20px;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--color-cream);
+        }
+        
+        .detail-label {
+            color: var(--color-text-light);
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: var(--color-text);
+        }
+        }
+         .upload-profile{
+            /* Profile image styling */
+            background-size: cover;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+        }
+        </style>
+</body>
+</html>
