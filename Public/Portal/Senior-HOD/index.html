@@ -12,10 +12,12 @@
         <div class="header-content">
             <h1><i class="fas fa-chalkboard-teacher"></i> Senior HOD Dashboard</h1>
             <div class="header-actions">
-                <button id="Create-Account" class="btn-primary">
-                    <i class="fas fa-user-plus"></i> Create Student Account
-                </button>
-                <a href="#" class="logout-link">Logout <i class="fas fa-sign-out-alt"></i></a>
+               <a href="./staffCreate.html">
+                    <button id="Create-Account" class="btn-primary">
+                        <i class="fas fa-user-plus"></i> Create Teacher Account
+                    </button>
+                </a>
+                <a href="#" class="logout-link" onclick="handleLogout()">Logout <i class="fas fa-sign-out-alt"></i></a>
             </div>
         </div>
     </header>
@@ -36,37 +38,37 @@
                     <div class="profile-row">
                         <div class="profile-item">
                             <span class="label"><i class="fas fa-user"></i> Name:</span>
-                            <span id="name" class="value">Loading...</span>
+                            <span id="name" class="value"></span>
                         </div>
                         <div class="profile-item">
                             <span class="label"><i class="fas fa-briefcase"></i> Position:</span>
-                            <span id="position" class="value">Senior-HOD</span>
+                            <span id="position" class="value"></span>
                         </div>
                     </div>
                     <div class="profile-row">
                         <div class="profile-item">
                             <span class="label"><i class="fas fa-phone"></i> Phone:</span>
-                            <span id="phone" class="value">Loading...</span>
+                            <span id="phone" class="value"></span>
                         </div>
                         <div class="profile-item">
                             <span class="label"><i class="fas fa-envelope"></i> Email:</span>
-                            <span id="email" class="value">Loading...</span>
+                            <span id="email" class="value"></span>
                         </div>
                     </div>
                     <div class="profile-row">
                         <div class="profile-item">
                             <span class="label"><i class="fas fa-calendar-alt"></i> Member Since:</span>
-                            <span id="member" class="value">Loading...</span>
+                            <span id="member" class="value"></span>
                         </div>
                         <div class="profile-item">
                             <span class="label"><i class="fas fa-graduation-cap"></i> Qualification:</span>
-                            <span id="qualification" class="value">Loading...</span>
+                            <span id="qualification" class="value"></span>
                         </div>
                     </div>
                     <div class="profile-row">
                         <div class="profile-item">
                             <span class="label"><i class="fas fa-id-badge"></i> Teacher ID:</span>
-                            <span id="teacher_id" class="value">Loading...</span>
+                            <span id="teacher_id" class="value"></span>
                         </div>
                     </div>
                 </div>
@@ -666,35 +668,14 @@
             }
         }
 
-        // Mock data function for demonstration
-        function loadMockData() {
-            document.getElementById('name').textContent = "Dr. Sarah Johnson";
-            document.getElementById('phone').textContent = "+1 (555) 987-6543";
-            document.getElementById('member').textContent = "2021-08-20";
-            document.getElementById('email').textContent = localStorage.getItem('Alma') || "s.johnson@school.edu";
-            document.getElementById('qualification').textContent = "Ph.D in Curriculum Development";
-            document.getElementById('teacher_id').textContent = "HOD-2021-003";
-        }
-
-        // Add form validation
-        document.querySelector('.report-form').addEventListener('submit', function(e) {
-            const title = document.getElementById('title').value;
-            const reporterName = document.getElementById('reporter-name').value;
-            const teacherId = document.getElementById('teacher-id').value;
-            
-            if (!title || !reporterName || !teacherId) {
-                e.preventDefault();
-                alert('Please fill in all required fields: Report Title, Reporter\'s Name, and Teacher ID');
-                return false;
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.clear();
+                localStorage.removeItem('Alma')
+                alert('You have been logged out successfully.');
+                window.location.href = '/';
             }
-            
-            // If validation passes, show a confirmation (in a real app, this would submit)
-            console.log('Form submitted successfully');
-            // For demo purposes, we'll prevent actual submission
-            e.preventDefault();
-            alert('Report submitted successfully! (This is a demo - form not actually submitted)');
-            return false;
-        });
+        }
     </script>
 </body>
 </html>

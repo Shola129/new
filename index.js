@@ -356,7 +356,7 @@ app.post('/principal-info', (req, res)=>{
 //display student id on the admin dashbord
 app.post('/get-student-info-by-id', (req, res)=>{
     const {Admission_number} = req.body;
-    console.log(Admission_number);
+    // console.log(Admission_number);
     if(!Admission_number){
         res.status(400).json("data empty");
     }
@@ -369,7 +369,7 @@ app.post('/get-student-info-by-id', (req, res)=>{
                 }
                 if(result.length > 0){
                     res.status(200).json(JSON.stringify(result[0]));
-                    console.log(result[0]);
+                    // console.log(result[0]);
                 }
                 else if(result.length < 1){ 
                     res.status(404).json();
@@ -397,7 +397,7 @@ app.post('/get-all-student-info-by-id', (req, res)=>{
                 }
                 if(result.length > 0){
                     res.status(200).json(JSON.stringify(result[0]));
-                    console.log(result[0]);
+                    // console.log(result[0]);
                 }
                 else if(result.length < 1){ 
                     res.status(404).json();
@@ -425,7 +425,7 @@ app.post('/student-profile-class', (req, res)=>{
                     console.log(err.message);
                 }
                 if(result.length > 0){
-                    console.log(result);
+                    // console.log(result);
                      return res.status(200).json(JSON.stringify(result));
                 }
                 else{
@@ -464,7 +464,7 @@ app.post('/teacher-info', (req, res)=>{
 //transcation history
 app.post('/last-20-transcation', (req, res)=>{
     const {offset, limit} = req.body;
-    console.log(offset, limit)
+    // console.log(offset, limit)
     let offSetToUse;
     if(offset!==''){
         offSetToUse=offset;
@@ -1627,6 +1627,60 @@ app.post('/fixed-amount-particular-class-term-session', (req, res)=>{
         })
     }
 })
+
+app.post('/totalAdminStaff', (req, res)=>{
+    // const {Data} = req.body;
+    try{
+        const qry = "SELECT * FROM hod_hm";
+        con.query(qry, (err, result)=>{
+            if(err){
+                console.log(err);
+            }
+            else{
+                res.status(200).json(JSON.stringify(result));
+            }
+        })
+    }
+    catch(err){
+        console.log(err.message);
+    }
+});
+
+app.post('/totalActiveStaff', (req, res)=>{
+    // const {Data} = req.body;
+    try{
+        const qry = "SELECT * FROM staff_data";
+        con.query(qry, (err, result)=>{
+            if(err){
+                console.log(err);
+            }
+            else{
+                res.status(200).json(JSON.stringify(result));
+            }
+        })
+    }
+    catch(err){
+        console.log(err.message);
+    }
+});
+
+app.post('/student-info', (req, res)=>{
+    // const {Data} = req.body;
+    try{
+        const qry = "SELECT * FROM student_data";
+        con.query(qry, (err, result)=>{
+            if(err){
+                console.log(err);
+            }
+            else{
+                res.status(200).json(JSON.stringify(result));
+            }
+        })
+    }
+    catch(err){
+        console.log(err.message);
+    }
+});
 
 app.listen(process.env.PORT, ()=>{
     console.log("started");

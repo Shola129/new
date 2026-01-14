@@ -427,6 +427,43 @@
             margin-top: 2rem;
             border-top: 1px solid var(--cream-dark);
         }
+           .btn-primary, .btn-secondary {
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--wine-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--wine-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+          .logout-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: opacity 0.3s;
+        }
+
+        .logout-link:hover {
+            opacity: 0.9;
+        }
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -491,6 +528,11 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--wine-secondary);
         }
+          .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
     </style>
 </head>
 <body>
@@ -507,12 +549,12 @@
                 </div>
             </div>
             <div class="header-actions">
-                <a href="/Public/Create-Account/addstudent.html" class="btn btn-primary">
-                    <i class="fas fa-user-plus"></i> Create Student Account
+               <a href="./staffCreate.html">
+                    <button id="Create-Account" class="btn-primary">
+                        <i class="fas fa-user-plus"></i> Create Teacher Account
+                    </button>
                 </a>
-                <button class="btn btn-secondary" id="logoutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
+                <a href="#" class="logout-link" onclick="handleLogout()">Logout <i class="fas fa-sign-out-alt"></i></a>
             </div>
         </div>
     </header>
@@ -535,38 +577,38 @@
                     <div class="profile-details">
                         <div class="profile-item">
                             <span class="profile-label"><i class="fas fa-user"></i> Name</span>
-                            <span id="name" class="profile-value">Loading...</span>
+                            <span id="name" class="profile-value"></span>
                         </div>
                         <div class="profile-item">
                             <span class="profile-label"><i class="fas fa-briefcase"></i> Position</span>
-                            <span id="position" class="profile-value">Primary HOD</span>
+                            <span id="position" class="profile-value"></span>
                         </div>
                         <div class="profile-item">
                             <span class="profile-label"><i class="fas fa-phone"></i> Phone</span>
-                            <span id="phone" class="profile-value">Loading...</span>
+                            <span id="phone" class="profile-value"></span>
                         </div>
                         <div class="profile-item">
                             <span class="profile-label"><i class="fas fa-envelope"></i> Email</span>
-                            <span id="email" class="profile-value">Loading...</span>
+                            <span id="email" class="profile-value"></span>
                         </div>
                         <div class="profile-item">
                             <span class="profile-label"><i class="fas fa-calendar-alt"></i> Member Since</span>
-                            <span id="member" class="profile-value">Loading...</span>
+                            <span id="member" class="profile-value"></span>
                         </div>
                         <div class="profile-item">
                             <span class="profile-label"><i class="fas fa-graduation-cap"></i> Qualification</span>
-                            <span id="qualification" class="profile-value">Loading...</span>
+                            <span id="qualification" class="profile-value"></span>
                         </div>
                         <div class="profile-item">
                             <span class="profile-label"><i class="fas fa-id-badge"></i> Teacher ID</span>
-                            <span id="teacher_id" class="profile-value">Loading...</span>
+                            <span id="teacher_id" class="profile-value"></span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Quick Actions -->
-            <div class="quick-actions">
+            <!-- <div class="quick-actions">
                 <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
                 <div class="action-buttons">
                     <button class="btn btn-secondary" id="viewReportsBtn">
@@ -582,7 +624,7 @@
                         <i class="fas fa-cog"></i> Settings
                     </button>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <!-- Right Column: Report Form -->
@@ -754,7 +796,7 @@
 
     <!-- Footer -->
     <footer class="dashboard-footer">
-        <p>Primary HOD Dashboard &copy; 2023 | Designed for Primary Department Management</p>
+        <p>Primary HOD Dashboard &copy; 2025 | Designed for Primary Department Management</p>
         <p style="font-size: 0.8rem; margin-top: 0.5rem;">All reports are securely stored and managed</p>
     </footer>
 
@@ -814,7 +856,6 @@
                     }
                 } catch (error) {
                     console.error("Error fetching data:", error);
-                    loadDemoData();
                 }
             }
             
@@ -823,46 +864,34 @@
             document.getElementById('date').value = today;
         }
 
-        function loadDemoData() {
-            // Demo data for when API is not available
-            document.getElementById('name').textContent = "Dr. Elizabeth Bennett";
-            document.getElementById('phone').textContent = "+1 (555) 234-5678";
-            document.getElementById('member').textContent = "2020-03-15";
-            document.getElementById('email').textContent = localStorage.getItem('Alma') || "e.bennett@primaryschool.edu";
-            document.getElementById('qualification').textContent = "M.Ed in Primary Education";
-            document.getElementById('teacher_id').textContent = "PRI-HOD-2020-005";
-            
-            // Pre-fill form with demo data
-            document.getElementById('reporter-name').value = "Dr. Elizabeth Bennett";
-            document.getElementById('teacher-id').value = "PRI-HOD-2020-005";
-        }
+       
 
         function setupEventListeners() {
             // Form submission handler
-            document.getElementById('reportForm').addEventListener('submit', function(e) {
-                e.preventDefault();
+            // document.getElementById('reportForm').addEventListener('submit', function(e) {
+            //     e.preventDefault();
                 
-                // Basic validation
-                const title = document.getElementById('title').value;
-                const reporterName = document.getElementById('reporter-name').value;
-                const teacherId = document.getElementById('teacher-id').value;
-                const date = document.getElementById('date').value;
+            //     // Basic validation
+            //     const title = document.getElementById('title').value;
+            //     const reporterName = document.getElementById('reporter-name').value;
+            //     const teacherId = document.getElementById('teacher-id').value;
+            //     const date = document.getElementById('date').value;
                 
-                if (!title || !reporterName || !teacherId || !date) {
-                    alert('Please fill in all required fields: Report Title, Reporter Name, Teacher ID, and Date.');
-                    return false;
-                }
+            //     if (!title || !reporterName || !teacherId || !date) {
+            //         alert('Please fill in all required fields: Report Title, Reporter Name, Teacher ID, and Date.');
+            //         return false;
+            //     }
                 
-                // In a real app, this would submit to the server
-                console.log('Form submitted successfully');
-                alert('Report submitted successfully! (Demo mode - form not actually submitted)');
+            //     // In a real app, this would submit to the server
+            //     console.log('Form submitted successfully');
+            //     alert('Report submitted successfully! (Demo mode - form not actually submitted)');
                 
-                // Reset form after successful submission
-                // this.reset();
-                // document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            //     // Reset form after successful submission
+            //     // this.reset();
+            //     // document.getElementById('date').value = new Date().toISOString().split('T')[0];
                 
-                return false;
-            });
+            //     return false;
+            // });
             
             // Quick action buttons
             document.getElementById('viewReportsBtn').addEventListener('click', function() {
@@ -886,7 +915,7 @@
                 if(confirm('Are you sure you want to logout?')) {
                     localStorage.removeItem('Alma');
                     // window.location.href='/';
-                    alert('Logged out successfully (demo mode).');
+                    alert('Logged out successfully');
                 }
             });
             

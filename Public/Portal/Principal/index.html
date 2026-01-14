@@ -2063,7 +2063,7 @@
         document.addEventListener("DOMContentLoaded", function(){
             totalstudent();
             totalstaff();
-            ready();
+            // ready();
             getAllInfo();
         });
         
@@ -2079,12 +2079,8 @@
                 else{
                     const response = await api.json();
                     const cons = JSON.parse(response);
-                    let output = 0;
-                    for(let i=0; i<cons.length; i++){
-                        output+=Number(cons[i].id);
-                    }
-                    document.getElementById('total-student').textContent=output;
-                    document.getElementById('total-student2').textContent=output;
+                    document.getElementById('total-student').textContent=cons.length;
+                    document.getElementById('total-student2').textContent=cons.length;
                 }
             }
             catch(err){
@@ -2094,7 +2090,7 @@
         
         async function totalstaff(){
             try{
-                const api = await fetch('/total-staff', {
+                const api = await fetch('/teacher-info', {
                     method:'POST',
                     headers:{'Content-type':'application/json'}
                 });
@@ -2104,11 +2100,7 @@
                 else{
                     const response = await api.json();
                     const cons = JSON.parse(response);
-                    let output = 0;
-                    for(let i=0; i<cons.length; i++){
-                        output+=parseFloat(cons[i].id);
-                    }
-                    document.getElementById('total-staff').textContent=output;
+                    document.getElementById('total-staff').textContent=cons.length;
                 }
             }
             catch(err){

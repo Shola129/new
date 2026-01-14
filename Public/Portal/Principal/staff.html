@@ -631,9 +631,9 @@
             <h3 id="activeStaff">0</h3>
             <p>Active Staff</p>
         </div>
-        <div class="stat-card">
-            <h3 id="teachingStaff">0</h3>
-            <p>Teaching Staff</p>
+         <div class="">
+            <h3 id="teachingStaff"></h3>
+            <p></p>
         </div>
         <div class="stat-card">
             <h3 id="adminStaff">0</h3>
@@ -691,6 +691,8 @@
         document.addEventListener("DOMContentLoaded", function(){
             staffInfo();
             setupEventListeners();
+            ActiveStaff();
+            totalAdminStaff();
         });
 
         async function staffInfo(){
@@ -714,13 +716,13 @@
                     const conv = JSON.parse(result);
                     let output='';
                     let totalStaff = conv.length;
-                    let activeStaff = 0;
-                    let teachingStaff = 0;
-                    let adminStaff = 0;
+                    // let activeStaff = 0;
+                    // let teachingStaff = 0;
+                    // let adminStaff = 0;
                     
                     for(let i=0; i < conv.length; i++){
                         // Count statistics
-                        if(conv[i].status === 'Active') activeStaff++;
+                        // if(conv[i].status === 'Active') activeStaff++;
                         if(conv[i].position && (conv[i].position.includes('Teacher') || conv[i].position.includes('HOD') || conv[i].position.includes('HM'))) teachingStaff++;
                         if(conv[i].position && conv[i].position.includes('Administrative')) adminStaff++;
                         
@@ -799,9 +801,9 @@
                     
                     // Update statistics
                     document.getElementById('totalStaff').textContent = totalStaff;
-                    document.getElementById('activeStaff').textContent = activeStaff;
-                    document.getElementById('teachingStaff').textContent = teachingStaff;
-                    document.getElementById('adminStaff').textContent = adminStaff;
+                    // document.getElementById('activeStaff').textContent = activeStaff;
+                    // document.getElementById('teachingStaff').textContent = teachingStaff;
+                    // document.getElementById('adminStaff').textContent = adminStaff;
                     
                     // Hide loading spinner and show content
                     document.getElementById('loadingSpinner').style.display = 'none';
@@ -853,6 +855,45 @@
                     behavior: 'smooth'
                 });
             });
+        }
+
+
+        async function ActiveStaff(){
+             try{
+                const api = await fetch('/totalActiveStaff', {
+                    method:'POST',
+                    headers:{'Content-type':'application/json'}
+                });
+
+                if(!api.ok){
+
+                }
+                const response = await api.json();
+                const convert = JSON.parse(response);
+                document.getElementById('activeStaff').textContent=convert.length;
+            }
+            catch(err){
+                console.log(err);
+            }
+        }
+
+        async function totalAdminStaff(){
+            try{
+                const api = await fetch('/totalAdminStaff', {
+                    method:'POST',
+                    headers:{'Content-type':'application/json'}
+                });
+
+                if(!api.ok){
+
+                }
+                const response = await api.json();
+                const convert = JSON.parse(response);
+                document.getElementById('adminStaff').textContent=convert.length;
+            }
+            catch(err){
+                console.log(err);
+            }
         }
 
         function initializeFilters() {
