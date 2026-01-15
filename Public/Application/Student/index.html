@@ -302,8 +302,8 @@
             <div class="school-logo">
                 <i class="fas fa-school"></i>
             </div>
-            <h1>Sunshine Academy</h1>
-            <p class="subtitle">Admission Form for Secondary & Junior School</p>
+            <h1>Abundant Light Mega Academy</h1>
+            <p class="subtitle">Admission Form Student</p>
         </header>
         
         <!-- Progress Indicator -->
@@ -318,7 +318,7 @@
         </div>
         
         <!-- Form -->
-        <form action="#" method="post">
+        <form action="/student-application" method="post" enctype="multipart/form-data">
             <!-- Student Information -->
             <section class="form-section">
                 <div class="section-title">
@@ -327,9 +327,14 @@
                 </div>
                 
                 <div class="form-row">
+
+                    <div class="form-group">
+                         <input type="file" id="student-name" name="passport" accept="image/*" required placeholder="First and Last Name">
+                        <label for="student-name" class="required">Upload Student Passport</label>
+                    </div>
                     <div class="form-group">
                         <label for="student-name" class="required">Student's Full Name</label>
-                        <input type="text" id="student-name" name="student-name" required placeholder="First and Last Name">
+                        <input type="text" id="student-name" name="student_name" required placeholder="First and Last Name">
                     </div>
                     
                     <div class="form-group">
@@ -337,7 +342,7 @@
                         <input type="date" id="dob" name="dob" required>
                         <div class="age-display">
                             <i class="fas fa-birthday-cake"></i>
-                            <span id="age-display">Age will be calculated automatically</span>
+                             <span id="age-display">Age will be calculated automatically</span> 
                         </div>
                     </div>
                 </div>
@@ -378,7 +383,7 @@
                 
                 <div class="form-group">
                     <label for="apply-grade" class="required">Grade Applying For</label>
-                    <select id="apply-grade" name="apply-grade" required>
+                    <select id="apply-grade" name="apply_class" required>
                         <option value="">Select Grade</option>
                         <optgroup label="Junior School">
                             <option value="grade-1">Grade 1</option>
@@ -400,12 +405,12 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="current-school" class="required">Current School</label>
-                        <input type="text" id="current-school" name="current-school" required placeholder="Name of current school">
+                        <input type="text" id="current-school" name="current_school" required placeholder="Name of current school">
                     </div>
                     
                     <div class="form-group">
                         <label for="current-grade" class="required">Current Grade</label>
-                        <select id="current-grade" name="current-grade" required>
+                        <select id="current-grade" name="current_grade" required>
                             <option value="">Select Current Grade</option>
                             <option value="nursery">Nursery</option>
                             <option value="kg">Kindergarten</option>
@@ -426,7 +431,7 @@
                     <h4>For Junior School Applicants (Grades 1-5)</h4>
                     <div class="form-group">
                         <label for="reading-level">Reading Level</label>
-                        <select id="reading-level" name="reading-level">
+                        <select id="reading-level" name="reading_level">
                             <option value="">Select Reading Level</option>
                             <option value="beginner">Beginner</option>
                             <option value="intermediate">Intermediate</option>
@@ -435,13 +440,13 @@
                     </div>
                 </div>
                 
-                <div class="grade-specific" id="secondary-fields" style="display:none;">
+                <!-- <div class="grade-specific" id="secondary-fields" style="display:none;">
                     <h4>For Secondary School Applicants (Grades 6-10)</h4>
                     <div class="form-group">
                         <label for="fav-subject">Favorite Subject</label>
                         <input type="text" id="fav-subject" name="fav-subject" placeholder="e.g., Mathematics, Science">
                     </div>
-                </div>
+                </div> -->
             </section>
             
             <!-- Parent/Guardian Information -->
@@ -454,7 +459,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="parent-name" class="required">Parent/Guardian Name</label>
-                        <input type="text" id="parent-name" name="parent-name" required placeholder="Full name">
+                        <input type="text" id="parent-name" name="parent_name" required placeholder="Full name">
                     </div>
                     
                     <div class="form-group">
@@ -472,18 +477,18 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="parent-email" class="required">Email Address</label>
-                        <input type="email" id="parent-email" name="parent-email" required placeholder="parent@example.com">
+                        <input type="email" id="parent-email" name="parent_email" required placeholder="parent@example.com">
                     </div>
                     
                     <div class="form-group">
                         <label for="parent-phone" class="required">Phone Number</label>
-                        <input type="tel" id="parent-phone" name="parent-phone" required placeholder="10-digit mobile number">
+                        <input type="tel" id="parent-phone" name="parent_phone" required placeholder="10-digit mobile number">
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="parent-occupation">Parent Occupation</label>
-                    <input type="text" id="parent-occupation" name="parent-occupation" placeholder="Occupation">
+                    <input type="text" id="parent-occupation" name="parent_occupation" placeholder="Occupation">
                 </div>
                 
                 <div class="form-group">
@@ -507,7 +512,7 @@
                 
                 <div class="form-group">
                     <label for="medical-conditions">Medical Conditions</label>
-                    <textarea id="medical-conditions" name="medical-conditions" rows="3" placeholder="Any medical conditions we should know about"></textarea>
+                    <textarea id="medical-conditions" name="medical_conditions" rows="3" placeholder="Any medical conditions we should know about"></textarea>
                     <p class="field-note">Leave blank if none</p>
                 </div>
                 
@@ -518,7 +523,7 @@
             </section>
             
             <!-- Transportation -->
-            <section class="form-section">
+            <!-- <section class="form-section">
                 <div class="section-title">
                     <i class="fas fa-bus"></i>
                     <h2>Transportation</h2>
@@ -542,7 +547,7 @@
                     <label for="bus-stop">Nearest Bus Stop (if bus required)</label>
                     <input type="text" id="bus-stop" name="bus-stop" placeholder="Nearest bus stop to your home">
                 </div>
-            </section>
+            </section> -->
             
             <!-- Declaration & Submit -->
             <section class="form-section">
@@ -565,10 +570,10 @@
                     </div>
                 </div>
                 
-                <div class="info-box">
+                <!-- <div class="info-box">
                     <h4><i class="fas fa-envelope"></i> What happens next?</h4>
                     <p>After submitting this form, our admissions office will contact you within 5 working days to schedule an interview/assessment. Please bring original documents for verification.</p>
-                </div>
+                </div> -->
             </section>
             
             <!-- Buttons -->
@@ -584,10 +589,10 @@
         
         <!-- Footer -->
         <footer>
-            <p><strong>Sunshine Academy Admissions Office</strong></p>
+            <p><strong>Abundant Light Mega Academy Admissions Office</strong></p>
             <p>Phone: (022) 1234-5678 | Email: admissions@sunshine.edu</p>
             <p>Office Hours: Monday-Friday, 9:00 AM - 4:00 PM</p>
-            <p>© 2023 Sunshine Academy. Simple admission form with HTML & CSS only.</p>
+            <p>© 2023 Abundant Light Mega Academy. Simple admission form with HTML & CSS only.</p>
         </footer>
     </div>
     

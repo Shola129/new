@@ -295,7 +295,7 @@
         </div>
         
         <div class="form-container">
-            <form id="applicationForm">
+            <form id="applicationForm" action="/staff-application" method="post" enctype="multipart/form-data">
                 <!-- Section 1: Personal Information -->
                 <div class="form-section">
                     <h2 class="section-title">
@@ -352,13 +352,13 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="currentPosition" class="required">Current Position</label>
-                            <input type="text" id="currentPosition" name="currentPosition" placeholder="e.g., Mathematics Teacher" required>
+                            <input type="text" id="currentPosition" name="formal_position" placeholder="e.g., Mathematics Teacher" required>
                             <div class="error-message" id="positionError">Please enter your current position</div>
                         </div>
                         
                         <div class="form-group">
                             <label for="institution" class="required">Institution/School</label>
-                            <input type="text" id="institution" name="institution" placeholder="Name of your current institution" required>
+                            <input type="text" id="institution" name="formal_place_work" placeholder="Name of your current institution" required>
                             <div class="error-message" id="institutionError">Please enter your current institution</div>
                         </div>
                     </div>
@@ -374,7 +374,7 @@
                             <label for="endDate">End Date</label>
                             <input type="date" id="endDate" name="endDate">
                             <div class="checkbox-group">
-                                <input type="checkbox" id="currentlyWorking" name="currentlyWorking">
+                                <input type="checkbox" id="currentlyWorking" name="currentlyWorking" value="yes">
                                 <label for="currentlyWorking">I currently work here</label>
                             </div>
                         </div>
@@ -497,15 +497,15 @@
                             <div class="file-upload">
                                 <label for="cvUpload">
                                     <i class="fas fa-cloud-upload-alt"></i>
-                                    <span><strong>Upload CV/Resume</strong> (PDF, DOC, DOCX, max 5MB)</span>
-                                    <input type="file" id="cvUpload" name="cvUpload" accept=".pdf,.doc,.docx" style="display: none;" required>
+                                    <span><strong>Upload CV/Resume</strong> (Image  max 5MB)</span>
+                                    <input type="file" id="cvUpload" name="cvUpload" accept="image/*" style="display: none;" required>
                                 </label>
                                 <div class="file-info" id="cvFileInfo">No file selected</div>
                                 <div class="error-message" id="cvError">Please upload your CV/Resume</div>
                             </div>
                         </div>
                         
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <div class="file-upload">
                                 <label for="coverLetterUpload">
                                     <i class="fas fa-cloud-upload-alt"></i>
@@ -514,18 +514,18 @@
                                 </label>
                                 <div class="file-info" id="coverLetterFileInfo">No file selected</div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="coverLetterText">Or Type Your Cover Letter</label>
-                            <textarea id="coverLetterText" name="coverLetterText" placeholder="Explain why you're interested in this teaching position and why you'd be a good fit..."></textarea>
+                            <label for="coverLetterText">Type Your Cover Letter</label>
+                            <textarea id="coverLetterText" name="coverLetter" placeholder="Explain why you're interested in this teaching position and why you'd be a good fit..." required></textarea>
                         </div>
                     </div>
                     
                     <div class="checkbox-group">
-                        <input type="checkbox" id="consent" name="consent" required>
+                        <input type="checkbox" id="consent" name="consent" value="yes" required>
                         <label for="consent" class="required">I confirm that all information provided in this application is accurate and complete to the best of my knowledge.</label>
                     </div>
                     <div class="error-message" id="consentError">You must agree to the terms before submitting</div>
@@ -535,10 +535,10 @@
                     <i class="fas fa-paper-plane"></i> Submit Application
                 </button>
                 
-                <div class="form-footer">
+                <!-- <div class="form-footer">
                     <p>Your application will be reviewed by our HR team. We will contact you within 2-3 weeks if your qualifications match our requirements.</p>
                     <p>For any questions, please contact us at hr@educationschool.edu</p>
-                </div>
+                </div> -->
             </form>
         </div>
     </div>

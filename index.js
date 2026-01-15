@@ -990,34 +990,65 @@ app.post('/payment-income', (req, res)=>{
 
 app.post('/OutCome-payment', upload.single('receipt'), (req, res)=>{
      const saveReceipt = req.file;
-    //  console.log(saveReceipt);
-     const receiptName = saveReceipt.filename;
-     const {type, amount, party, category, description, transaction_id, time, date, session, term, week, receiver, approval, method, surbordinate_name} = req.body;
-    //  console.log(type, amount, party, category, description, transaction_id, time, date, session, term, week, receiver, approval);
-     if(!type || !amount || !party || !category || !description || !transaction_id || !time || !date  || !session || !term || !week || !receiver || !approval || !method){
-        res.status(400).json();
-     }
-     else{
-        try{
-            const qry = "INSERT INTO expenses(type, amount, party, category, description, transaction_id, time, date, session, term, week, receiver, approval, method, surbordinate, receipt)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            con.query(qry, [type, amount, party, category, description, transaction_id, time, date, session, term, week, receiver, approval, method, surbordinate_name ||'none', receiptName], (err, result)=>{
-                const dataToReturn = {
+    //  let receipt='';
+     if(saveReceipt!==undefined){
+         const receiptName = saveReceipt.filename;
+         const {type, amount, party, category, description, transaction_id, time, date, session, term, week, receiver, approval, method, surbordinate_name} = req.body;
+        //  console.log(type, amount, party, category, description, transaction_id, time, date, session, term, week, receiver, approval);
+        if(!type || !amount || !party || !category || !description || !transaction_id || !time || !date  || !session || !term || !week || !receiver || !approval || !method){
+            res.status(400).json();
+        }
+        else{
+            try{
+                const qry = "INSERT INTO expenses(type, amount, party, category, description, transaction_id, time, date, session, term, week, receiver, approval, method, surbordinate, receipt)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                con.query(qry, [type, amount, party, category, description, transaction_id, time, date, session, term, week, receiver, approval, method, surbordinate_name ||'none', receiptName], (err, result)=>{
+                    if(err){
+                        console.log(err.message);
+                    }
+                    else{
+                         const dataToReturn = {
                             date:date,
                             transaction_id:transaction_id,
                             time:time
-                        } 
-                if(err){
-                    console.log(err.message);
-                 }
-                 
-                 else{
-                    res.status(200).json(JSON.stringify(dataToReturn));
-                 }
-            })
+                        }
+                        res.status(200).json(JSON.stringify(dataToReturn));
+                    }
+                })
+            }
+            catch(err){
+                console.log(err.message);
+            }
         }
-        catch(err){
-            console.log(err.message);
+     }
+     else{
+         let receipt='';
+        const {type, amount, party, category, description, transaction_id, time, date, session, term, week, receiver, approval, method, surbordinate_name} = req.body;
+        //  console.log(type, amount, party, category, description, transaction_id, time, date, session, term, week, receiver, approval);
+        if(!type || !amount || !party || !category || !description || !transaction_id || !time || !date  || !session || !term || !week || !receiver || !approval || !method){
+            res.status(400).json();
         }
+        else{
+            try{
+                const qry = "INSERT INTO expenses(type, amount, party, category, description, transaction_id, time, date, session, term, week, receiver, approval, method, surbordinate, receipt)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                con.query(qry, [type, amount, party, category, description, transaction_id, time, date, session, term, week, receiver, approval, method, surbordinate_name ||'none', receipt], (err, result)=>{
+                    if(err){
+                        console.log(err.message);
+                    }
+                    else{
+                         const dataToReturn = {
+                            date:date,
+                            transaction_id:transaction_id,
+                            time:time
+                        }
+                        res.status(200).json(JSON.stringify(dataToReturn));
+                    }
+                })
+            }
+            catch(err){
+                console.log(err.message);
+            }
+        }
+        return;
      }
 });
 
@@ -1681,6 +1712,58 @@ app.post('/student-info', (req, res)=>{
         console.log(err.message);
     }
 });
+
+app.post('/staff-application', upload.single('cvUpload'), (req, res)=>{
+    const cv = req.file.filename;
+    console.log(cv)
+    const {fullName, email, phone, address, dob, nationality, formal_position, formal_place_work, startDate, endDate, currentlyWorking, responsibilities, highestQualification,institutionName, graduationYear, certifications, teachingExperience, subjects, previousRoles, coverLetter,consent} = req.body;
+    // console.log(fullName, email, phone, address, dob, nationality, formal_position, formal_place_work, startDate, endDate, currentlyWorking, responsibilities, highestQualification,institutionName, graduationYear, certifications, teachingExperience, subjects, previousRoles, coverLetter,consent);
+    if(!fullName || !email || !phone || !address || !dob || !nationality || !formal_position || !formal_place_work || !startDate  || !responsibilities || !highestQualification || !institutionName || !graduationYear || !certifications || !teachingExperience || !subjects || !previousRoles || !coverLetter || !consent){
+        res.status(400).json();
+    }
+    else{
+        try{
+            const qry = "INSERT INTO staff_application(email, phone, address, dob, nationality, formal_position, formal_place_work, startDate, endDate, currentlyWorking, responsibilities, highestQualification,institutionName, graduationYear, certifications, teachingExperience, subjects, previousRoles, coverLetter,consent,cv)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            con.query(qry, [email, phone, address, dob, nationality, formal_position, formal_place_work, startDate, endDate||'none', currentlyWorking || 'no', responsibilities, highestQualification,institutionName, graduationYear, certifications, teachingExperience, subjects, previousRoles, coverLetter,consent, cv], (err, result)=>{
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.sendFile(__dirname+'FileName');
+                }
+            })
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+})
+
+app.post('/student-application', upload.single('passport'), (req, res)=>{
+    const passport = req.file.filename;
+    console.log(passport);
+    const {student_name, dob, gender, nationality, apply_class, current_school, current_grade, reading_level, parent_name, parent_phone, parent_occupation,address, allergies, medical_conditions, medications, declaration, permission} = req.body;
+    // console.log(student_name, dob, gender, nationality, apply_class, current_school, current_grade, reading_level, parent_name, parent_phone, parent_occupation,address, allergies, medical_conditions, medications, declaration, permission);
+    if(!student_name || !dob  || !gender || !nationality || !apply_class || !current_school || !current_grade || !reading_level || !parent_name || !parent_phone || !parent_occupation || !address || !declaration ||!permission){
+        res.status(400).json();
+    }
+    else{
+        try{
+            const qry ="INSERT INTO student_application(passport, student_name, dob, gender, nationality, apply_class, current_school, current_grade, reading_level, parent_name, parent_phone, parent_occupation,address, allergies, medical_conditions, medications, declaration, permission)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            con.query(qry, [passport,student_name, dob, gender, nationality, apply_class, current_school, current_grade, reading_level, parent_name, parent_phone, parent_occupation,address, allergies || 'none', medical_conditions || 'none', medications || 'none', declaration, permission], (err, result)=>{
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.sendFile(__dirname+'FileName');
+                }
+            })
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+})
 
 app.listen(process.env.PORT, ()=>{
     console.log("started");

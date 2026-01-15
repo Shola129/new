@@ -2492,7 +2492,7 @@
                 }
             });
             
-        o    // Load profile info
+            // Load profile info
             getinfo();
             
             // Initialize income section
@@ -3151,7 +3151,7 @@ async function submitPasscode() {
                         alert('Payment saved successfully!');
                         
                         // Update local data
-                        updateStats('income', parseFloat(data.amount));
+                        // updateStats('income', parseFloat(data.amount));
                         
                         // Generate and show receipt
                         generateIncomeReceipt(storedata);
@@ -3214,7 +3214,7 @@ async function submitPasscode() {
                     formData.append('receipt', data.receiptFile);
                 } else {
                     console.log('No receipt file provided or invalid file object');
-                    formData.append('receipt', ''); // Empty string if no file
+                    formData.append('receipt', undefined); // Empty string if no file
                 }
                 
                   // Create data object for receipt generation
@@ -3316,7 +3316,7 @@ async function submitPasscode() {
             });
             
             const receiptHtml = `
-                 <div class="receipt-container">
+        <div class="receipt-container">
         <div class="watermark">
             <div class="watermark-text">ABUNDANT LIGHT MEGA ACADEMY</div>
         </div>
@@ -3497,7 +3497,7 @@ async function submitPasscode() {
             const weekDisplay = data.week.replace('week-', 'Week ') || data.week;
             
             const receiptHtml = `
-                <div class="receipt-container">
+     <div class="receipt-container">
         <div class="watermark">
             <div class="watermark-text">ABUNDANT LIGHT MEGA ACADEMY</div>
         </div>

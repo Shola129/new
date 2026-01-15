@@ -6,6 +6,8 @@
     <title>Abundant Light Mega Academy</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="./assets/css/style.css">
+    <!-- link to jquery live sever -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <!-- Header with Logo -->
@@ -23,13 +25,68 @@
                     <li><a href="./Login/student-login.html">STUDENTS</a></li>
                     <li><a href="./Login/staff-login.html">STAFFS</a></li>
                     <li><a href="./Login/headStaffs.html">Head Of Staff</a></li>
-                    <li><a href="#programs">ADMISSION</a></li>
+                    <li class="main-display">APPLICATION
+                    <!-- Drop down for staff and students application form-->
+                    <ul class="dropdown">
+                        <li><a href="./Application/Student/index.html">Student Application</a></li>
+                        <li><a href="./Application/Staff/index.html">Staff Application</a></li>
+                    </ul>
+                    </li>
                     <li><a href="">CALLENDER</a></li>
                     <li><a href="">EVENTS & NEWS</a></li>
                     <li><a href="#contacts">CONTACTS</a></li>
                 </ul>
             </nav>
-            
+            <style>
+                /* Dropdown Menu Styles */
+                .main-display {
+                    position: relative;
+                }
+                
+                .desktop-nav ul {
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                    /* display: flex; */
+                    align-items: center;
+                }
+
+                .desktop-nav ul li {
+                    position: relative;
+                }
+
+                .desktop-nav ul li .dropdown {
+                    color: #000000;
+                    text-decoration: none;
+                    padding: 20px 25px;
+                    display: none;
+                    /* margin-top: 10px; */
+                }
+
+                .desktop-nav ul li:hover > .dropdown {
+                    display: block;
+                }
+
+                .dropdown {
+                    display: none;
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    /* background-color: var(--color-primary); */
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                    z-index: 1000;
+                }
+
+                .dropdown li a {
+                    padding: 10px 15px;
+                    white-space: nowrap;
+                }
+
+                .dropdown li a:hover {
+                    /* background-color: var(--color-accent); */
+                    display: block;
+                }
+            </style>
             <!-- Mobile Navigation Toggle -->
             <div class="mobile-nav-toggle" id="mobileNavToggle">
                 <span></span>
@@ -47,12 +104,27 @@
                 <li><a href="./Login/student-login.html" class="mobile-nav-link">STUDENTS</a></li>
                 <li><a href="./Login/staff-login.html" class="mobile-nav-link">STAFFS</a></li>
                 <li><a href="./Login/headStaffs.html">Head Of Staff</a></li>
+                <!-- Handle the application dropdown with onclick javascript on mobile -->
+                <li>
+                    <div class="main-display-mobile" id="main-display-mobile" style="cursor: pointer; width: 100%; padding: 15px 20px; box-sizing: border-box; background-color: #f0f0f0; color: #000000;">
+                        APPLICATION <i class="fas fa-caret-down"></i>
+                    </div>
+                    <ul class="dropdown-mobile" id="dropdown-mobile" style="display: none; background-color: #ffffff; color: #000000; padding: 5px 5px;">
+                        <li><a href="./Application/Student/index1.html" class="mobile-nav-link">Student Application</a></li>
+                        <li><a href="./Application/Staff/index.html" class="mobile-nav-link">Staff Application</a></li>
+                    </ul>
+                </li>
                 <li><a href="" class="mobile-nav-link">CALLENDER</a></li>
                 <li><a href="" class="mobile-nav-link">EVENTS & NEWS</a></li>
                 <li><a href="" class="mobile-nav-link">CONTACTS</a></li>
             </ul>
         </div>
-        
+        <script>
+            
+                $('#main-display-mobile').click(function() {
+                    $('#dropdown-mobile').toggle();
+                });
+        </script>
         <!-- Mobile Navigation Overlay -->
         <div class="mobile-overlay" id="mobileOverlay"></div>
     </header>
