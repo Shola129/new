@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Report Viewing System</title>
+    <title>Admin Dashboard - Notifications</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,649 +14,1724 @@
         }
         
         body {
-            background-color: #f5f9ff;
+            background-color: #f5f7fb;
             color: #333;
             line-height: 1.6;
+            overflow-x: hidden;
         }
         
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            text-align: center;
-            padding: 30px 20px;
-            background: linear-gradient(135deg, #1a4f8c, #2a6bb1);
-            color: white;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        
-        header p {
-            font-size: 1.1rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .role-navigation {
             display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 30px;
+            min-height: 100vh;
+            transition: transform 0.3s ease;
         }
         
-        .role-btn {
-            display: inline-flex;
-            align-items: center;
-            padding: 12px 25px;
-            background-color: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 50px;
-            text-decoration: none;
-            color: #333;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-        }
-        
-        .role-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .role-btn i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-        
-        .role-btn.student-btn:hover {
-            border-color: #3498db;
-            color: #3498db;
-        }
-        
-        .role-btn.principal-btn:hover {
-            border-color: #2ecc71;
-            color: #2ecc71;
-        }
-        
-        .role-btn.vice-principal-btn:hover {
-            border-color: #e74c3c;
-            color: #e74c3c;
-        }
-        
-        .role-btn.supervisor-btn:hover {
-            border-color: #f39c12;
-            color: #f39c12;
-        }
-        
-        /* Report sections - hidden by default */
-        .report-section {
+        /* Mobile Header */
+        .mobile-header {
             display: none;
-            background-color: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            margin-bottom: 40px;
-            animation: fadeIn 0.5s ease;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 900;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .mobile-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 18px;
         }
         
-        /* Show targeted section */
-        #student-reports:target,
-        #principal-reports:target,
-        #vice-principal-reports:target,
-        #supervisor-reports:target {
-            display: block;
+        .mobile-header .logo i {
+            color: #4dabf7;
         }
         
-        .section-header {
+        .mobile-menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .mobile-menu-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 270px;
+            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 25px 0;
+            transition: all 0.3s;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 0 25px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #eaeaea;
         }
         
-        .section-title {
-            font-size: 1.8rem;
-            color: #1a4f8c;
+        .sidebar-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 20px;
         }
         
-        .report-count {
-            background-color: #e6f0ff;
-            color: #2a6bb1;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: 600;
+        .sidebar-header i {
+            color: #4dabf7;
         }
         
-        .report-filters {
+        .close-sidebar {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .close-sidebar:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-links {
+            list-style: none;
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+        }
+        
+        .nav-links li {
+            padding: 14px 25px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-links li:hover, .nav-links li.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid #4dabf7;
+        }
+        
+        .nav-links li i {
+            width: 20px;
+        }
+        
+        /* Overlay for mobile */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .header h1 {
+            color: #2a5298;
+            font-size: 28px;
+        }
+        
+        .header-controls {
             display: flex;
             gap: 15px;
-            margin-bottom: 25px;
+            align-items: center;
+        }
+        
+        .notification-badge {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .notification-badge i {
+            font-size: 22px;
+            color: #2a5298;
+        }
+        
+        .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        /* Filter Buttons */
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
             flex-wrap: wrap;
         }
         
         .filter-btn {
-            padding: 8px 20px;
-            background-color: #f0f7ff;
-            border: 1px solid #d0e2ff;
-            border-radius: 20px;
+            padding: 10px 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 30px;
             cursor: pointer;
-            color: #555;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
+            font-weight: 500;
         }
         
-        .filter-btn:hover, .filter-btn.active {
-            background-color: #2a6bb1;
+        .filter-btn:hover {
+            background-color: #f1f5fd;
+            border-color: #2a5298;
+        }
+        
+        .filter-btn.active {
+            background-color: #2a5298;
             color: white;
-            border-color: #2a6bb1;
+            border-color: #2a5298;
         }
         
-        .reports-grid {
+        /* Notifications Grid */
+        .notifications-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 25px;
         }
         
-        .report-card {
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            padding: 20px;
-            border-left: 4px solid #2a6bb1;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-        }
-        
-        .report-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .report-card.student-report {
-            border-left-color: #3498db;
-        }
-        
-        .report-card.principal-report {
-            border-left-color: #2ecc71;
-        }
-        
-        .report-card.vice-principal-report {
-            border-left-color: #e74c3c;
-        }
-        
-        .report-card.supervisor-report {
-            border-left-color: #f39c12;
-        }
-        
-        .report-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-        }
-        
-        .report-title {
-            font-size: 1.3rem;
-            color: #1a4f8c;
-            margin-bottom: 5px;
-        }
-        
-        .report-meta {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
-        
-        .report-category {
-            display: inline-block;
-            background-color: #e6f0ff;
-            color: #2a6bb1;
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .report-date {
-            color: #777;
-            font-size: 0.9rem;
-        }
-        
-        .report-status {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .status-pending {
-            background-color: #fff4e6;
-            color: #f39c12;
-        }
-        
-        .status-resolved {
-            background-color: #e6f7f0;
-            color: #2ecc71;
-        }
-        
-        .status-urgent {
-            background-color: #ffe6e6;
-            color: #e74c3c;
-        }
-        
-        .report-content {
-            color: #555;
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-        
-        .report-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .action-btn {
-            padding: 6px 12px;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            color: #555;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-        
-        .action-btn:hover {
-            background-color: #f0f7ff;
-            border-color: #2a6bb1;
-            color: #2a6bb1;
-        }
-        
-        .default-message {
-            text-align: center;
-            padding: 60px 20px;
+        .notification-card {
             background-color: white;
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            margin-bottom: 40px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid #2a5298;
         }
         
-        .default-message i {
-            font-size: 3rem;
-            color: #b3cde8;
-            margin-bottom: 20px;
+        .notification-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
         
-        .default-message h2 {
-            color: #1a4f8c;
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .source {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .source-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .main-dashboard .source-icon {
+            background-color: #4dabf7;
+        }
+        
+        .teachers .source-icon {
+            background-color: #20c997;
+        }
+        
+        .students .source-icon {
+            background-color: #ffa502;
+        }
+        
+        .principal .source-icon {
+            background-color: #9c88ff;
+        }
+        
+        .vice-principal .source-icon {
+            background-color: #fd79a8;
+        }
+        
+        .supervisors .source-icon {
+            background-color: #00cec9;
+        }
+        
+        .student-applications .source-icon {
+            background-color: #ff6b81;
+        }
+        
+        .staff-applications .source-icon {
+            background-color: #a55eea;
+        }
+        
+        .staff .source-icon {
+            background-color: #a55eea;
+        }
+        
+        .source-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .time {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .notification-title {
+            font-weight: 600;
             margin-bottom: 10px;
+            color: #2a5298;
         }
         
-        .default-message p {
-            color: #666;
-            max-width: 600px;
-            margin: 0 auto 20px;
+        .notification-content {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 15px;
         }
         
-        footer {
-            text-align: center;
+        .notification-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .priority {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .priority.high {
+            background-color: #ffeaea;
+            color: #ff4757;
+        }
+        
+        .priority.medium {
+            background-color: #fff4e6;
+            color: #ffa502;
+        }
+        
+        .priority.low {
+            background-color: #e6f7ff;
+            color: #4dabf7;
+        }
+        
+        .card-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .view-btn, .mark-read, .message-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            border: none;
+            font-weight: 500;
+        }
+        
+        .view-btn {
+            background-color: #2a5298;
+            color: white;
+        }
+        
+        .view-btn:hover {
+            background-color: #1e3c72;
+        }
+        
+        .message-btn {
+            background-color: #20c997;
+            color: white;
+        }
+        
+        .message-btn:hover {
+            background-color: #1ba87e;
+        }
+        
+        .mark-read {
+            background-color: #f1f5fd;
+            color: #2a5298;
+        }
+        
+        .mark-read:hover {
+            background-color: #e1e9f9;
+        }
+        
+        /* Message Form Container */
+        .message-form-container {
+            margin-top: 15px;
             padding: 20px;
-            color: #666;
-            font-size: 0.9rem;
-            border-top: 1px solid #ddd;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #20c997;
+            display: none;
+        }
+        
+        .message-form-container.active {
+            display: block;
+        }
+        
+        .form-title {
+            color: #2a5298;
+            margin-bottom: 15px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-title i {
+            color: #20c997;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .form-group input, 
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus, 
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
             margin-top: 20px;
         }
         
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .reports-grid {
-                grid-template-columns: 1fr;
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #2a5298;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1e3c72;
+        }
+        
+        .btn-secondary {
+            background-color: #f1f5fd;
+            color: #2a5298;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e1e9f9;
+        }
+        
+        /* Status Messages */
+        .status-message {
+            padding: 12px 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+            display: block;
+        }
+        
+        .status-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+            display: block;
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            padding: 20px;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transform: translateY(-20px);
+            transition: transform 0.3s;
+        }
+        
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            padding: 25px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            color: #2a5298;
+            font-size: 22px;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #888;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: #ff4757;
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        .notification-detail {
+            margin-bottom: 25px;
+        }
+        
+        .detail-item {
+            margin-bottom: 15px;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .detail-value {
+            color: #333;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border-left: 3px solid #2a5298;
+        }
+        
+        /* Application Details */
+        .application-details {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #4dabf7;
+        }
+        
+        .application-details h4 {
+            color: #2a5298;
+            margin-bottom: 10px;
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .detail-label {
+            min-width: 150px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .detail-value {
+            flex: 1;
+            color: #333;
+            padding: 0;
+            background: none;
+            border: none;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            grid-column: 1 / -1;
+        }
+        
+        .empty-state i {
+            font-size: 60px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state h3 {
+            color: #888;
+            margin-bottom: 10px;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 250px;
             }
             
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .report-count {
-                margin-top: 10px;
-            }
-            
-            header h1 {
-                font-size: 2rem;
-            }
-            
-            .role-navigation {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .role-btn {
-                width: 100%;
-                max-width: 300px;
-                justify-content: center;
+            .notifications-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             }
         }
         
-        /* Print styles */
-        @media print {
-            .role-navigation, footer, .report-actions, .filter-btn {
-                display: none;
+        @media (max-width: 992px) {
+            .notifications-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             }
             
-            .report-section {
-                box-shadow: none;
-                border: 1px solid #ddd;
+            .modal {
+                max-width: 90%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            /* Show mobile header */
+            .mobile-header {
+                display: flex;
             }
             
-            .report-card {
-                break-inside: avoid;
+            /* Adjust main content for mobile header */
+            .main-content {
+                padding-top: 80px;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            
+            /* Hide sidebar by default on mobile */
+            .sidebar {
+                position: fixed;
+                left: -270px;
+                top: 0;
+                bottom: 0;
+                z-index: 1000;
+                transition: left 0.3s ease;
+                width: 270px;
+            }
+            
+            .sidebar.active {
+                left: 0;
+            }
+            
+            /* Show close button in sidebar on mobile */
+            .close-sidebar {
+                display: block;
+            }
+            
+            /* Adjust container for mobile */
+            .container {
+                margin-top: 70px;
+            }
+            
+            /* Mobile filter buttons */
+            .filter-buttons {
+                overflow-x: auto;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+                gap: 8px;
+            }
+            
+            .filter-buttons::-webkit-scrollbar {
+                height: 5px;
+            }
+            
+            .filter-buttons::-webkit-scrollbar-thumb {
+                background-color: rgba(42, 82, 152, 0.3);
+                border-radius: 10px;
+            }
+            
+            .filter-btn {
+                flex-shrink: 0;
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+            
+            /* Adjust notification cards for mobile */
+            .notifications-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .notification-card {
+                padding: 20px;
+            }
+            
+            .notification-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .card-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .modal-header {
+                padding: 20px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .form-actions .btn {
+                width: 100%;
+            }
+            
+            /* Adjust header for mobile */
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-bottom: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .header-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .modal {
+                max-width: 95%;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+                margin-bottom: 15px;
+            }
+            
+            .detail-label {
+                min-width: auto;
+                margin-bottom: 5px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .mobile-header {
+                padding: 15px;
+            }
+            
+            .main-content {
+                padding: 80px 15px 20px;
+            }
+            
+            .notification-card {
+                padding: 15px;
+            }
+            
+            .card-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .card-buttons button {
+                width: 100%;
+            }
+        }
+        
+        /* Tablet specific styles */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .notifications-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            
+            .sidebar {
+                width: 220px;
+            }
+            
+            .nav-links li {
+                padding: 12px 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-school"></i>Report Viewing System</h1>
-            <p>View reports from students, principals, vice principals, and supervisors</p>
-        </header>
-        
-        <!-- Role Navigation -->
-        <div class="role-navigation">
-            <a href="#student-reports" class="role-btn student-btn">
-                <i class="fas fa-user-graduate"></i> Student Reports
-            </a>
-            <a href="#principal-reports" class="role-btn principal-btn">
-                <i class="fas fa-user-tie"></i> Principal Reports
-            </a>
-            <a href="#vice-principal-reports" class="role-btn vice-principal-btn">
-                <i class="fas fa-user-friends"></i> Vice Principal Reports
-            </a>
-            <a href="#supervisor-reports" class="role-btn supervisor-btn">
-                <i class="fas fa-clipboard-check"></i> Supervisor Reports
-            </a>
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <div class="logo">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Admin Dashboard</span>
         </div>
-        
-        <!-- Default message when no role is selected -->
-        <!-- <div class="default-message" id="default-view">
-            <i class="fas fa-file-alt"></i>
-            <h2>Select a Role to View Reports</h2>
-            <p>Click on one of the role buttons above to view reports submitted by students, principals, vice principals, or supervisors.</p>
-            <p>You can view report details, check their status, and see when they were submitted.</p>
-        </div> -->
-        
-        <!-- Student Reports Section -->
-        <div class="report-section" id="student-reports">
-            <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-user-graduate"></i> Student Reports</h2>
-                <div class="report-count">8 Reports</div>
-            </div>
-            
-            <div class="report-filters">
-                <a href="#student-reports" class="filter-btn active">All</a>
-                <a href="#student-reports" class="filter-btn">Academic</a>
-                <a href="#student-reports" class="filter-btn">Behavioral</a>
-                <a href="#student-reports" class="filter-btn">Facilities</a>
-                <a href="#student-reports" class="filter-btn">Pending</a>
-            </div>
-            
-            <div class="reports-grid">
-                <div class="report-card student-report">
-                    <div class="report-header">
-                        <div>
-                            <h3 class="report-title">Library Books Damaged</h3>
-                            <div class="report-meta">
-                                <span class="report-category">Facilities</span>
-                                <span class="report-date">Oct 15, 2023</span>
-                                <span class="report-status status-pending">Pending</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="report-content">
-                        <p>Found several books in the science section with torn pages. Requesting replacement funds for at least 5 books that are beyond repair.</p>
-                    </div>
-                    <div class="report-actions">
-                        <a href="#student-reports" class="action-btn">View Details</a>
-                        <a href="#student-reports" class="action-btn">Mark as Read</a>
-                    </div>
-                </div>
-                
-                <div class="report-card student-report">
-                    <div class="report-header">
-                        <div>
-                            <h3 class="report-title">Cafeteria Food Quality</h3>
-                            <div class="report-meta">
-                                <span class="report-category">Facilities</span>
-                                <span class="report-date">Oct 12, 2023</span>
-                                <span class="report-status status-resolved">Resolved</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="report-content">
-                        <p>Multiple students have reported cold meals during lunch time. The food is often served lukewarm, affecting taste and potentially safety.</p>
-                    </div>
-                    <div class="report-actions">
-                        <a href="#student-reports" class="action-btn">View Details</a>
-                        <a href="#student-reports" class="action-btn">Mark as Read</a>
-                    </div>
-                </div>
-                
-                <div class="report-card student-report">
-                    <div class="report-header">
-                        <div>
-                            <h3 class="report-title">Math Tutoring Request</h3>
-                            <div class="report-meta">
-                                <span class="report-category">Academic</span>
-                                <span class="report-date">Oct 10, 2023</span>
-                                <span class="report-status status-resolved">Resolved</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="report-content">
-                        <p>Requesting additional tutoring sessions for Algebra II. Many students are struggling with the current curriculum pace.</p>
-                    </div>
-                    <div class="report-actions">
-                        <a href="#student-reports" class="action-btn">View Details</a>
-                        <a href="#student-reports" class="action-btn">Mark as Read</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Principal Reports Section -->
-        <div class="report-section" id="principal-reports">
-            <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-user-tie"></i> Principal Reports</h2>
-                <div class="report-count">6 Reports</div>
-            </div>
-            
-            <div class="report-filters">
-                <a href="#principal-reports" class="filter-btn active">All</a>
-                <a href="#principal-reports" class="filter-btn">Administrative</a>
-                <a href="#principal-reports" class="filter-btn">Policy</a>
-                <a href="#principal-reports" class="filter-btn">Budget</a>
-            </div>
-            
-            <div class="reports-grid">
-                <div class="report-card principal-report">
-                    <div class="report-header">
-                        <div>
-                            <h3 class="report-title">Parent-Teacher Meeting Schedule</h3>
-                            <div class="report-meta">
-                                <span class="report-category">Administrative</span>
-                                <span class="report-date">Oct 12, 2023</span>
-                                <span class="report-status status-resolved">Resolved</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="report-content">
-                        <p>Fall parent-teacher meetings scheduled for November 5-7. All staff must confirm availability by October 20th. Extended hours will be available on November 6th.</p>
-                    </div>
-                    <div class="report-actions">
-                        <a href="#principal-reports" class="action-btn">View Details</a>
-                        <a href="#principal-reports" class="action-btn">Download Schedule</a>
-                    </div>
-                </div>
-                
-                <div class="report-card principal-report">
-                    <div class="report-header">
-                        <div>
-                            <h3 class="report-title">Annual Budget Review</h3>
-                            <div class="report-meta">
-                                <span class="report-category">Budget</span>
-                                <span class="report-date">Oct 5, 2023</span>
-                                <span class="report-status status-pending">Pending Approval</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="report-content">
-                        <p>Proposed budget for the 2024 academic year. Includes increases for technology upgrades and facility maintenance. Needs board approval by November 15th.</p>
-                    </div>
-                    <div class="report-actions">
-                        <a href="#principal-reports" class="action-btn">View Details</a>
-                        <a href="#principal-reports" class="action-btn">Download Budget</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Vice Principal Reports Section -->
-        <div class="report-section" id="vice-principal-reports">
-            <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-user-friends"></i> Vice Principal Reports</h2>
-                <div class="report-count">7 Reports</div>
-            </div>
-            
-            <div class="report-filters">
-                <a href="#vice-principal-reports" class="filter-btn active">All</a>
-                <a href="#vice-principal-reports" class="filter-btn">Disciplinary</a>
-                <a href="#vice-principal-reports" class="filter-btn">Attendance</a>
-                <a href="#vice-principal-reports" class="filter-btn">Operations</a>
-            </div>
-            
-            <div class="reports-grid">
-                <div class="report-card vice-principal-report">
-                    <div class="report-header">
-                        <div>
-                            <h3 class="report-title">Hallway Monitoring Update</h3>
-                            <div class="report-meta">
-                                <span class="report-category">Operations</span>
-                                <span class="report-date">Oct 8, 2023</span>
-                                <span class="report-status status-resolved">Resolved</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="report-content">
-                        <p>Increased hallway monitoring has reduced tardiness by 25% in the past two weeks. Continuing the initiative through the end of the semester.</p>
-                    </div>
-                    <div class="report-actions">
-                        <a href="#vice-principal-reports" class="action-btn">View Details</a>
-                        <a href="#vice-principal-reports" class="action-btn">View Statistics</a>
-                    </div>
-                </div>
-                
-                <div class="report-card vice-principal-report">
-                    <div class="report-header">
-                        <div>
-                            <h3 class="report-title">Disciplinary Actions - October</h3>
-                            <div class="report-meta">
-                                <span class="report-category">Disciplinary</span>
-                                <span class="report-date">Oct 3, 2023</span>
-                                <span class="report-status status-urgent">Needs Review</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="report-content">
-                        <p>Summary of disciplinary actions taken in October. Three suspensions issued for repeated violations of the code of conduct. Requires principal review.</p>
-                    </div>
-                    <div class="report-actions">
-                        <a href="#vice-principal-reports" class="action-btn">View Details</a>
-                        <a href="#vice-principal-reports" class="action-btn">Download Report</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Supervisor Reports Section -->
-        <div class="report-section" id="supervisor-reports">
-            <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-clipboard-check"></i> Supervisor Reports</h2>
-                <div class="report-count">5 Reports</div>
-            </div>
-            
-            <div class="report-filters">
-                <a href="#supervisor-reports" class="filter-btn active">All</a>
-                <a href="#supervisor-reports" class="filter-btn">Facilities</a>
-                <a href="#supervisor-reports" class="filter-btn">Staff</a>
-                <a href="#supervisor-reports" class="filter-btn">Evaluation</a>
-            </div>
-            
-            <div class="reports-grid">
-                <div class="report-card supervisor-report">
-                    <div class="report-header">
-                        <div>
-                            <h3 class="report-title">Science Lab Equipment Audit</h3>
-                            <div class="report-meta">
-                                <span class="report-category">Facilities</span>
-                                <span class="report-date">Oct 10, 2023</span>
-                                <span class="report-status status-resolved">Resolved</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="report-content">
-                        <p>Completed audit of all lab equipment. 15% of items need replacement or repair. Budget request submitted for $8,500 in replacements.</p>
-                    </div>
-                    <div class="report-actions">
-                        <a href="#supervisor-reports" class="action-btn">View Details</a>
-                        <a href="#supervisor-reports" class="action-btn">View Audit</a>
-                    </div>
-                </div>
-                
-                <div class="report-card supervisor-report">
-                    <div class="report-header">
-                        <div>
-                            <h3 class="report-title">Custodial Staff Performance Review</h3>
-                            <div class="report-meta">
-                                <span class="report-category">Staff</span>
-                                <span class="report-date">Oct 1, 2023</span>
-                                <span class="report-status status-pending">Under Review</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="report-content">
-                        <p>Quarterly performance review for custodial staff. All members meeting expectations. Two staff members recommended for additional training.</p>
-                    </div>
-                    <div class="report-actions">
-                        <a href="#supervisor-reports" class="action-btn">View Details</a>
-                        <a href="#supervisor-reports" class="action-btn">Download Review</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>School Report Viewing System &copy; 2023 | All reports are confidential</p>
-            <p>This system works without JavaScript - all navigation implemented with HTML and CSS only</p>
-        </footer>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
     </div>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h2>
+                <button class="close-sidebar" id="closeSidebar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-filter="all">
+                    <i class="fas fa-bell"></i> All Notifications
+                </li>
+                <li data-filter="main">
+                    <i class="fas fa-home"></i> Main Dashboard
+                </li>
+                <li data-filter="teachers">
+                    <i class="fas fa-chalkboard-teacher"></i> Teachers
+                </li>
+                <li data-filter="students">
+                    <i class="fas fa-user-graduate"></i> Students
+                </li>
+                <li data-filter="principal">
+                    <i class="fas fa-user-tie"></i> Principal
+                </li>
+                <li data-filter="vice-principal">
+                    <i class="fas fa-user-shield"></i> Vice Principal
+                </li>
+                <li data-filter="supervisors">
+                    <i class="fas fa-clipboard-check"></i> Supervisors
+                </li>
+                <li data-filter="student-applications">
+                    <i class="fas fa-file-alt"></i> Student Applications
+                </li>
+                <li data-filter="staff-applications">
+                    <i class="fas fa-briefcase"></i> Staff Applications
+                </li>
+                <li data-filter="staff">
+                    <i class="fas fa-users"></i> Staff
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h1>Notifications Center</h1>
+                <div class="header-controls">
+                    <div class="notification-badge">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="unreadCount">15</span>
+                    </div>
+                    <button id="markAllRead" class="filter-btn">
+                        <i class="fas fa-check-double"></i> Mark All as Read
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="main">Main Dashboard</button>
+                <button class="filter-btn" data-filter="teachers">Teachers</button>
+                <button class="filter-btn" data-filter="students">Students</button>
+                <button class="filter-btn" data-filter="principal">Principal</button>
+                <button class="filter-btn" data-filter="vice-principal">Vice Principal</button>
+                <button class="filter-btn" data-filter="supervisors">Supervisors</button>
+                <button class="filter-btn" data-filter="student-applications">Student Apps</button>
+                <button class="filter-btn" data-filter="staff-applications">Staff Apps</button>
+                <button class="filter-btn" data-filter="staff">Staff</button>
+            </div>
+
+            <!-- Notifications Grid -->
+            <div class="notifications-grid" id="notificationsContainer">
+                <!-- Notifications will be dynamically inserted here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Notification Details -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="notificationModal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Notification Details</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="notification-detail" id="notificationDetail">
+                    <!-- Notification details will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Notification Data with new sources: Vice Principal and Supervisors
+        const notifications = [
+            {
+                id: 1,
+                source: "main",
+                title: "System Maintenance Scheduled",
+                content: "The main dashboard will be offline for maintenance on Saturday from 2:00 AM to 4:00 AM.",
+                detailedContent: "Maintenance is required to update the server infrastructure and apply critical security patches. All dashboard services will be temporarily unavailable during this window. Users are advised to save any ongoing work before the maintenance begins. The maintenance is expected to improve system performance by 30%.",
+                time: "10 minutes ago",
+                priority: "high",
+                read: false,
+                date: "2023-10-15",
+                category: "System Alert",
+                actionRequired: true
+            },
+            {
+                id: 2,
+                source: "teachers",
+                title: "New Teacher Registration",
+                content: "Sarah Johnson has registered as a new teacher in the Mathematics department.",
+                detailedContent: "Sarah Johnson holds a Master's degree in Mathematics from Stanford University. She has 5 years of teaching experience and will be joining the Mathematics department starting next week. Her specialization is in Calculus and Algebra. Please review her documents and schedule an orientation session.",
+                time: "1 hour ago",
+                priority: "medium",
+                read: false,
+                date: "2023-10-15",
+                category: "New Registration",
+                actionRequired: true
+            },
+            {
+                id: 3,
+                source: "students",
+                title: "Attendance Alert",
+                content: "15 students marked absent in Grade 10 today. Review required.",
+                detailedContent: "Grade 10 has an unusually high absence rate today (25%). Most absences are from Section B. The homeroom teacher has reported that a flu outbreak might be affecting attendance. Please contact parents of absent students and review the school's health protocols.",
+                time: "2 hours ago",
+                priority: "high",
+                read: true,
+                date: "2023-10-15",
+                category: "Attendance",
+                actionRequired: true
+            },
+            {
+                id: 4,
+                source: "principal",
+                title: "Monthly Report Ready",
+                content: "The monthly performance report is now available for review.",
+                detailedContent: "The October monthly performance report includes academic results, attendance statistics, teacher performance metrics, and financial summaries. Key findings: Mathematics scores improved by 8%, attendance rate is at 94%, and parent satisfaction survey shows 92% approval rating. The report requires your signature by Friday.",
+                time: "5 hours ago",
+                priority: "medium",
+                read: false,
+                date: "2023-10-14",
+                category: "Report",
+                actionRequired: true
+            },
+            {
+                id: 5,
+                source: "vice-principal",
+                title: "Disciplinary Meeting Scheduled",
+                content: "A disciplinary meeting has been scheduled for two students from Grade 11.",
+                detailedContent: "Two students from Grade 11, Section A, were involved in a violation of school code of conduct. The meeting is scheduled for tomorrow at 11:00 AM in the vice principal's office. Please review the incident report and student records before the meeting.",
+                time: "3 hours ago",
+                priority: "high",
+                read: false,
+                date: "2023-10-15",
+                category: "Disciplinary",
+                actionRequired: true
+            },
+            {
+                id: 6,
+                source: "supervisors",
+                title: "Classroom Inspection Report",
+                content: "Classroom inspection reports for October are now available.",
+                detailedContent: "The October classroom inspection reports have been completed by the supervision team. Overall compliance rate is 92%. 8 classrooms require follow-up inspections due to minor issues. Please review the detailed reports and schedule corrective actions where needed.",
+                time: "6 hours ago",
+                priority: "medium",
+                read: false,
+                date: "2023-10-15",
+                category: "Inspection",
+                actionRequired: true
+            },
+            {
+                id: 7,
+                source: "student-applications",
+                title: "New Student Application",
+                content: "Michael Chen has submitted an application for the Science program.",
+                detailedContent: "Michael Chen is applying for the Science program starting Spring 2024. He is currently in 9th grade at Lincoln Middle School. His academic record shows excellent performance in Mathematics and Science (GPA: 3.9/4.0).",
+                time: "1 day ago",
+                priority: "medium",
+                read: false,
+                date: "2023-10-14",
+                category: "Student Application",
+                actionRequired: true,
+                applicantName: "Michael Chen",
+                applicantEmail: "michael.chen@example.com",
+                applicantPhone: "(555) 123-4567",
+                program: "Science Program",
+                applicationId: "STU-APP-2024-0873",
+                status: "Pending Review",
+                submissionDate: "2023-10-13",
+                documents: ["Transcripts", "Recommendation Letters", "Personal Statement"]
+            },
+            {
+                id: 8,
+                source: "staff",
+                title: "Staff Meeting Reminder",
+                content: "Reminder: Quarterly staff meeting scheduled for Friday at 10:00 AM in the conference room.",
+                detailedContent: "The quarterly staff meeting will cover: 1) Q3 performance review, 2) Upcoming curriculum changes, 3) Budget planning for next quarter, 4) Staff training opportunities. All department heads are required to present a 5-minute summary of their department's achievements and challenges. Please bring your department reports.",
+                time: "1 day ago",
+                priority: "medium",
+                read: true,
+                date: "2023-10-14",
+                category: "Meeting",
+                actionRequired: false
+            },
+            {
+                id: 9,
+                source: "main",
+                title: "Dashboard Performance Update",
+                content: "Dashboard performance has improved by 25% after the latest optimization.",
+                detailedContent: "After implementing the latest caching strategy and database optimizations, the dashboard load time has decreased from 3.2 seconds to 2.4 seconds (25% improvement). User satisfaction scores have increased accordingly. The next optimization phase will focus on mobile responsiveness and offline capabilities.",
+                time: "2 days ago",
+                priority: "low",
+                read: false,
+                date: "2023-10-13",
+                category: "Performance",
+                actionRequired: false
+            },
+            {
+                id: 10,
+                source: "teachers",
+                title: "Training Session Complete",
+                content: "All teachers have completed the digital tools training session.",
+                detailedContent: "The digital tools training session held last week had 100% participation from teaching staff. Feedback scores average 4.7/5.0. Teachers are now proficient in using the new Learning Management System, online assessment tools, and virtual classroom features. Certificates have been issued to all participants.",
+                time: "3 days ago",
+                priority: "low",
+                read: true,
+                date: "2023-10-12",
+                category: "Training",
+                actionRequired: false
+            },
+            {
+                id: 11,
+                source: "students",
+                title: "Exam Results Published",
+                content: "Final exam results for Semester 1 have been published on the student portal.",
+                detailedContent: "Semester 1 final exam results are now available. Overall pass rate: 94.2% (up 2.1% from last semester). Top performing subjects: Mathematics (96% pass rate), Science (95% pass rate). 15 students achieved perfect scores in at least one subject. Parents can access results through the parent portal.",
+                time: "4 days ago",
+                priority: "high",
+                read: false,
+                date: "2023-10-11",
+                category: "Exams",
+                actionRequired: false
+            },
+            {
+                id: 12,
+                source: "vice-principal",
+                title: "Parent Complaint Received",
+                content: "A formal complaint has been filed by a parent regarding transportation services.",
+                detailedContent: "Mr. Robert Smith has filed a formal complaint regarding inconsistent bus timings and safety concerns. The complaint has been logged and requires investigation. Please review the complaint details and schedule a meeting with the transportation department.",
+                time: "1 day ago",
+                priority: "high",
+                read: false,
+                date: "2023-10-14",
+                category: "Complaint",
+                actionRequired: true
+            },
+            {
+                id: 13,
+                source: "supervisors",
+                title: "Safety Drill Scheduled",
+                content: "A safety drill has been scheduled for next week across all departments.",
+                detailedContent: "The quarterly safety drill will take place on Wednesday at 10:30 AM. All supervisors must ensure their departments are prepared. Emergency procedures should be reviewed with all staff members. The drill will be evaluated for response times and compliance with safety protocols.",
+                time: "2 days ago",
+                priority: "medium",
+                read: true,
+                date: "2023-10-13",
+                category: "Safety",
+                actionRequired: true
+            },
+            {
+                id: 14,
+                source: "staff-applications",
+                title: "New Staff Application Received",
+                content: "David Wilson has applied for the IT Support Specialist position.",
+                detailedContent: "David Wilson has submitted an application for the IT Support Specialist role. He has 7 years of experience in educational technology support and holds certifications in network administration and cybersecurity.",
+                time: "5 days ago",
+                priority: "high",
+                read: false,
+                date: "2023-10-10",
+                category: "Staff Application",
+                actionRequired: true,
+                applicantName: "David Wilson",
+                applicantEmail: "david.wilson@example.com",
+                applicantPhone: "(555) 987-6543",
+                position: "IT Support Specialist",
+                applicationId: "STAFF-APP-2023-0451",
+                status: "Under Review",
+                submissionDate: "2023-10-09",
+                experience: "7 years",
+                documents: ["Resume", "Cover Letter", "Certifications", "References"]
+            },
+            {
+                id: 15,
+                source: "staff",
+                title: "New Staff Member",
+                content: "Jennifer Lee has joined as the new Administrative Assistant.",
+                detailedContent: "Jennifer Lee has joined the administration department as an Administrative Assistant. She brings 5 years of experience in office administration and will be supporting the principal's office. Her orientation is scheduled for next Monday.",
+                time: "6 days ago",
+                priority: "medium",
+                read: true,
+                date: "2023-10-09",
+                category: "New Hire",
+                actionRequired: false
+            },
+            {
+                id: 16,
+                source: "principal",
+                title: "Parent-Teacher Conference",
+                content: "The principal has scheduled a parent-teacher conference for next week.",
+                detailedContent: "The school-wide parent-teacher conference is scheduled for October 23-25. Each teacher has been allocated 15-minute slots with parents. The online scheduling system is now open for parents to book appointments. Teachers should prepare progress reports for each student before the conferences.",
+                time: "1 week ago",
+                priority: "medium",
+                read: true,
+                date: "2023-10-08",
+                category: "Conference",
+                actionRequired: true
+            },
+            {
+                id: 17,
+                source: "vice-principal",
+                title: "Budget Review Meeting",
+                content: "Department budget reviews are scheduled for next Monday.",
+                detailedContent: "All department heads must submit their budget proposals by Friday. The review meeting will be held on Monday at 2:00 PM in the conference room. Please ensure all supporting documents are prepared for discussion.",
+                time: "3 days ago",
+                priority: "medium",
+                read: false,
+                date: "2023-10-12",
+                category: "Budget",
+                actionRequired: true
+            },
+            {
+                id: 18,
+                source: "supervisors",
+                title: "Supervisor Monthly Report",
+                content: "Monthly supervisor reports are due by the end of this week.",
+                detailedContent: "All supervisors must submit their monthly activity reports by Friday 5:00 PM. The reports should include department performance metrics, staff evaluations, and any incidents that occurred during the month. Use the updated template available in the shared drive.",
+                time: "4 days ago",
+                priority: "medium",
+                read: false,
+                date: "2023-10-11",
+                category: "Report",
+                actionRequired: true
+            }
+        ];
+
+        // Source mapping for display
+        const sourceMap = {
+            "main": { name: "Main Dashboard", icon: "fas fa-home" },
+            "teachers": { name: "Teachers", icon: "fas fa-chalkboard-teacher" },
+            "students": { name: "Students", icon: "fas fa-user-graduate" },
+            "principal": { name: "Principal", icon: "fas fa-user-tie" },
+            "vice-principal": { name: "Vice Principal", icon: "fas fa-user-shield" },
+            "supervisors": { name: "Supervisors", icon: "fas fa-clipboard-check" },
+            "student-applications": { name: "Student Applications", icon: "fas fa-file-alt" },
+            "staff-applications": { name: "Staff Applications", icon: "fas fa-briefcase" },
+            "staff": { name: "Staff", icon: "fas fa-users" }
+        };
+
+        // DOM Elements
+        const notificationsContainer = document.getElementById('notificationsContainer');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const navLinks = document.querySelectorAll('.nav-links li');
+        const unreadCountElement = document.getElementById('unreadCount');
+        const markAllReadButton = document.getElementById('markAllRead');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeModalButton = document.getElementById('closeModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const notificationDetail = document.getElementById('notificationDetail');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const container = document.querySelector('.container');
+
+        // Current filter
+        let currentFilter = 'all';
+        let currentNotificationId = null;
+        let openMessageFormId = null;
+        let isMobile = window.innerWidth <= 768;
+
+        // Initialize the dashboard
+        function initDashboard() {
+            renderNotifications();
+            updateUnreadCount();
+            
+            // Add event listeners to filter buttons
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // Update current filter
+                    currentFilter = button.getAttribute('data-filter');
+                    
+                    // Update sidebar active item
+                    navLinks.forEach(link => {
+                        if (link.getAttribute('data-filter') === currentFilter) {
+                            navLinks.forEach(l => l.classList.remove('active'));
+                            link.classList.add('active');
+                        }
+                    });
+                    
+                    // Re-render notifications
+                    renderNotifications();
+                    
+                    // Close sidebar on mobile after selection
+                    if (isMobile) {
+                        closeMobileSidebar();
+                    }
+                });
+            });
+            
+            // Add event listeners to sidebar navigation
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    // Update active nav link
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    
+                    // Update current filter
+                    currentFilter = link.getAttribute('data-filter');
+                    
+                    // Update filter buttons
+                    filterButtons.forEach(btn => {
+                        if (btn.getAttribute('data-filter') === currentFilter) {
+                            filterButtons.forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                        }
+                    });
+                    
+                    // Re-render notifications
+                    renderNotifications();
+                    
+                    // Close sidebar on mobile after selection
+                    if (isMobile) {
+                        closeMobileSidebar();
+                    }
+                });
+            });
+            
+            // Add event listener to mark all as read button
+            markAllReadButton.addEventListener('click', markAllAsRead);
+            
+            // Add event listener to close modal button
+            closeModalButton.addEventListener('click', closeModal);
+            
+            // Add event listener to close modal when clicking outside
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+            
+            // Add keyboard listener for closing modal with ESC key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+            
+            // Mobile sidebar functionality
+            mobileMenuBtn.addEventListener('click', openMobileSidebar);
+            closeSidebar.addEventListener('click', closeMobileSidebar);
+            sidebarOverlay.addEventListener('click', closeMobileSidebar);
+            
+            // Detect window resize
+            window.addEventListener('resize', handleResize);
+        }
+
+        // Handle window resize
+        function handleResize() {
+            isMobile = window.innerWidth <= 768;
+            
+            // If resizing to desktop, ensure sidebar is visible
+            if (!isMobile && sidebar.classList.contains('active')) {
+                closeMobileSidebar();
+            }
+        }
+
+        // Open mobile sidebar
+        function openMobileSidebar() {
+            sidebar.classList.add('active');
+            sidebarOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close mobile sidebar
+        function closeMobileSidebar() {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Render notifications based on current filter
+        function renderNotifications() {
+            // Filter notifications based on current filter
+            let filteredNotifications = notifications;
+            if (currentFilter !== 'all') {
+                filteredNotifications = notifications.filter(notification => 
+                    notification.source === currentFilter
+                );
+            }
+            
+            // Clear the container
+            notificationsContainer.innerHTML = '';
+            
+            // If no notifications, show empty state
+            if (filteredNotifications.length === 0) {
+                notificationsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bell-slash"></i>
+                        <h3>No notifications found</h3>
+                        <p>There are no notifications for the selected filter.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Render each notification
+            filteredNotifications.forEach(notification => {
+                const sourceInfo = sourceMap[notification.source];
+                const card = document.createElement('div');
+                card.className = `notification-card ${notification.source}`;
+                card.innerHTML = `
+                    <div class="notification-header">
+                        <div class="source">
+                            <div class="source-icon">
+                                <i class="${sourceInfo.icon}"></i>
+                            </div>
+                            <div class="source-name">${sourceInfo.name}</div>
+                        </div>
+                        <div class="time">${notification.time}</div>
+                    </div>
+                    <h3 class="notification-title">${notification.title}</h3>
+                    <p class="notification-content">${notification.content}</p>
+                    <div class="notification-footer">
+                        <span class="priority ${notification.priority}">${notification.priority.toUpperCase()}</span>
+                        <div class="card-buttons">
+                            ${(notification.source === 'student-applications' || notification.source === 'staff-applications') 
+                                ? `<button class="message-btn" data-id="${notification.id}">
+                                    <i class="fas fa-comment"></i> ${isMobile ? '' : 'Message'}
+                                   </button>` 
+                                : ''}
+                            <button class="view-btn" data-id="${notification.id}">
+                                <i class="fas fa-eye"></i> ${isMobile ? '' : 'Details'}
+                            </button>
+                            <button class="mark-read" data-id="${notification.id}">
+                                ${notification.read 
+                                    ? '<i class="fas fa-check"></i>' + (isMobile ? '' : ' Read') 
+                                    : '<i class="fas fa-envelope"></i>' + (isMobile ? '' : ' Mark Read')}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add visual indicator for unread notifications
+                if (!notification.read) {
+                    card.style.borderLeft = '4px solid #ff4757';
+                }
+                
+                // Add message form for application notifications
+                if (notification.source === 'student-applications' || notification.source === 'staff-applications') {
+                    const messageForm = document.createElement('div');
+                    messageForm.className = `message-form-container ${openMessageFormId === notification.id ? 'active' : ''}`;
+                    messageForm.id = `messageForm-${notification.id}`;
+                    messageForm.innerHTML = createMessageForm(notification);
+                    card.appendChild(messageForm);
+                }
+                
+                notificationsContainer.appendChild(card);
+                
+                // Add event listener to view button
+                const viewButton = card.querySelector('.view-btn');
+                viewButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showNotificationDetails(notification.id);
+                });
+                
+                // Add event listener to mark as read button
+                const markReadButton = card.querySelector('.mark-read');
+                markReadButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    markAsRead(notification.id);
+                });
+                
+                // Add event listener to message button (for applications)
+                if (notification.source === 'student-applications' || notification.source === 'staff-applications') {
+                    const messageButton = card.querySelector('.message-btn');
+                    messageButton.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        toggleMessageForm(notification.id);
+                    });
+                }
+            });
+            
+            // Reattach form event listeners
+            attachFormEventListeners();
+        }
+
+        // Create message form for application notifications
+        function createMessageForm(notification) {
+            const isStudentApp = notification.source === 'student-applications';
+            const formType = isStudentApp ? 'Student' : 'Staff';
+            
+            return `
+                <h3 class="form-title">
+                    <i class="fas fa-paper-plane"></i> Send Message to ${formType} Applicant
+                </h3>
+                <div class="status-message" id="status-${notification.id}"></div>
+                <form id="messageForm-${notification.id}" class="message-form">
+                    <div class="form-group">
+                        <label for="applicantName-${notification.id}">Applicant Name</label>
+                        <input type="text" id="applicantName-${notification.id}" value="${notification.applicantName}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="applicantEmail-${notification.id}">Applicant Email</label>
+                        <input type="email" id="applicantEmail-${notification.id}" value="${notification.applicantEmail}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="applicationId-${notification.id}">Application ID</label>
+                        <input type="text" id="applicationId-${notification.id}" value="${notification.applicationId}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject-${notification.id}">Subject</label>
+                        <input type="text" id="subject-${notification.id}" value="Regarding your ${isStudentApp ? notification.program : notification.position} application" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="messageType-${notification.id}">Message Type</label>
+                        <select id="messageType-${notification.id}" required>
+                            <option value="">Select message type</option>
+                            <option value="request_info">Request Additional Information</option>
+                            <option value="interview">Schedule Interview</option>
+                            <option value="acceptance">Application Acceptance</option>
+                            <option value="rejection">Application Rejection</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-${notification.id}">Message</label>
+                        <textarea id="message-${notification.id}" placeholder="Type your message to the applicant..." required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" data-cancel="${notification.id}">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </div>
+                </form>
+            `;
+        }
+
+        // Attach event listeners to forms
+        function attachFormEventListeners() {
+            // Attach form submit listeners
+            document.querySelectorAll('.message-form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const notificationId = this.id.split('-')[1];
+                    handleFormSubmit(notificationId);
+                });
+            });
+            
+            // Attach cancel button listeners
+            document.querySelectorAll('[data-cancel]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const notificationId = this.getAttribute('data-cancel');
+                    toggleMessageForm(notificationId);
+                });
+            });
+        }
+
+        // Toggle message form visibility
+        function toggleMessageForm(notificationId) {
+            if (openMessageFormId === notificationId) {
+                openMessageFormId = null;
+            } else {
+                openMessageFormId = notificationId;
+            }
+            renderNotifications();
+        }
+
+        // Handle form submission
+        function handleFormSubmit(notificationId) {
+            const notification = notifications.find(n => n.id == notificationId);
+            if (!notification) return;
+            
+            const subject = document.getElementById(`subject-${notificationId}`).value;
+            const messageType = document.getElementById(`messageType-${notificationId}`).value;
+            const message = document.getElementById(`message-${notificationId}`).value;
+            const statusElement = document.getElementById(`status-${notificationId}`);
+            
+            // Validate form
+            if (!subject || !messageType || !message) {
+                statusElement.textContent = "Please fill in all required fields.";
+                statusElement.className = "status-message error";
+                return;
+            }
+            
+            // Simulate sending message (in real app, this would be an API call)
+            statusElement.textContent = `Message sent successfully to ${notification.applicantName}.`;
+            statusElement.className = "status-message success";
+            
+            // Reset form after 3 seconds
+            setTimeout(() => {
+                statusElement.className = "status-message";
+                document.getElementById(`subject-${notificationId}`).value = `Regarding your ${notification.source === 'student-applications' ? notification.program : notification.position} application`;
+                document.getElementById(`messageType-${notificationId}`).value = "";
+                document.getElementById(`message-${notificationId}`).value = "";
+            }, 3000);
+        }
+
+        // Show notification details in modal
+        function showNotificationDetails(id) {
+            const notification = notifications.find(n => n.id === id);
+            if (!notification) return;
+            
+            currentNotificationId = id;
+            
+            // Update modal title
+            modalTitle.textContent = notification.title;
+            
+            // Update notification details
+            const sourceInfo = sourceMap[notification.source];
+            notificationDetail.innerHTML = `
+                <div class="detail-item">
+                    <div class="detail-label">Source</div>
+                    <div class="detail-value">
+                        <i class="${sourceInfo.icon}"></i> ${sourceInfo.name}
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Category</div>
+                    <div class="detail-value">${notification.category}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Priority</div>
+                    <div class="detail-value">
+                        <span class="priority ${notification.priority}">${notification.priority.toUpperCase()}</span>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Date & Time</div>
+                    <div class="detail-value">${notification.date} • ${notification.time}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Action Required</div>
+                    <div class="detail-value">${notification.actionRequired ? 'Yes' : 'No'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Detailed Information</div>
+                    <div class="detail-value">${notification.detailedContent}</div>
+                </div>
+            `;
+            
+            // Add application details if it's an application notification
+            if (notification.source === 'student-applications' || notification.source === 'staff-applications') {
+                const appType = notification.source === 'student-applications' ? 'Student' : 'Staff';
+                notificationDetail.innerHTML += `
+                    <div class="application-details">
+                        <h4>${appType} Application Details</h4>
+                        <div class="detail-row">
+                            <div class="detail-label">Applicant Name:</div>
+                            <div class="detail-value">${notification.applicantName}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Email:</div>
+                            <div class="detail-value">${notification.applicantEmail}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Phone:</div>
+                            <div class="detail-value">${notification.applicantPhone}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">${appType === 'Student' ? 'Program' : 'Position'}:</div>
+                            <div class="detail-value">${appType === 'Student' ? notification.program : notification.position}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Application ID:</div>
+                            <div class="detail-value">${notification.applicationId}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Status:</div>
+                            <div class="detail-value">${notification.status}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Submission Date:</div>
+                            <div class="detail-value">${notification.submissionDate}</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Show the modal
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Mark as read when viewing details
+            if (!notification.read) {
+                markAsRead(id);
+            }
+        }
+
+        // Close the modal
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Mark a single notification as read
+        function markAsRead(id) {
+            const notification = notifications.find(n => n.id === id);
+            if (notification && !notification.read) {
+                notification.read = true;
+                renderNotifications();
+                updateUnreadCount();
+            }
+        }
+
+        // Mark all notifications as read
+        function markAllAsRead() {
+            notifications.forEach(notification => {
+                notification.read = true;
+            });
+            renderNotifications();
+            updateUnreadCount();
+        }
+
+        // Update unread count badge
+        function updateUnreadCount() {
+            const unreadCount = notifications.filter(n => !n.read).length;
+            unreadCountElement.textContent = unreadCount;
+            
+            // Hide badge if no unread notifications
+            if (unreadCount === 0) {
+                unreadCountElement.style.display = 'none';
+            } else {
+                unreadCountElement.style.display = 'flex';
+            }
+        }
+
+        // Initialize dashboard when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
 </body>
 </html>
