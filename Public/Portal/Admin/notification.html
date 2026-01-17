@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Notifications</title>
+    <title>Notification Center</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Previous CSS styles remain the same, adding some new styles for separated notifications */
-        
-           * {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -16,2232 +14,542 @@
         }
         
         body {
-            background-color: #f5f7fb;
+            background-color: #f5f7fa;
             color: #333;
             line-height: 1.6;
-            overflow-x: hidden;
+            padding: 20px;
+            min-height: 100vh;
         }
         
         .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .notification-center {
             display: flex;
-            min-height: 100vh;
-            transition: transform 0.3s ease;
+            flex-direction: column;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
         }
         
-        /* Mobile Header */
-        .mobile-header {
-            display: none;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 900;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        /* Navigation styles */
+        .nav-container {
+            background-color: #2c3e50;
+            padding: 0;
         }
         
-        .mobile-header .logo {
+        .nav-tabs {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            font-size: 18px;
+            flex-wrap: wrap;
+            justify-content: center;
+            list-style: none;
         }
         
-        .mobile-header .logo i {
-            color: #4dabf7;
+        .nav-tab {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
         }
         
-        .mobile-menu-btn {
+        .nav-tab-btn {
             background: none;
             border: none;
-            color: white;
-            font-size: 24px;
+            color: #ecf0f1;
+            padding: 18px 15px;
+            font-size: 1rem;
             cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            gap: 10px;
         }
         
-        .mobile-menu-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        .nav-tab-btn i {
+            font-size: 1.2rem;
         }
         
-        /* Sidebar Styles */
-        .sidebar {
-            width: 270px;
-            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+        .nav-tab-btn:hover {
+            background-color: #34495e;
             color: white;
-            padding: 25px 0;
-            transition: all 0.3s;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 1000;
-            overflow-y: auto;
         }
         
-        .sidebar-header {
-            padding: 0 25px 25px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        .nav-tab-btn.active {
+            background-color: #34495e;
+            border-bottom: 3px solid #3498db;
+            color: white;
+        }
+        
+        /* Content area */
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            min-height: 500px;
+        }
+        
+        .content-header {
             margin-bottom: 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        
-        .sidebar-header h2 {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            font-size: 20px;
-        }
-        
-        .sidebar-header i {
-            color: #4dabf7;
-        }
-        
-        .close-sidebar {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        
-        .close-sidebar:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        .nav-links {
-            list-style: none;
-            max-height: calc(100vh - 150px);
-            overflow-y: auto;
-        }
-        
-        .nav-links li {
-            padding: 14px 25px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            border-left: 3px solid transparent;
-        }
-        
-        .nav-links li:hover, .nav-links li.active {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-left: 3px solid #4dabf7;
-        }
-        
-        .nav-links li i {
-            width: 20px;
-        }
-        
-        /* Overlay for mobile */
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        /* Main Content Styles */
-        .main-content {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-        }
-        
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
             flex-wrap: wrap;
             gap: 15px;
         }
         
-        .header h1 {
-            color: #2a5298;
-            font-size: 28px;
+        .content-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
         }
         
-        .header-controls {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        
-        .notification-badge {
-            position: relative;
-            cursor: pointer;
-        }
-        
-        .notification-badge i {
-            font-size: 22px;
-            color: #2a5298;
-        }
-        
-        .badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background-color: #ff4757;
+        .notification-count {
+            background-color: #3498db;
             color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        /* Notification list */
+        .notification-list {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
+            flex-direction: column;
+            gap: 20px;
         }
         
-        /* Filter Buttons */
-        .filter-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
+        .notification-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         
-        .filter-btn {
-            padding: 10px 20px;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .filter-btn:hover {
-            background-color: #f1f5fd;
-            border-color: #2a5298;
-        }
-        
-        .filter-btn.active {
-            background-color: #2a5298;
-            color: white;
-            border-color: #2a5298;
-        }
-        
-        /* Notifications Grid */
-        .notifications-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-        }
-        
-        .notification-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-            border-left: 4px solid #2a5298;
-        }
-        
-        .notification-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        .notification-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.08);
         }
         
         .notification-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .source {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .source-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-        }
-        
-        .main-dashboard .source-icon {
-            background-color: #4dabf7;
-        }
-        
-        .teachers .source-icon {
-            background-color: #20c997;
-        }
-        
-        .students .source-icon {
-            background-color: #ffa502;
-        }
-        
-        .principal .source-icon {
-            background-color: #9c88ff;
-        }
-        
-        .vice-principal .source-icon {
-            background-color: #fd79a8;
-        }
-        
-        .supervisors .source-icon {
-            background-color: #00cec9;
-        }
-        
-        .student-applications .source-icon {
-            background-color: #ff6b81;
-        }
-        
-        .staff-applications .source-icon {
-            background-color: #a55eea;
-        }
-        
-        .staff .source-icon {
-            background-color: #a55eea;
-        }
-        
-        .source-name {
-            font-weight: 600;
-            font-size: 16px;
-        }
-        
-        .time {
-            color: #888;
-            font-size: 14px;
+            align-items: flex-start;
+            margin-bottom: 10px;
         }
         
         .notification-title {
             font-weight: 600;
-            margin-bottom: 10px;
-            color: #2a5298;
+            color: #2c3e50;
+            font-size: 1.1rem;
         }
         
-        .notification-content {
+        .notification-time {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+        }
+        
+        .notification-message {
             color: #555;
             margin-bottom: 15px;
-            font-size: 15px;
+            line-height: 1.5;
         }
         
-        .notification-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .priority {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-        }
-        
-        .priority.high {
-            background-color: #ffeaea;
-            color: #ff4757;
-        }
-        
-        .priority.medium {
-            background-color: #fff4e6;
-            color: #ffa502;
-        }
-        
-        .priority.low {
-            background-color: #e6f7ff;
-            color: #4dabf7;
-        }
-        
-        .card-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .view-btn, .mark-read, .message-btn {
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-            border: none;
-            font-weight: 500;
-        }
-        
-        .view-btn {
-            background-color: #2a5298;
-            color: white;
-        }
-        
-        .view-btn:hover {
-            background-color: #1e3c72;
-        }
-        
-        .message-btn {
-            background-color: #20c997;
-            color: white;
-        }
-        
-        .message-btn:hover {
-            background-color: #1ba87e;
-        }
-        
-        .mark-read {
-            background-color: #f1f5fd;
-            color: #2a5298;
-        }
-        
-        .mark-read:hover {
-            background-color: #e1e9f9;
-        }
-        
-        /* Message Form Container */
-        .message-form-container {
-            margin-top: 15px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 4px solid #20c997;
-            display: none;
-        }
-        
-        .message-form-container.active {
-            display: block;
-        }
-        
-        .form-title {
-            color: #2a5298;
-            margin-bottom: 15px;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .form-title i {
-            color: #20c997;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #555;
-        }
-        
-        .form-group input, 
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 15px;
-            transition: border-color 0.3s;
-        }
-        
-        .form-group input:focus, 
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #2a5298;
-        }
-        
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-        
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 20px;
-        }
-        
-        .btn {
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary {
-            background-color: #2a5298;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background-color: #1e3c72;
-        }
-        
-        .btn-secondary {
-            background-color: #f1f5fd;
-            color: #2a5298;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #e1e9f9;
-        }
-        
-        /* Status Messages */
-        .status-message {
-            padding: 12px 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        
-        .status-message.success {
-            background-color: #d4edda;
-            color: #155724;
-            border-left: 4px solid #28a745;
-            display: block;
-        }
-        
-        .status-message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border-left: 4px solid #dc3545;
-            display: block;
-        }
-        
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-            padding: 20px;
-        }
-        
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .modal {
-            background-color: white;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 700px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transform: translateY(-20px);
-            transition: transform 0.3s;
-        }
-        
-        .modal-overlay.active .modal {
-            transform: translateY(0);
-        }
-        
-        .modal-header {
-            padding: 25px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .modal-header h2 {
-            color: #2a5298;
-            font-size: 22px;
-        }
-        
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: #888;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-        
-        .close-modal:hover {
-            color: #ff4757;
-        }
-        
-        .modal-body {
-            padding: 25px;
-        }
-        
-        .notification-detail {
-            margin-bottom: 25px;
-        }
-        
-        .detail-item {
-            margin-bottom: 15px;
-        }
-        
-        .detail-label {
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 5px;
-            display: block;
-        }
-        
-        .detail-value {
-            color: #333;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            border-left: 3px solid #2a5298;
-        }
-        
-        /* Application Details */
-        .application-details {
-            background-color: #f0f7ff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border-left: 4px solid #4dabf7;
-        }
-        
-        .application-details h4 {
-            color: #2a5298;
-            margin-bottom: 10px;
-        }
-        
-        .detail-row {
-            display: flex;
-            margin-bottom: 8px;
-        }
-        
-        .detail-label {
-            min-width: 150px;
-            font-weight: 600;
-            color: #555;
-        }
-        
-        .detail-value {
-            flex: 1;
-            color: #333;
-            padding: 0;
-            background: none;
-            border: none;
-        }
-        
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            grid-column: 1 / -1;
-        }
-        
-        .empty-state i {
-            font-size: 60px;
-            color: #ddd;
-            margin-bottom: 20px;
-        }
-        
-        .empty-state h3 {
-            color: #888;
-            margin-bottom: 10px;
-        }
-        
-        /* Loading Spinner */
-        .loading-spinner {
-            display: none;
-            text-align: center;
-            padding: 40px;
-            grid-column: 1 / -1;
-        }
-        
-        .loading-spinner.active {
-            display: block;
-        }
-        
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #2a5298;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Global Status Messages */
-        .global-status {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 2000;
-            max-width: 350px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: all 0.3s ease;
-        }
-        
-        .global-status.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .global-status.success {
-            background-color: #d4edda;
-            color: #155724;
-            border-left: 4px solid #28a745;
-        }
-        
-        .global-status.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border-left: 4px solid #dc3545;
-        }
-        
-        /* Responsive Styles */
-        @media (max-width: 1200px) {
-            .sidebar {
-                width: 250px;
-            }
-            
-            .notifications-grid {
-                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            }
-        }
-        
-        @media (max-width: 992px) {
-            .notifications-grid {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            }
-            
-            .modal {
-                max-width: 90%;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .mobile-header {
-                display: flex;
-            }
-            
-            .main-content {
-                padding-top: 80px;
-                padding-left: 20px;
-                padding-right: 20px;
-            }
-            
-            .sidebar {
-                position: fixed;
-                left: -270px;
-                top: 0;
-                bottom: 0;
-                z-index: 1000;
-                transition: left 0.3s ease;
-                width: 270px;
-            }
-            
-            .sidebar.active {
-                left: 0;
-            }
-            
-            .close-sidebar {
-                display: block;
-            }
-            
-            .container {
-                margin-top: 70px;
-            }
-            
-            .filter-buttons {
-                overflow-x: auto;
-                padding-bottom: 10px;
-                margin-bottom: 20px;
-                gap: 8px;
-            }
-            
-            .filter-buttons::-webkit-scrollbar {
-                height: 5px;
-            }
-            
-            .filter-buttons::-webkit-scrollbar-thumb {
-                background-color: rgba(42, 82, 152, 0.3);
-                border-radius: 10px;
-            }
-            
-            .filter-btn {
-                flex-shrink: 0;
-                padding: 8px 15px;
-                font-size: 14px;
-            }
-            
-            .notifications-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .notification-card {
-                padding: 20px;
-            }
-            
-            .notification-footer {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            
-            .card-buttons {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .modal-header {
-                padding: 20px;
-            }
-            
-            .modal-body {
-                padding: 20px;
-            }
-            
-            .form-actions {
-                flex-direction: column;
-            }
-            
-            .form-actions .btn {
-                width: 100%;
-            }
-            
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                margin-bottom: 20px;
-            }
-            
-            .header h1 {
-                font-size: 24px;
-            }
-            
-            .header-controls {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .modal {
-                max-width: 95%;
-            }
-            
-            .detail-row {
-                flex-direction: column;
-                margin-bottom: 15px;
-            }
-            
-            .detail-label {
-                min-width: auto;
-                margin-bottom: 5px;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .mobile-header {
-                padding: 15px;
-            }
-            
-            .main-content {
-                padding: 80px 15px 20px;
-            }
-            
-            .notification-card {
-                padding: 15px;
-            }
-            
-            .card-buttons {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .card-buttons button {
-                width: 100%;
-            }
-        }
-        
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .notifications-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            }
-            
-            .sidebar {
-                width: 220px;
-            }
-            
-            .nav-links li {
-                padding: 12px 20px;
-            }
-        }
-        /* Category Containers */
-        .category-container {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .category-container.active {
-            display: block;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .category-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #2a5298;
-        }
-        
-        .category-header h2 {
-            color: #2a5298;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .category-stats {
-            display: flex;
-            gap: 15px;
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        /* Add to existing CSS */
-        .notification-card.unread {
-            border-left: 4px solid #ff4757;
-        }
-        
-        .category-empty {
-            text-align: center;
-            padding: 50px 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .category-empty i {
-            font-size: 60px;
-            color: #ddd;
-            margin-bottom: 20px;
-        }
-        
-        .category-empty h3 {
-            color: #888;
-            margin-bottom: 10px;
-        }
-        
-        /* Notification Actions */
         .notification-actions {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
         }
         
-        .action-btn {
-            padding: 8px 15px;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        .btn {
+            padding: 8px 18px;
+            border-radius: 4px;
+            border: none;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
         }
         
-        .action-btn:hover {
-            background-color: #f1f5fd;
-            border-color: #2a5298;
-        }
-        
-        .action-btn.active {
-            background-color: #2a5298;
+        .btn-detail {
+            background-color: #3498db;
             color: white;
-            border-color: #2a5298;
         }
         
+        .btn-detail:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-message {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+        }
+        
+        .btn-message:hover {
+            background-color: #d5dbdb;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #bdc3c7;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tab {
+                min-width: 100%;
+            }
+            
+            .nav-tab-btn {
+                padding: 15px;
+                justify-content: flex-start;
+                padding-left: 25px;
+            }
+            
+            .content-container {
+                padding: 20px;
+            }
+            
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .notification-actions {
+                flex-wrap: wrap;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .notification-item {
+                padding: 15px;
+            }
+            
+            .notification-header {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .btn {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
-    <!-- Global Status Messages Container -->
-    <div id="globalStatusContainer"></div>
-
-    <!-- Mobile Header -->
-    <div class="mobile-header">
-        <div class="logo">
-            <i class="fas fa-tachometer-alt"></i>
-            <span>Admin Dashboard</span>
-        </div>
-        <button class="mobile-menu-btn" id="mobileMenuBtn">
-            <i class="fas fa-bars"></i>
-        </button>
-    </div>
-
-    <!-- Sidebar Overlay for Mobile -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
     <div class="container">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h2>
-                <button class="close-sidebar" id="closeSidebar">
-                    <i class="fas fa-times"></i>
-                </button>
+        <header>
+            <h1>Notification Center</h1>
+            <p class="subtitle">Stay updated with the latest notifications from your dashboard</p>
+        </header>
+        
+        <main class="notification-center">
+            <!-- Navigation Tabs -->
+            <div class="nav-container">
+                <ul class="nav-tabs">
+                    <li class="nav-tab">
+                        <button class="nav-tab-btn active" data-tab="staff">
+                            <i class="fas fa-users"></i>
+                            <span>Staff</span>
+                        </button>
+                    </li>
+                    <li class="nav-tab">
+                        <button class="nav-tab-btn" data-tab="student">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Student</span>
+                        </button>
+                    </li>
+                    <li class="nav-tab">
+                        <button class="nav-tab-btn" data-tab="staff-app">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Staff Application</span>
+                        </button>
+                    </li>
+                    <li class="nav-tab">
+                        <button class="nav-tab-btn" data-tab="student-app">
+                            <i class="fas fa-file-signature"></i>
+                            <span>Student Application</span>
+                        </button>
+                    </li>
+                    <li class="nav-tab">
+                        <button class="nav-tab-btn" data-tab="comment">
+                            <i class="fas fa-comments"></i>
+                            <span>Comment from Dashboard</span>
+                        </button>
+                    </li>
+                </ul>
             </div>
-            <ul class="nav-links">
-                <!-- <li class="active" data-filter="all">
-                    <i class="fas fa-bell"></i> All Notifications
-                </li> -->
-                <li data-filter="main">
-                    <i class="fas fa-home"></i> Main Dashboard
-                </li>
-                <li data-filter="teachers">
-                    <i class="fas fa-chalkboard-teacher"></i> Teachers
-                </li>
-                <li data-filter="students">
-                    <i class="fas fa-user-graduate"></i> Students
-                </li>
-                <li data-filter="principal">
-                    <i class="fas fa-user-tie"></i> Principal
-                </li>
-                <li data-filter="vice-principal">
-                    <i class="fas fa-user-shield"></i> Vice Principal
-                </li>
-                <li data-filter="supervisors">
-                    <i class="fas fa-clipboard-check"></i> Supervisors
-                </li>
-                <li data-filter="student-applications">
-                    <i class="fas fa-file-alt"></i> Student Applications
-                </li>
-                <li data-filter="staff-applications">
-                    <i class="fas fa-briefcase"></i> Staff Applications
-                </li>
-                <li data-filter="staff">
-                    <i class="fas fa-users"></i> Staff
-                </li>
-            </ul>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="header">
-                <h1>Notifications Center</h1>
-                <div class="header-controls">
-                    <div class="notification-badge">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge" id="unreadCount">0</span>
-                    </div>
-                    <button id="markAllRead" class="filter-btn">
-                        <i class="fas fa-check-double"></i> Mark All as Read
-                    </button>
+            
+            <!-- Content Area -->
+            <div class="content-container">
+                <div class="content-header">
+                    <h2 class="content-title" id="content-title">Staff Notifications</h2>
+                    <div class="notification-count" id="notification-count">4 New</div>
+                </div>
+                
+                <div class="notification-list" id="notification-list">
+                    <!-- Notifications will be loaded here by JavaScript -->
                 </div>
             </div>
-
-            <!-- Filter Buttons
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="main">Main Dashboard</button>
-                <button class="filter-btn" data-filter="teachers">Teachers</button>
-                <button class="filter-btn" data-filter="students">Students</button>
-                <button class="filter-btn" data-filter="principal">Principal</button>
-                <button class="filter-btn" data-filter="vice-principal">Vice Principal</button>
-                <button class="filter-btn" data-filter="supervisors">Supervisors</button>
-                <button class="filter-btn" data-filter="student-applications">Student Apps</button>
-                <button class="filter-btn" data-filter="staff-applications">Staff Apps</button>
-                <button class="filter-btn" data-filter="staff">Staff</button>
-            </div> -->
-
-            <!-- Loading Spinner -->
-            <div class="loading-spinner" id="loadingSpinner">
-                <div class="spinner"></div>
-                <p>Loading notifications...</p>
-            </div>
-
-            <!-- All Notifications Container -->
-            <div id="category-all" class="category-container active">
-                <div class="category-header">
-                    <h2><i class="fas fa-bell"></i> All Notifications</h2>
-                    <div class="category-stats">
-                        <span class="stat-item" id="all-total">Total: 0</span>
-                        <span class="stat-item" id="all-unread">Unread: 0</span>
-                    </div>
-                </div>
-                <div class="notification-actions">
-                    <button class="action-btn" id="refresh-all">
-                        <i class="fas fa-sync-alt"></i> Refresh All
-                    </button>
-                    <button class="action-btn" id="mark-all-category-read">
-                        <i class="fas fa-check-double"></i> Mark All as Read
-                    </button>
-                </div>
-                <!-- <div class="notifications-grid" id="notifications-all">
-                     All notifications will be displayed here 
-                </div> -->
-            </div>
-
-            <!-- Main Dashboard Notifications Container -->
-            <div id="category-main" class="category-container">
-                <div class="category-header">
-                    <h2><i class="fas fa-home"></i> Main Dashboard</h2>
-                    <div class="category-stats">
-                        <span class="stat-item" id="main-total">Total: 0</span>
-                        <span class="stat-item" id="main-unread">Unread: 0</span>
-                    </div>
-                </div>
-                <div class="notification-actions">
-                    <button class="action-btn" id="refresh-main">
-                        <i class="fas fa-sync-alt"></i> Refresh
-                    </button>
-                    <button class="action-btn" id="mark-main-read">
-                        <i class="fas fa-check-double"></i> Mark All as Read
-                    </button>
-                </div>
-                <div class="notifications-grid" id="notifications-main">
-                    <!-- Main dashboard notifications will be displayed here -->
-                </div>
-            </div>
-
-            <!-- Teachers Notifications Container -->
-            <div id="category-teachers" class="category-container">
-                <div class="category-header">
-                    <h2><i class="fas fa-chalkboard-teacher"></i> Teachers</h2>
-                    <div class="category-stats">
-                        <span class="stat-item" id="teachers-total">Total: 0</span>
-                        <span class="stat-item" id="teachers-unread">Unread: 0</span>
-                    </div>
-                </div>
-                <div class="notification-actions">
-                    <button class="action-btn" id="refresh-teachers">
-                        <i class="fas fa-sync-alt"></i> Refresh
-                    </button>
-                    <button class="action-btn" id="mark-teachers-read">
-                        <i class="fas fa-check-double"></i> Mark All as Read
-                    </button>
-                </div>
-                <div class="notifications-grid" id="notifications-teachers">
-                    <!-- Teachers notifications will be displayed here -->
-                </div>
-            </div>
-
-            <!-- Students Notifications Container -->
-            <div id="category-students" class="category-container">
-                <div class="category-header">
-                    <h2><i class="fas fa-user-graduate"></i> Students</h2>
-                    <div class="category-stats">
-                        <span class="stat-item" id="students-total">Total: 0</span>
-                        <span class="stat-item" id="students-unread">Unread: 0</span>
-                    </div>
-                </div>
-                <div class="notification-actions">
-                    <button class="action-btn" id="refresh-students">
-                        <i class="fas fa-sync-alt"></i> Refresh
-                    </button>
-                    <button class="action-btn" id="mark-students-read">
-                        <i class="fas fa-check-double"></i> Mark All as Read
-                    </button>
-                </div>
-                <div class="notifications-grid" id="notifications-students">
-                    <!-- Students notifications will be displayed here -->
-                </div>
-            </div>
-
-            <!-- Principal Notifications Container -->
-            <div id="category-principal" class="category-container">
-                <div class="category-header">
-                    <h2><i class="fas fa-user-tie"></i> Principal</h2>
-                    <div class="category-stats">
-                        <span class="stat-item" id="principal-total">Total: 0</span>
-                        <span class="stat-item" id="principal-unread">Unread: 0</span>
-                    </div>
-                </div>
-                <div class="notification-actions">
-                    <button class="action-btn" id="refresh-principal">
-                        <i class="fas fa-sync-alt"></i> Refresh
-                    </button>
-                    <button class="action-btn" id="mark-principal-read">
-                        <i class="fas fa-check-double"></i> Mark All as Read
-                    </button>
-                </div>
-                <div class="notifications-grid" id="notifications-principal">
-                    <!-- Principal notifications will be displayed here -->
-                </div>
-            </div>
-
-            <!-- Vice Principal Notifications Container -->
-            <div id="category-vice-principal" class="category-container">
-                <div class="category-header">
-                    <h2><i class="fas fa-user-shield"></i> Vice Principal</h2>
-                    <div class="category-stats">
-                        <span class="stat-item" id="vice-principal-total">Total: 0</span>
-                        <span class="stat-item" id="vice-principal-unread">Unread: 0</span>
-                    </div>
-                </div>
-                <div class="notification-actions">
-                    <button class="action-btn" id="refresh-vice-principal">
-                        <i class="fas fa-sync-alt"></i> Refresh
-                    </button>
-                    <button class="action-btn" id="mark-vice-principal-read">
-                        <i class="fas fa-check-double"></i> Mark All as Read
-                    </button>
-                </div>
-                <div class="notifications-grid" id="notifications-vice-principal">
-                    <!-- Vice Principal notifications will be displayed here -->
-                </div>
-            </div>
-
-            <!-- Supervisors Notifications Container -->
-            <div id="category-supervisors" class="category-container">
-                <div class="category-header">
-                    <h2><i class="fas fa-clipboard-check"></i> Supervisors</h2>
-                    <div class="category-stats">
-                        <span class="stat-item" id="supervisors-total">Total: 0</span>
-                        <span class="stat-item" id="supervisors-unread">Unread: 0</span>
-                    </div>
-                </div>
-                <div class="notification-actions">
-                    <button class="action-btn" id="refresh-supervisors">
-                        <i class="fas fa-sync-alt"></i> Refresh
-                    </button>
-                    <button class="action-btn" id="mark-supervisors-read">
-                        <i class="fas fa-check-double"></i> Mark All as Read
-                    </button>
-                </div>
-                <div class="notifications-grid" id="notifications-supervisors">
-                    <!-- Supervisors notifications will be displayed here -->
-                </div>
-            </div>
-
-            <!-- Student Applications Container -->
-            <div id="category-student-applications" class="category-container">
-                <div class="category-header">
-                    <h2><i class="fas fa-file-alt"></i> Student Applications</h2>
-                    <div class="category-stats">
-                        <span class="stat-item" id="student-apps-total">Total: 0</span>
-                        <span class="stat-item" id="student-apps-unread">Unread: 0</span>
-                    </div>
-                </div>
-                <div class="notification-actions">
-                    <button class="action-btn" id="refresh-student-apps">
-                        <i class="fas fa-sync-alt"></i> Refresh
-                    </button>
-                    <button class="action-btn" id="mark-student-apps-read">
-                        <i class="fas fa-check-double"></i> Mark All as Read
-                    </button>
-                </div>
-                <div class="notifications-grid" id="notifications-student-applications">
-                    <!-- Student applications notifications will be displayed here -->
-                </div>
-            </div>
-
-            <!-- Staff Applications Container -->
-            <div id="category-staff-applications" class="category-container">
-                <div class="category-header">
-                    <h2><i class="fas fa-briefcase"></i> Staff Applications</h2>
-                    <div class="category-stats">
-                        <span class="stat-item" id="staff-apps-total">Total: 0</span>
-                        <span class="stat-item" id="staff-apps-unread">Unread: 0</span>
-                    </div>
-                </div>
-                <div class="notification-actions">
-                    <button class="action-btn" id="refresh-staff-apps">
-                        <i class="fas fa-sync-alt"></i> Refresh
-                    </button>
-                    <button class="action-btn" id="mark-staff-apps-read">
-                        <i class="fas fa-check-double"></i> Mark All as Read
-                    </button>
-                </div>
-                <div class="notifications-grid" id="notifications-staff-applications">
-                    <!-- Staff applications notifications will be displayed here -->
-                </div>
-            </div>
-
-            <!-- Staff Notifications Container -->
-            <div id="category-staff" class="category-container">
-                <div class="category-header">
-                    <h2><i class="fas fa-users"></i> Staff</h2>
-                    <div class="category-stats">
-                        <span class="stat-item" id="staff-total">Total: 0</span>
-                        <span class="stat-item" id="staff-unread">Unread: 0</span>
-                    </div>
-                </div>
-                <div class="notification-actions">
-                    <button class="action-btn" id="refresh-staff">
-                        <i class="fas fa-sync-alt"></i> Refresh
-                    </button>
-                    <button class="action-btn" id="mark-staff-read">
-                        <i class="fas fa-check-double"></i> Mark All as Read
-                    </button>
-                </div>
-                <div class="notifications-grid" id="notifications-staff">
-                    <!-- Staff notifications will be displayed here -->
-                </div>
-            </div>
-
         </main>
-    </div>
-
-    <!-- Modal for Notification Details -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal" id="notificationModal">
-            <div class="modal-header">
-                <h2 id="modalTitle">Notification Details</h2>
-                <button class="close-modal" id="closeModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="loading-spinner" id="modalSpinner">
-                    <div class="spinner"></div>
-                    <p>Loading details...</p>
-                </div>
-                <div class="notification-detail" id="notificationDetail">
-                    <!-- Notification details will be inserted here -->
-                </div>
-            </div>
-        </div>
+        
+        <footer>
+            <p>Notification Center &copy; 2023 | All notifications are confidential</p>
+        </footer>
     </div>
 
     <script>
-        // ===========================================
-        // CONFIGURATION AND STATE MANAGEMENT
-        // ===========================================
-
-        // API Endpoints configuration - REPLACE WITH YOUR ACTUAL API ENDPOINTS
-        const API_ENDPOINTS = {
-            // Individual category endpoints
-            GET_ALL_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/all',
-            GET_MAIN_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/main-dashboard',
-            GET_TEACHERS_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/teachers',
-            GET_STUDENTS_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/students',
-            GET_PRINCIPAL_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/principal',
-            GET_VICE_PRINCIPAL_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/vice-principal',
-            GET_SUPERVISORS_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/supervisors',
-            GET_STUDENT_APPS_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/student-applications',
-            GET_STAFF_APPS_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/staff-applications',
-            GET_STAFF_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/staff',
-            
-            // Common endpoints
-            MARK_READ: 'https://api.yourdomain.com/notifications/mark-read',
-            MARK_ALL_READ: 'https://api.yourdomain.com/notifications/mark-all-read',
-            SEND_MESSAGE: 'https://api.yourdomain.com/messages/send',
-            GET_NOTIFICATION_DETAILS: 'https://api.yourdomain.com/notifications'
-        };
-
-        // Source mapping for display
-        const SOURCE_MAP = {
-            "main": { name: "Main Dashboard", icon: "fas fa-home", color: "#4dabf7" },
-            "teachers": { name: "Teachers", icon: "fas fa-chalkboard-teacher", color: "#20c997" },
-            "students": { name: "Students", icon: "fas fa-user-graduate", color: "#ffa502" },
-            "principal": { name: "Principal", icon: "fas fa-user-tie", color: "#9c88ff" },
-            "vice-principal": { name: "Vice Principal", icon: "fas fa-user-shield", color: "#fd79a8" },
-            "supervisors": { name: "Supervisors", icon: "fas fa-clipboard-check", color: "#00cec9" },
-            "student-applications": { name: "Student Applications", icon: "fas fa-file-alt", color: "#ff6b81" },
-            "staff-applications": { name: "Staff Applications", icon: "fas fa-briefcase", color: "#a55eea" },
-            "staff": { name: "Staff", icon: "fas fa-users", color: "#a55eea" }
-        };
-
-        // DOM Elements
-        const categoryContainers = {
-            all: document.getElementById('category-all'),
-            main: document.getElementById('category-main'),
-            teachers: document.getElementById('category-teachers'),
-            students: document.getElementById('category-students'),
-            principal: document.getElementById('category-principal'),
-            vicePrincipal: document.getElementById('category-vice-principal'),
-            supervisors: document.getElementById('category-supervisors'),
-            studentApplications: document.getElementById('category-student-applications'),
-            staffApplications: document.getElementById('category-staff-applications'),
-            staff: document.getElementById('category-staff')
-        };
-
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const navLinks = document.querySelectorAll('.nav-links li');
-        const unreadCountElement = document.getElementById('unreadCount');
-        const markAllReadButton = document.getElementById('markAllRead');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const closeModalButton = document.getElementById('closeModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const notificationDetail = document.getElementById('notificationDetail');
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const closeSidebar = document.getElementById('closeSidebar');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        const modalSpinner = document.getElementById('modalSpinner');
-        const globalStatusContainer = document.getElementById('globalStatusContainer');
-
-        // Application state
-        let currentCategory = 'all';
-        let currentNotificationId = null;
-        let openMessageFormId = null;
-        let isMobile = window.innerWidth <= 768;
-        
-        // Store notifications by category
-        let notificationsByCategory = {
-            all: [],
-            main: [],
-            teachers: [],
-            students: [],
-            principal: [],
-            'vice-principal': [],
-            supervisors: [],
-            'student-applications': [],
-            'staff-applications': [],
-            staff: []
-        };
-
-        // ===========================================
-        // INITIALIZATION
-        // ===========================================
-
-        function initDashboard() {
-            setupEventListeners();
-            loadAllNotifications();
-        }
-
-        function setupEventListeners() {
-            // Filter buttons - Switch between categories
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const category = button.getAttribute('data-filter');
-                    
-                    // Update active button
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    
-                    // Update sidebar
-                    navLinks.forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('data-filter') === category) {
-                            link.classList.add('active');
-                        }
-                    });
-                    
-                    // Switch category
-                    switchCategory(category);
-                    
-                    // Close sidebar on mobile
-                    if (isMobile) closeMobileSidebar();
-                });
-            });
-            
-            // Sidebar navigation
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    const category = link.getAttribute('data-filter');
-                    
-                    // Update active nav link
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                    
-                    // Update filter buttons
-                    filterButtons.forEach(btn => {
-                        btn.classList.remove('active');
-                        if (btn.getAttribute('data-filter') === category) {
-                            btn.classList.add('active');
-                        }
-                    });
-                    
-                    // Switch category
-                    switchCategory(category);
-                    
-                    // Close sidebar on mobile
-                    if (isMobile) closeMobileSidebar();
-                });
-            });
-            
-            // Setup refresh buttons for each category
-            setupRefreshButtons();
-            
-            // Setup mark all read buttons for each category
-            setupMarkReadButtons();
-            
-            // Global mark all read
-            markAllReadButton.addEventListener('click', markAllAsRead);
-            
-            // Modal controls
-            closeModalButton.addEventListener('click', closeModal);
-            modalOverlay.addEventListener('click', (e) => {
-                if (e.target === modalOverlay) closeModal();
-            });
-            
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-                    closeModal();
+        // Sample notification data for each category
+        const notificationData = {
+            student: [
+                {
+                    id: 1,
+                    title: "Exam Schedule Released",
+                    message: "Final exam schedule for the current semester is now available on the student portal.",
+                    time: "5 hours ago",
+                    type: "academic"
+                },
+                {
+                    id: 2,
+                    title: "Library Book Due Reminder",
+                    message: "You have 3 books due for return in 2 days. Please renew or return them to avoid late fees.",
+                    time: "1 day ago",
+                    type: "reminder"
                 }
-            });
+            ],
+            "staff-app": [
+                {
+                    id: 1,
+                    title: "Application Submitted",
+                    message: "Your application for professional development grant has been submitted successfully.",
+                    time: "3 hours ago",
+                    type: "submission"
+                },
+                {
+                    id: 2,
+                    title: "Application Under Review",
+                    message: "Your leave application for June 15-20 is currently under review by the department head.",
+                    time: "1 day ago",
+                    type: "review"
+                },
+                {
+                    id: 3,
+                    title: "Application Approved",
+                    message: "Your request for software license has been approved. You will receive access within 24 hours.",
+                    time: "4 days ago",
+                    type: "approval"
+                }
+            ],
+            "student-app": [
+                {
+                    id: 1,
+                    title: "Scholarship Application Received",
+                    message: "Your scholarship application has been received and is currently being processed.",
+                    time: "1 day ago",
+                    type: "submission"
+                },
+                {
+                    id: 2,
+                    title: "Course Registration Approved",
+                    message: "Your course registration for Advanced Mathematics has been approved by the department.",
+                    time: "2 days ago",
+                    type: "approval"
+                },
+                {
+                    id: 3,
+                    title: "Dormitory Application Status",
+                    message: "Your dormitory application is in the waiting list. Current position: 12",
+                    time: "5 days ago",
+                    type: "status"
+                }
+            ],
+            comment: [
+                {
+                    id: 1,
+                    title: "New Comment on Your Post",
+                    message: "John Smith commented on your dashboard post: 'Great analysis! Could you share the source data?'",
+                    time: "1 hour ago",
+                    type: "feedback"
+                },
+                {
+                    id: 2,
+                    title: "Reply to Your Comment",
+                    message: "Jane Doe replied to your comment on the quarterly report dashboard.",
+                    time: "3 hours ago",
+                    type: "reply"
+                },
+                {
+                    id: 3,
+                    title: "Mention in Dashboard Comment",
+                    message: "You were mentioned by Alex Johnson in a comment on the enrollment statistics dashboard.",
+                    time: "1 day ago",
+                    type: "mention"
+                }
+            ]
+        };
+
+        // Function to display notifications for a specific category
+        function displayNotifications(category) {
+            const notificationList = document.getElementById('notification-list');
+            const contentTitle = document.getElementById('content-title');
+            const notificationCount = document.getElementById('notification-count');
             
-            // Mobile sidebar
-            mobileMenuBtn.addEventListener('click', openMobileSidebar);
-            closeSidebar.addEventListener('click', closeMobileSidebar);
-            sidebarOverlay.addEventListener('click', closeMobileSidebar);
+            // Clear current notifications
+            notificationList.innerHTML = '';
             
-            // Window resize
-            window.addEventListener('resize', handleResize);
-        }
-
-        function setupRefreshButtons() {
-            // Setup refresh buttons for each category
-            document.getElementById('refresh-all').addEventListener('click', () => loadAllNotifications());
-            document.getElementById('refresh-main').addEventListener('click', () => loadMainDashboardNotifications());
-            document.getElementById('refresh-teachers').addEventListener('click', () => loadTeachersNotifications());
-            document.getElementById('refresh-students').addEventListener('click', () => loadStudentsNotifications());
-            document.getElementById('refresh-principal').addEventListener('click', () => loadPrincipalNotifications());
-            document.getElementById('refresh-vice-principal').addEventListener('click', () => loadVicePrincipalNotifications());
-            document.getElementById('refresh-supervisors').addEventListener('click', () => loadSupervisorsNotifications());
-            document.getElementById('refresh-student-apps').addEventListener('click', () => loadStudentApplicationsNotifications());
-            document.getElementById('refresh-staff-apps').addEventListener('click', () => loadStaffApplicationsNotifications());
-            document.getElementById('refresh-staff').addEventListener('click', () => loadStaffNotifications());
-        }
-
-        function setupMarkReadButtons() {
-            // Setup mark all read buttons for each category
-            document.getElementById('mark-all-category-read').addEventListener('click', () => markAllInCategoryAsRead('all'));
-            document.getElementById('mark-main-read').addEventListener('click', () => markAllInCategoryAsRead('main'));
-            document.getElementById('mark-teachers-read').addEventListener('click', () => markAllInCategoryAsRead('teachers'));
-            document.getElementById('mark-students-read').addEventListener('click', () => markAllInCategoryAsRead('students'));
-            document.getElementById('mark-principal-read').addEventListener('click', () => markAllInCategoryAsRead('principal'));
-            document.getElementById('mark-vice-principal-read').addEventListener('click', () => markAllInCategoryAsRead('vice-principal'));
-            document.getElementById('mark-supervisors-read').addEventListener('click', () => markAllInCategoryAsRead('supervisors'));
-            document.getElementById('mark-student-apps-read').addEventListener('click', () => markAllInCategoryAsRead('student-applications'));
-            document.getElementById('mark-staff-apps-read').addEventListener('click', () => markAllInCategoryAsRead('staff-applications'));
-            document.getElementById('mark-staff-read').addEventListener('click', () => markAllInCategoryAsRead('staff'));
-        }
-
-        // ===========================================
-        // CATEGORY SWITCHING FUNCTIONS
-        // ===========================================
-
-        function switchCategory(category) {
-            // Hide all category containers
-            Object.values(categoryContainers).forEach(container => {
-                container.classList.remove('active');
-            });
+            // Update title and count
+            const categoryNames = {
+                staff: "Staff",
+                student: "Student",
+                "staff-app": "Staff Application",
+                "student-app": "Student Application",
+                comment: "Comment from Dashboard"
+            };
             
-            // Show selected category container
-            categoryContainers[category].classList.add('active');
-            currentCategory = category;
+            contentTitle.textContent = `${categoryNames[category]} Notifications`;
+            notificationCount.textContent = `${notificationData[category].length} ${notificationData[category].length === 1 ? 'Notification' : 'Notifications'}`;
             
-            // Load category data if not loaded
-            if (notificationsByCategory[category].length === 0 && category !== 'all') {
-                loadCategoryNotifications(category);
-            }
-            
-            // Update statistics for current category
-            updateCategoryStats(category);
-        }
-
-        // ===========================================
-        // INDIVIDUAL CATEGORY API FUNCTIONS
-        // ===========================================
-
-        // Load all notifications
-        async function loadAllNotifications() {
-            try {
-                loadingSpinner.classList.add('active');
-                
-                // API CALL: Get all notifications
-                // Replace with your actual API call
-                const response = await fetch(API_ENDPOINTS.GET_ALL_NOTIFICATIONS);
-                if (!response.ok) throw new Error('Failed to fetch all notifications');
-                
-                const data = await response.json();
-                notificationsByCategory.all = data.notifications || [];
-                
-                // Display notifications
-                displayNotifications('all', notificationsByCategory.all);
-                updateCategoryStats('all');
-                updateGlobalUnreadCount();
-                
-                showGlobalStatus('All notifications loaded successfully', 'success');
-                
-            } catch (error) {
-                console.error('Error loading all notifications:', error);
-                showGlobalStatus('Failed to load all notifications', 'error');
-                showEmptyState('all');
-            } finally {
-                loadingSpinner.classList.remove('active');
-            }
-        }
-
-        // Load main dashboard notifications
-        async function loadMainDashboardNotifications() {
-            try {
-                loadingSpinner.classList.add('active');
-                
-                // API CALL: Get main dashboard notifications
-                const response = await fetch(API_ENDPOINTS.GET_MAIN_NOTIFICATIONS);
-                if (!response.ok) throw new Error('Failed to fetch main dashboard notifications');
-                
-                const data = await response.json();
-                notificationsByCategory.main = data.notifications || [];
-                
-                displayNotifications('main', notificationsByCategory.main);
-                updateCategoryStats('main');
-                updateGlobalUnreadCount();
-                
-                showGlobalStatus('Main dashboard notifications loaded', 'success');
-                
-            } catch (error) {
-                console.error('Error loading main notifications:', error);
-                showGlobalStatus('Failed to load main dashboard notifications', 'error');
-                showEmptyState('main');
-            } finally {
-                loadingSpinner.classList.remove('active');
-            }
-        }
-
-        // Load teachers notifications
-        async function loadTeachersNotifications() {
-            try {
-                loadingSpinner.classList.add('active');
-                
-                // API CALL: Get teachers notifications
-                const response = await fetch(API_ENDPOINTS.GET_TEACHERS_NOTIFICATIONS);
-                if (!response.ok) throw new Error('Failed to fetch teachers notifications');
-                
-                const data = await response.json();
-                notificationsByCategory.teachers = data.notifications || [];
-                
-                displayNotifications('teachers', notificationsByCategory.teachers);
-                updateCategoryStats('teachers');
-                updateGlobalUnreadCount();
-                
-                showGlobalStatus('Teachers notifications loaded', 'success');
-                
-            } catch (error) {
-                console.error('Error loading teachers notifications:', error);
-                showGlobalStatus('Failed to load teachers notifications', 'error');
-                showEmptyState('teachers');
-            } finally {
-                loadingSpinner.classList.remove('active');
-            }
-        }
-
-        // Load students notifications
-        async function loadStudentsNotifications() {
-            try {
-                loadingSpinner.classList.add('active');
-                
-                // API CALL: Get students notifications
-                const response = await fetch(API_ENDPOINTS.GET_STUDENTS_NOTIFICATIONS);
-                if (!response.ok) throw new Error('Failed to fetch students notifications');
-                
-                const data = await response.json();
-                notificationsByCategory.students = data.notifications || [];
-                
-                displayNotifications('students', notificationsByCategory.students);
-                updateCategoryStats('students');
-                updateGlobalUnreadCount();
-                
-                showGlobalStatus('Students notifications loaded', 'success');
-                
-            } catch (error) {
-                console.error('Error loading students notifications:', error);
-                showGlobalStatus('Failed to load students notifications', 'error');
-                showEmptyState('students');
-            } finally {
-                loadingSpinner.classList.remove('active');
-            }
-        }
-
-        // Load principal notifications
-        async function loadPrincipalNotifications() {
-            try {
-                loadingSpinner.classList.add('active');
-                
-                // API CALL: Get principal notifications
-                const response = await fetch(API_ENDPOINTS.GET_PRINCIPAL_NOTIFICATIONS);
-                if (!response.ok) throw new Error('Failed to fetch principal notifications');
-                
-                const data = await response.json();
-                notificationsByCategory.principal = data.notifications || [];
-                
-                displayNotifications('principal', notificationsByCategory.principal);
-                updateCategoryStats('principal');
-                updateGlobalUnreadCount();
-                
-                showGlobalStatus('Principal notifications loaded', 'success');
-                
-            } catch (error) {
-                console.error('Error loading principal notifications:', error);
-                showGlobalStatus('Failed to load principal notifications', 'error');
-                showEmptyState('principal');
-            } finally {
-                loadingSpinner.classList.remove('active');
-            }
-        }
-
-        // Load vice principal notifications
-        async function loadVicePrincipalNotifications() {
-            try {
-                loadingSpinner.classList.add('active');
-                
-                // API CALL: Get vice principal notifications
-                const response = await fetch(API_ENDPOINTS.GET_VICE_PRINCIPAL_NOTIFICATIONS);
-                if (!response.ok) throw new Error('Failed to fetch vice principal notifications');
-                
-                const data = await response.json();
-                notificationsByCategory['vice-principal'] = data.notifications || [];
-                
-                displayNotifications('vice-principal', notificationsByCategory['vice-principal']);
-                updateCategoryStats('vice-principal');
-                updateGlobalUnreadCount();
-                
-                showGlobalStatus('Vice principal notifications loaded', 'success');
-                
-            } catch (error) {
-                console.error('Error loading vice principal notifications:', error);
-                showGlobalStatus('Failed to load vice principal notifications', 'error');
-                showEmptyState('vice-principal');
-            } finally {
-                loadingSpinner.classList.remove('active');
-            }
-        }
-
-        // Load supervisors notifications
-        async function loadSupervisorsNotifications() {
-            try {
-                loadingSpinner.classList.add('active');
-                
-                // API CALL: Get supervisors notifications
-                const response = await fetch(API_ENDPOINTS.GET_SUPERVISORS_NOTIFICATIONS);
-                if (!response.ok) throw new Error('Failed to fetch supervisors notifications');
-                
-                const data = await response.json();
-                notificationsByCategory.supervisors = data.notifications || [];
-                
-                displayNotifications('supervisors', notificationsByCategory.supervisors);
-                updateCategoryStats('supervisors');
-                updateGlobalUnreadCount();
-                
-                showGlobalStatus('Supervisors notifications loaded', 'success');
-                
-            } catch (error) {
-                console.error('Error loading supervisors notifications:', error);
-                showGlobalStatus('Failed to load supervisors notifications', 'error');
-                showEmptyState('supervisors');
-            } finally {
-                loadingSpinner.classList.remove('active');
-            }
-        }
-
-        // Load student applications notifications
-        async function loadStudentApplicationsNotifications() {
-            try {
-                loadingSpinner.classList.add('active');
-                
-                // API CALL: Get student applications notifications
-                const response = await fetch(API_ENDPOINTS.GET_STUDENT_APPS_NOTIFICATIONS);
-                if (!response.ok) throw new Error('Failed to fetch student applications notifications');
-                
-                const data = await response.json();
-                notificationsByCategory['student-applications'] = data.notifications || [];
-                
-                displayNotifications('student-applications', notificationsByCategory['student-applications']);
-                updateCategoryStats('student-applications');
-                updateGlobalUnreadCount();
-                
-                showGlobalStatus('Student applications notifications loaded', 'success');
-                
-            } catch (error) {
-                console.error('Error loading student applications notifications:', error);
-                showGlobalStatus('Failed to load student applications notifications', 'error');
-                showEmptyState('student-applications');
-            } finally {
-                loadingSpinner.classList.remove('active');
-            }
-        }
-
-        // Load staff applications notifications
-        async function loadStaffApplicationsNotifications() {
-            try {
-                loadingSpinner.classList.add('active');
-                
-                // API CALL: Get staff applications notifications
-                const response = await fetch(API_ENDPOINTS.GET_STAFF_APPS_NOTIFICATIONS);
-                if (!response.ok) throw new Error('Failed to fetch staff applications notifications');
-                
-                const data = await response.json();
-                notificationsByCategory['staff-applications'] = data.notifications || [];
-                
-                displayNotifications('staff-applications', notificationsByCategory['staff-applications']);
-                updateCategoryStats('staff-applications');
-                updateGlobalUnreadCount();
-                
-                showGlobalStatus('Staff applications notifications loaded', 'success');
-                
-            } catch (error) {
-                console.error('Error loading staff applications notifications:', error);
-                showGlobalStatus('Failed to load staff applications notifications', 'error');
-                showEmptyState('staff-applications');
-            } finally {
-                loadingSpinner.classList.remove('active');
-            }
-        }
-
-        // Load staff notifications
-        async function loadStaffNotifications() {
-            try {
-                loadingSpinner.classList.add('active');
-                
-                // API CALL: Get staff notifications
-                const response = await fetch(API_ENDPOINTS.GET_STAFF_NOTIFICATIONS);
-                if (!response.ok) throw new Error('Failed to fetch staff notifications');
-                
-                const data = await response.json();
-                notificationsByCategory.staff = data.notifications || [];
-                
-                displayNotifications('staff', notificationsByCategory.staff);
-                updateCategoryStats('staff');
-                updateGlobalUnreadCount();
-                
-                showGlobalStatus('Staff notifications loaded', 'success');
-                
-            } catch (error) {
-                console.error('Error loading staff notifications:', error);
-                showGlobalStatus('Failed to load staff notifications', 'error');
-                showEmptyState('staff');
-            } finally {
-                loadingSpinner.classList.remove('active');
-            }
-        }
-
-        // Generic function to load any category
-        async function loadCategoryNotifications(category) {
-            switch(category) {
-                case 'main':
-                    await loadMainDashboardNotifications();
-                    break;
-                case 'teachers':
-                    await loadTeachersNotifications();
-                    break;
-                case 'students':
-                    await loadStudentsNotifications();
-                    break;
-                case 'principal':
-                    await loadPrincipalNotifications();
-                    break;
-                case 'vice-principal':
-                    await loadVicePrincipalNotifications();
-                    break;
-                case 'supervisors':
-                    await loadSupervisorsNotifications();
-                    break;
-                case 'student-applications':
-                    await loadStudentApplicationsNotifications();
-                    break;
-                case 'staff-applications':
-                    await loadStaffApplicationsNotifications();
-                    break;
-                case 'staff':
-                    await loadStaffNotifications();
-                    break;
-                default:
-                    await loadAllNotifications();
-            }
-        }
-
-        // ===========================================
-        // NOTIFICATION DISPLAY FUNCTIONS
-        // ===========================================
-
-        function displayNotifications(category, notifications) {
-            const container = document.getElementById(`notifications-${category}`);
-            container.innerHTML = '';
-            
-            if (!notifications || notifications.length === 0) {
-                showEmptyState(category);
+            // Check if there are notifications for this category
+            if (notificationData[category].length === 0) {
+                notificationList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="far fa-bell-slash"></i>
+                        <h3>No Notifications</h3>
+                        <p>There are no notifications in this category at the moment.</p>
+                    </div>
+                `;
                 return;
             }
             
-            notifications.forEach(notification => {
-                const card = createNotificationCard(notification, category);
-                container.appendChild(card);
-            });
-            
-            // Attach event listeners to the new cards
-            attachNotificationEventListeners(category);
-        }
-
-        function createNotificationCard(notification, category) {
-            const sourceInfo = SOURCE_MAP[notification.source || category];
-            const isUnread = !notification.read;
-            const cardClass = isUnread ? 'notification-card unread' : 'notification-card';
-            
-            const card = document.createElement('div');
-            card.className = `${cardClass} ${category}`;
-            card.dataset.id = notification.id;
-            
-            card.innerHTML = `
-                <div class="notification-header">
-                    <div class="source">
-                        <div class="source-icon" style="background-color: ${sourceInfo.color}">
-                            <i class="${sourceInfo.icon}"></i>
-                        </div>
-                        <div class="source-name">${sourceInfo.name}</div>
+            // Add notifications to the list
+            notificationData[category].forEach(notification => {
+                const notificationElement = document.createElement('div');
+                notificationElement.className = 'notification-item';
+                
+                // Set border color based on notification type
+                let borderColor = '#3498db'; // default blue
+                if (notification.type === 'approval') borderColor = '#2ecc71';
+                if (notification.type === 'reminder') borderColor = '#f39c12';
+                if (notification.type === 'meeting') borderColor = '#9b59b6';
+                
+                notificationElement.style.borderLeftColor = borderColor;
+                
+                notificationElement.innerHTML = `
+                    <div class="notification-header">
+                        <div class="notification-title">${notification.title}</div>
+                        <div class="notification-time">${notification.time}</div>
                     </div>
-                    <div class="time">${notification.time || 'Recently'}</div>
-                </div>
-                <h3 class="notification-title">${notification.title}</h3>
-                <p class="notification-content">${notification.content}</p>
-                <div class="notification-footer">
-                    <span class="priority ${notification.priority || 'medium'}">
-                        ${(notification.priority || 'medium').toUpperCase()}
-                    </span>
-                    <div class="card-buttons">
-                        ${(category === 'student-applications' || category === 'staff-applications') 
-                            ? `<button class="message-btn" data-id="${notification.id}">
-                                <i class="fas fa-comment"></i> ${isMobile ? '' : 'Message'}
-                               </button>` 
-                            : ''}
-                        <button class="view-btn" data-id="${notification.id}">
-                            <i class="fas fa-eye"></i> ${isMobile ? '' : 'Details'}
-                        </button>
-                        <button class="mark-read" data-id="${notification.id}">
-                            ${notification.read 
-                                ? '<i class="fas fa-check"></i>' + (isMobile ? '' : ' Read') 
-                                : '<i class="fas fa-envelope"></i>' + (isMobile ? '' : ' Mark Read')}
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            return card;
-        }
-
-        function attachNotificationEventListeners(category) {
-            const container = document.getElementById(`notifications-${category}`);
-            
-            // View button
-            container.querySelectorAll('.view-btn').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const notificationId = button.getAttribute('data-id');
-                    const notification = notificationsByCategory[category].find(n => n.id == notificationId);
-                    if (notification) {
-                        showNotificationDetails(notification);
-                    }
-                });
-            });
-            
-            // Mark as read button
-            container.querySelectorAll('.mark-read').forEach(button => {
-                button.addEventListener('click', async (e) => {
-                    e.stopPropagation();
-                    const notificationId = button.getAttribute('data-id');
-                    await markSingleAsRead(notificationId, category);
-                });
-            });
-            
-            // Message button (for applications)
-            container.querySelectorAll('.message-btn').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const notificationId = button.getAttribute('data-id');
-                    toggleMessageForm(notificationId, category);
-                });
-            });
-        }
-
-        // ===========================================
-        // NOTIFICATION ACTION FUNCTIONS
-        // ===========================================
-
-        async function markSingleAsRead(notificationId, category) {
-            try {
-                // API CALL: Mark single notification as read
-                const response = await fetch(API_ENDPOINTS.MARK_READ, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ notificationId, category })
-                });
-                
-                if (!response.ok) throw new Error('Failed to mark as read');
-                
-                // Update local state
-                const notification = notificationsByCategory[category].find(n => n.id == notificationId);
-                if (notification) {
-                    notification.read = true;
-                }
-                
-                // Update display
-                displayNotifications(category, notificationsByCategory[category]);
-                updateCategoryStats(category);
-                updateGlobalUnreadCount();
-                
-                showGlobalStatus('Notification marked as read', 'success');
-                
-            } catch (error) {
-                console.error('Error marking notification as read:', error);
-                showGlobalStatus('Failed to mark notification as read', 'error');
-            }
-        }
-
-        async function markAllInCategoryAsRead(category) {
-            try {
-                // API CALL: Mark all notifications in category as read
-                const response = await fetch(API_ENDPOINTS.MARK_ALL_READ, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ category })
-                });
-                
-                if (!response.ok) throw new Error('Failed to mark all as read');
-                
-                // Update local state
-                notificationsByCategory[category].forEach(notification => {
-                    notification.read = true;
-                });
-                
-                // Update display
-                displayNotifications(category, notificationsByCategory[category]);
-                updateCategoryStats(category);
-                updateGlobalUnreadCount();
-                
-                showGlobalStatus(`All ${category} notifications marked as read`, 'success');
-                
-            } catch (error) {
-                console.error('Error marking all as read:', error);
-                showGlobalStatus('Failed to mark all notifications as read', 'error');
-            }
-        }
-
-        async function markAllAsRead() {
-            try {
-                // API CALL: Mark all notifications across all categories as read
-                const response = await fetch(API_ENDPOINTS.MARK_ALL_READ, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ all: true })
-                });
-                
-                if (!response.ok) throw new Error('Failed to mark all as read');
-                
-                // Update all categories
-                Object.keys(notificationsByCategory).forEach(category => {
-                    notificationsByCategory[category].forEach(notification => {
-                        notification.read = true;
-                    });
-                    displayNotifications(category, notificationsByCategory[category]);
-                    updateCategoryStats(category);
-                });
-                
-                updateGlobalUnreadCount();
-                
-                showGlobalStatus('All notifications marked as read', 'success');
-                
-            } catch (error) {
-                console.error('Error marking all as read:', error);
-                showGlobalStatus('Failed to mark all notifications as read', 'error');
-            }
-        }
-
-        // ===========================================
-        // HELPER FUNCTIONS
-        // ===========================================
-
-        function updateCategoryStats(category) {
-            const notifications = notificationsByCategory[category];
-            const total = notifications.length;
-            const unread = notifications.filter(n => !n.read).length;
-            
-            // Update stats display
-            const totalElement = document.getElementById(`${category}-total`);
-            const unreadElement = document.getElementById(`${category}-unread`);
-            
-            if (totalElement) totalElement.textContent = `Total: ${total}`;
-            if (unreadElement) unreadElement.textContent = `Unread: ${unread}`;
-        }
-
-        function updateGlobalUnreadCount() {
-            let totalUnread = 0;
-            Object.values(notificationsByCategory).forEach(notifications => {
-                totalUnread += notifications.filter(n => !n.read).length;
-            });
-            
-            unreadCountElement.textContent = totalUnread;
-            unreadCountElement.style.display = totalUnread > 0 ? 'flex' : 'none';
-        }
-
-        function showEmptyState(category) {
-            const container = document.getElementById(`notifications-${category}`);
-            container.innerHTML = `
-                <div class="category-empty">
-                    <i class="fas fa-bell-slash"></i>
-                    <h3>No notifications found</h3>
-                    <p>There are no notifications in this category.</p>
-                </div>
-            `;
-        }
-
-        function showGlobalStatus(message, type) {
-            const statusDiv = document.createElement('div');
-            statusDiv.className = `global-status ${type}`;
-            statusDiv.textContent = message;
-            
-            globalStatusContainer.appendChild(statusDiv);
-            
-            // Show the status
-            setTimeout(() => {
-                statusDiv.classList.add('show');
-            }, 10);
-            
-            // Remove after 3 seconds
-            setTimeout(() => {
-                statusDiv.classList.remove('show');
-                setTimeout(() => {
-                    statusDiv.remove();
-                }, 300);
-            }, 3000);
-        }
-
-        function showNotificationDetails(notification) {
-            modalSpinner.classList.add('active');
-            notificationDetail.style.display = 'none';
-            
-            try {
-                const sourceInfo = SOURCE_MAP[notification.source];
-                modalTitle.textContent = notification.title;
-                
-                notificationDetail.innerHTML = `
-                    <div class="detail-item">
-                        <div class="detail-label">Source</div>
-                        <div class="detail-value">
-                            <i class="${sourceInfo.icon}"></i> ${sourceInfo.name}
-                        </div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Category</div>
-                        <div class="detail-value">${notification.category || 'General'}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Priority</div>
-                        <div class="detail-value">
-                            <span class="priority ${notification.priority || 'medium'}">
-                                ${(notification.priority || 'medium').toUpperCase()}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Date & Time</div>
-                        <div class="detail-value">${notification.date || 'Today'} • ${notification.time || 'Recently'}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Action Required</div>
-                        <div class="detail-value">${notification.actionRequired ? 'Yes' : 'No'}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Detailed Information</div>
-                        <div class="detail-value">${notification.detailedContent || notification.content}</div>
+                    <div class="notification-message">${notification.message}</div>
+                    <div class="notification-actions">
+                        <button class="btn btn-detail" onclick="showDetail(${notification.id}, '${category}')">Detail</button>
+                        <button class="btn btn-message" onclick="showMessage(${notification.id}, '${category}')">Message</button>
                     </div>
                 `;
                 
-                // Show modal
-                modalOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                
-            } catch (error) {
-                console.error('Error showing details:', error);
-                showGlobalStatus('Failed to load notification details', 'error');
-            } finally {
-                modalSpinner.classList.remove('active');
-                notificationDetail.style.display = 'block';
-            }
+                notificationList.appendChild(notificationElement);
+            });
         }
 
-        function toggleMessageForm(notificationId, category) {
-            // Implementation for message forms
-            showGlobalStatus('Message feature would open here', 'success');
+        // Function to handle tab switching
+        function setupTabListeners() {
+            const tabButtons = document.querySelectorAll('.nav-tab-btn');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Get the tab category from data attribute
+                    const category = this.getAttribute('data-tab');
+                    
+                    // Display notifications for this category
+                    displayNotifications(category);
+                });
+            });
         }
 
-        function closeModal() {
-            modalOverlay.classList.remove('active');
-            document.body.style.overflow = 'auto';
-            notificationDetail.innerHTML = '';
+        // Function to show notification detail
+        function showDetail(id, category) {
+            const notification = notificationData[category].find(item => item.id === id);
+            alert(`Notification Detail:\n\nTitle: ${notification.title}\n\nMessage: ${notification.message}\n\nTime: ${notification.time}\n\nType: ${notification.type}`);
         }
 
-        function openMobileSidebar() {
-            sidebar.classList.add('active');
-            sidebarOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+        // Function to show message interface
+        function showMessage(id, category) {
+            const notification = notificationData[category].find(item => item.id === id);
+            alert(`Replying to: ${notification.title}\n\nA message window would open here for you to respond to this notification.`);
         }
 
-        function closeMobileSidebar() {
-            sidebar.classList.remove('active');
-            sidebarOverlay.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        function handleResize() {
-            isMobile = window.innerWidth <= 768;
-            if (!isMobile && sidebar.classList.contains('active')) {
-                closeMobileSidebar();
-            }
-        }
-
-        // Initialize the dashboard
-        document.addEventListener('DOMContentLoaded', initDashboard);
+        // Initialize the notification center when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up tab listeners
+            setupTabListeners();
+            
+            // Display staff notifications by default
+            displayNotifications('staff');
+        });
     </script>
 </body>
 </html>
