@@ -6,7 +6,9 @@
     <title>Admin Dashboard - Notifications</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
+        /* Previous CSS styles remain the same, adding some new styles for separated notifications */
+        
+           * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -682,6 +684,65 @@
             margin-bottom: 10px;
         }
         
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            grid-column: 1 / -1;
+        }
+        
+        .loading-spinner.active {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2a5298;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Global Status Messages */
+        .global-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            max-width: 350px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+        }
+        
+        .global-status.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .global-status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+        
+        .global-status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+        
         /* Responsive Styles */
         @media (max-width: 1200px) {
             .sidebar {
@@ -704,19 +765,16 @@
         }
         
         @media (max-width: 768px) {
-            /* Show mobile header */
             .mobile-header {
                 display: flex;
             }
             
-            /* Adjust main content for mobile header */
             .main-content {
                 padding-top: 80px;
                 padding-left: 20px;
                 padding-right: 20px;
             }
             
-            /* Hide sidebar by default on mobile */
             .sidebar {
                 position: fixed;
                 left: -270px;
@@ -731,17 +789,14 @@
                 left: 0;
             }
             
-            /* Show close button in sidebar on mobile */
             .close-sidebar {
                 display: block;
             }
             
-            /* Adjust container for mobile */
             .container {
                 margin-top: 70px;
             }
             
-            /* Mobile filter buttons */
             .filter-buttons {
                 overflow-x: auto;
                 padding-bottom: 10px;
@@ -764,7 +819,6 @@
                 font-size: 14px;
             }
             
-            /* Adjust notification cards for mobile */
             .notifications-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
@@ -801,7 +855,6 @@
                 width: 100%;
             }
             
-            /* Adjust header for mobile */
             .header {
                 flex-direction: column;
                 align-items: flex-start;
@@ -855,7 +908,6 @@
             }
         }
         
-        /* Tablet specific styles */
         @media (min-width: 769px) and (max-width: 1024px) {
             .notifications-grid {
                 grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -869,9 +921,116 @@
                 padding: 12px 20px;
             }
         }
+        /* Category Containers */
+        .category-container {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .category-container.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2a5298;
+        }
+        
+        .category-header h2 {
+            color: #2a5298;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .category-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Add to existing CSS */
+        .notification-card.unread {
+            border-left: 4px solid #ff4757;
+        }
+        
+        .category-empty {
+            text-align: center;
+            padding: 50px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .category-empty i {
+            font-size: 60px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .category-empty h3 {
+            color: #888;
+            margin-bottom: 10px;
+        }
+        
+        /* Notification Actions */
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .action-btn {
+            padding: 8px 15px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .action-btn:hover {
+            background-color: #f1f5fd;
+            border-color: #2a5298;
+        }
+        
+        .action-btn.active {
+            background-color: #2a5298;
+            color: white;
+            border-color: #2a5298;
+        }
+        
+        /* Previous CSS styles remain exactly the same */
+        /* ... All existing CSS from previous answer ... */
+        
+        /* Rest of existing CSS */
     </style>
 </head>
 <body>
+    <!-- Global Status Messages Container -->
+    <div id="globalStatusContainer"></div>
+
     <!-- Mobile Header -->
     <div class="mobile-header">
         <div class="logo">
@@ -936,7 +1095,7 @@
                 <div class="header-controls">
                     <div class="notification-badge">
                         <i class="fas fa-bell"></i>
-                        <span class="badge" id="unreadCount">15</span>
+                        <span class="badge" id="unreadCount">0</span>
                     </div>
                     <button id="markAllRead" class="filter-btn">
                         <i class="fas fa-check-double"></i> Mark All as Read
@@ -958,10 +1117,236 @@
                 <button class="filter-btn" data-filter="staff">Staff</button>
             </div>
 
-            <!-- Notifications Grid -->
-            <div class="notifications-grid" id="notificationsContainer">
-                <!-- Notifications will be dynamically inserted here -->
+            <!-- Loading Spinner -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner"></div>
+                <p>Loading notifications...</p>
             </div>
+
+            <!-- =========================================== -->
+            <!-- SEPARATED NOTIFICATION CATEGORY CONTAINERS -->
+            <!-- =========================================== -->
+
+            <!-- All Notifications Container -->
+            <div id="category-all" class="category-container active">
+                <div class="category-header">
+                    <h2><i class="fas fa-bell"></i> All Notifications</h2>
+                    <div class="category-stats">
+                        <span class="stat-item" id="all-total">Total: 0</span>
+                        <span class="stat-item" id="all-unread">Unread: 0</span>
+                    </div>
+                </div>
+                <div class="notification-actions">
+                    <button class="action-btn" id="refresh-all">
+                        <i class="fas fa-sync-alt"></i> Refresh All
+                    </button>
+                    <button class="action-btn" id="mark-all-category-read">
+                        <i class="fas fa-check-double"></i> Mark All as Read
+                    </button>
+                </div>
+                <div class="notifications-grid" id="notifications-all">
+                    <!-- All notifications will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Main Dashboard Notifications Container -->
+            <div id="category-main" class="category-container">
+                <div class="category-header">
+                    <h2><i class="fas fa-home"></i> Main Dashboard</h2>
+                    <div class="category-stats">
+                        <span class="stat-item" id="main-total">Total: 0</span>
+                        <span class="stat-item" id="main-unread">Unread: 0</span>
+                    </div>
+                </div>
+                <div class="notification-actions">
+                    <button class="action-btn" id="refresh-main">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="action-btn" id="mark-main-read">
+                        <i class="fas fa-check-double"></i> Mark All as Read
+                    </button>
+                </div>
+                <div class="notifications-grid" id="notifications-main">
+                    <!-- Main dashboard notifications will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Teachers Notifications Container -->
+            <div id="category-teachers" class="category-container">
+                <div class="category-header">
+                    <h2><i class="fas fa-chalkboard-teacher"></i> Teachers</h2>
+                    <div class="category-stats">
+                        <span class="stat-item" id="teachers-total">Total: 0</span>
+                        <span class="stat-item" id="teachers-unread">Unread: 0</span>
+                    </div>
+                </div>
+                <div class="notification-actions">
+                    <button class="action-btn" id="refresh-teachers">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="action-btn" id="mark-teachers-read">
+                        <i class="fas fa-check-double"></i> Mark All as Read
+                    </button>
+                </div>
+                <div class="notifications-grid" id="notifications-teachers">
+                    <!-- Teachers notifications will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Students Notifications Container -->
+            <div id="category-students" class="category-container">
+                <div class="category-header">
+                    <h2><i class="fas fa-user-graduate"></i> Students</h2>
+                    <div class="category-stats">
+                        <span class="stat-item" id="students-total">Total: 0</span>
+                        <span class="stat-item" id="students-unread">Unread: 0</span>
+                    </div>
+                </div>
+                <div class="notification-actions">
+                    <button class="action-btn" id="refresh-students">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="action-btn" id="mark-students-read">
+                        <i class="fas fa-check-double"></i> Mark All as Read
+                    </button>
+                </div>
+                <div class="notifications-grid" id="notifications-students">
+                    <!-- Students notifications will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Principal Notifications Container -->
+            <div id="category-principal" class="category-container">
+                <div class="category-header">
+                    <h2><i class="fas fa-user-tie"></i> Principal</h2>
+                    <div class="category-stats">
+                        <span class="stat-item" id="principal-total">Total: 0</span>
+                        <span class="stat-item" id="principal-unread">Unread: 0</span>
+                    </div>
+                </div>
+                <div class="notification-actions">
+                    <button class="action-btn" id="refresh-principal">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="action-btn" id="mark-principal-read">
+                        <i class="fas fa-check-double"></i> Mark All as Read
+                    </button>
+                </div>
+                <div class="notifications-grid" id="notifications-principal">
+                    <!-- Principal notifications will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Vice Principal Notifications Container -->
+            <div id="category-vice-principal" class="category-container">
+                <div class="category-header">
+                    <h2><i class="fas fa-user-shield"></i> Vice Principal</h2>
+                    <div class="category-stats">
+                        <span class="stat-item" id="vice-principal-total">Total: 0</span>
+                        <span class="stat-item" id="vice-principal-unread">Unread: 0</span>
+                    </div>
+                </div>
+                <div class="notification-actions">
+                    <button class="action-btn" id="refresh-vice-principal">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="action-btn" id="mark-vice-principal-read">
+                        <i class="fas fa-check-double"></i> Mark All as Read
+                    </button>
+                </div>
+                <div class="notifications-grid" id="notifications-vice-principal">
+                    <!-- Vice Principal notifications will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Supervisors Notifications Container -->
+            <div id="category-supervisors" class="category-container">
+                <div class="category-header">
+                    <h2><i class="fas fa-clipboard-check"></i> Supervisors</h2>
+                    <div class="category-stats">
+                        <span class="stat-item" id="supervisors-total">Total: 0</span>
+                        <span class="stat-item" id="supervisors-unread">Unread: 0</span>
+                    </div>
+                </div>
+                <div class="notification-actions">
+                    <button class="action-btn" id="refresh-supervisors">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="action-btn" id="mark-supervisors-read">
+                        <i class="fas fa-check-double"></i> Mark All as Read
+                    </button>
+                </div>
+                <div class="notifications-grid" id="notifications-supervisors">
+                    <!-- Supervisors notifications will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Student Applications Container -->
+            <div id="category-student-applications" class="category-container">
+                <div class="category-header">
+                    <h2><i class="fas fa-file-alt"></i> Student Applications</h2>
+                    <div class="category-stats">
+                        <span class="stat-item" id="student-apps-total">Total: 0</span>
+                        <span class="stat-item" id="student-apps-unread">Unread: 0</span>
+                    </div>
+                </div>
+                <div class="notification-actions">
+                    <button class="action-btn" id="refresh-student-apps">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="action-btn" id="mark-student-apps-read">
+                        <i class="fas fa-check-double"></i> Mark All as Read
+                    </button>
+                </div>
+                <div class="notifications-grid" id="notifications-student-applications">
+                    <!-- Student applications notifications will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Staff Applications Container -->
+            <div id="category-staff-applications" class="category-container">
+                <div class="category-header">
+                    <h2><i class="fas fa-briefcase"></i> Staff Applications</h2>
+                    <div class="category-stats">
+                        <span class="stat-item" id="staff-apps-total">Total: 0</span>
+                        <span class="stat-item" id="staff-apps-unread">Unread: 0</span>
+                    </div>
+                </div>
+                <div class="notification-actions">
+                    <button class="action-btn" id="refresh-staff-apps">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="action-btn" id="mark-staff-apps-read">
+                        <i class="fas fa-check-double"></i> Mark All as Read
+                    </button>
+                </div>
+                <div class="notifications-grid" id="notifications-staff-applications">
+                    <!-- Staff applications notifications will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Staff Notifications Container -->
+            <div id="category-staff" class="category-container">
+                <div class="category-header">
+                    <h2><i class="fas fa-users"></i> Staff</h2>
+                    <div class="category-stats">
+                        <span class="stat-item" id="staff-total">Total: 0</span>
+                        <span class="stat-item" id="staff-unread">Unread: 0</span>
+                    </div>
+                </div>
+                <div class="notification-actions">
+                    <button class="action-btn" id="refresh-staff">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="action-btn" id="mark-staff-read">
+                        <i class="fas fa-check-double"></i> Mark All as Read
+                    </button>
+                </div>
+                <div class="notifications-grid" id="notifications-staff">
+                    <!-- Staff notifications will be displayed here -->
+                </div>
+            </div>
+
         </main>
     </div>
 
@@ -973,6 +1358,10 @@
                 <button class="close-modal" id="closeModal">&times;</button>
             </div>
             <div class="modal-body">
+                <div class="loading-spinner" id="modalSpinner">
+                    <div class="spinner"></div>
+                    <p>Loading details...</p>
+                </div>
                 <div class="notification-detail" id="notificationDetail">
                     <!-- Notification details will be inserted here -->
                 </div>
@@ -981,276 +1370,58 @@
     </div>
 
     <script>
-        // Notification Data with new sources: Vice Principal and Supervisors
-        // const notifications = [
-        //     {
-        //         id: 1,
-        //         source: "main",
-        //         title: "System Maintenance Scheduled",
-        //         content: "The main dashboard will be offline for maintenance on Saturday from 2:00 AM to 4:00 AM.",
-        //         detailedContent: "Maintenance is required to update the server infrastructure and apply critical security patches. All dashboard services will be temporarily unavailable during this window. Users are advised to save any ongoing work before the maintenance begins. The maintenance is expected to improve system performance by 30%.",
-        //         time: "10 minutes ago",
-        //         priority: "high",
-        //         read: false,
-        //         date: "2023-10-15",
-        //         category: "System Alert",
-        //         actionRequired: true
-        //     },
-        //     {
-        //         id: 2,
-        //         source: "teachers",
-        //         title: "New Teacher Registration",
-        //         content: "Sarah Johnson has registered as a new teacher in the Mathematics department.",
-        //         detailedContent: "Sarah Johnson holds a Master's degree in Mathematics from Stanford University. She has 5 years of teaching experience and will be joining the Mathematics department starting next week. Her specialization is in Calculus and Algebra. Please review her documents and schedule an orientation session.",
-        //         time: "1 hour ago",
-        //         priority: "medium",
-        //         read: false,
-        //         date: "2023-10-15",
-        //         category: "New Registration",
-        //         actionRequired: true
-        //     },
-        //     {
-        //         id: 3,
-        //         source: "students",
-        //         title: "Attendance Alert",
-        //         content: "15 students marked absent in Grade 10 today. Review required.",
-        //         detailedContent: "Grade 10 has an unusually high absence rate today (25%). Most absences are from Section B. The homeroom teacher has reported that a flu outbreak might be affecting attendance. Please contact parents of absent students and review the school's health protocols.",
-        //         time: "2 hours ago",
-        //         priority: "high",
-        //         read: true,
-        //         date: "2023-10-15",
-        //         category: "Attendance",
-        //         actionRequired: true
-        //     },
-        //     {
-        //         id: 4,
-        //         source: "principal",
-        //         title: "Monthly Report Ready",
-        //         content: "The monthly performance report is now available for review.",
-        //         detailedContent: "The October monthly performance report includes academic results, attendance statistics, teacher performance metrics, and financial summaries. Key findings: Mathematics scores improved by 8%, attendance rate is at 94%, and parent satisfaction survey shows 92% approval rating. The report requires your signature by Friday.",
-        //         time: "5 hours ago",
-        //         priority: "medium",
-        //         read: false,
-        //         date: "2023-10-14",
-        //         category: "Report",
-        //         actionRequired: true
-        //     },
-        //     {
-        //         id: 5,
-        //         source: "vice-principal",
-        //         title: "Disciplinary Meeting Scheduled",
-        //         content: "A disciplinary meeting has been scheduled for two students from Grade 11.",
-        //         detailedContent: "Two students from Grade 11, Section A, were involved in a violation of school code of conduct. The meeting is scheduled for tomorrow at 11:00 AM in the vice principal's office. Please review the incident report and student records before the meeting.",
-        //         time: "3 hours ago",
-        //         priority: "high",
-        //         read: false,
-        //         date: "2023-10-15",
-        //         category: "Disciplinary",
-        //         actionRequired: true
-        //     },
-        //     {
-        //         id: 6,
-        //         source: "supervisors",
-        //         title: "Classroom Inspection Report",
-        //         content: "Classroom inspection reports for October are now available.",
-        //         detailedContent: "The October classroom inspection reports have been completed by the supervision team. Overall compliance rate is 92%. 8 classrooms require follow-up inspections due to minor issues. Please review the detailed reports and schedule corrective actions where needed.",
-        //         time: "6 hours ago",
-        //         priority: "medium",
-        //         read: false,
-        //         date: "2023-10-15",
-        //         category: "Inspection",
-        //         actionRequired: true
-        //     },
-        //     {
-        //         id: 7,
-        //         source: "student-applications",
-        //         title: "New Student Application",
-        //         content: "Michael Chen has submitted an application for the Science program.",
-        //         detailedContent: "Michael Chen is applying for the Science program starting Spring 2024. He is currently in 9th grade at Lincoln Middle School. His academic record shows excellent performance in Mathematics and Science (GPA: 3.9/4.0).",
-        //         time: "1 day ago",
-        //         priority: "medium",
-        //         read: false,
-        //         date: "2023-10-14",
-        //         category: "Student Application",
-        //         actionRequired: true,
-        //         applicantName: "Michael Chen",
-        //         applicantEmail: "michael.chen@example.com",
-        //         applicantPhone: "(555) 123-4567",
-        //         program: "Science Program",
-        //         applicationId: "STU-APP-2024-0873",
-        //         status: "Pending Review",
-        //         submissionDate: "2023-10-13",
-        //         documents: ["Transcripts", "Recommendation Letters", "Personal Statement"]
-        //     },
-        //     {
-        //         id: 8,
-        //         source: "staff",
-        //         title: "Staff Meeting Reminder",
-        //         content: "Reminder: Quarterly staff meeting scheduled for Friday at 10:00 AM in the conference room.",
-        //         detailedContent: "The quarterly staff meeting will cover: 1) Q3 performance review, 2) Upcoming curriculum changes, 3) Budget planning for next quarter, 4) Staff training opportunities. All department heads are required to present a 5-minute summary of their department's achievements and challenges. Please bring your department reports.",
-        //         time: "1 day ago",
-        //         priority: "medium",
-        //         read: true,
-        //         date: "2023-10-14",
-        //         category: "Meeting",
-        //         actionRequired: false
-        //     },
-        //     {
-        //         id: 9,
-        //         source: "main",
-        //         title: "Dashboard Performance Update",
-        //         content: "Dashboard performance has improved by 25% after the latest optimization.",
-        //         detailedContent: "After implementing the latest caching strategy and database optimizations, the dashboard load time has decreased from 3.2 seconds to 2.4 seconds (25% improvement). User satisfaction scores have increased accordingly. The next optimization phase will focus on mobile responsiveness and offline capabilities.",
-        //         time: "2 days ago",
-        //         priority: "low",
-        //         read: false,
-        //         date: "2023-10-13",
-        //         category: "Performance",
-        //         actionRequired: false
-        //     },
-        //     {
-        //         id: 10,
-        //         source: "teachers",
-        //         title: "Training Session Complete",
-        //         content: "All teachers have completed the digital tools training session.",
-        //         detailedContent: "The digital tools training session held last week had 100% participation from teaching staff. Feedback scores average 4.7/5.0. Teachers are now proficient in using the new Learning Management System, online assessment tools, and virtual classroom features. Certificates have been issued to all participants.",
-        //         time: "3 days ago",
-        //         priority: "low",
-        //         read: true,
-        //         date: "2023-10-12",
-        //         category: "Training",
-        //         actionRequired: false
-        //     },
-        //     {
-        //         id: 11,
-        //         source: "students",
-        //         title: "Exam Results Published",
-        //         content: "Final exam results for Semester 1 have been published on the student portal.",
-        //         detailedContent: "Semester 1 final exam results are now available. Overall pass rate: 94.2% (up 2.1% from last semester). Top performing subjects: Mathematics (96% pass rate), Science (95% pass rate). 15 students achieved perfect scores in at least one subject. Parents can access results through the parent portal.",
-        //         time: "4 days ago",
-        //         priority: "high",
-        //         read: false,
-        //         date: "2023-10-11",
-        //         category: "Exams",
-        //         actionRequired: false
-        //     },
-        //     {
-        //         id: 12,
-        //         source: "vice-principal",
-        //         title: "Parent Complaint Received",
-        //         content: "A formal complaint has been filed by a parent regarding transportation services.",
-        //         detailedContent: "Mr. Robert Smith has filed a formal complaint regarding inconsistent bus timings and safety concerns. The complaint has been logged and requires investigation. Please review the complaint details and schedule a meeting with the transportation department.",
-        //         time: "1 day ago",
-        //         priority: "high",
-        //         read: false,
-        //         date: "2023-10-14",
-        //         category: "Complaint",
-        //         actionRequired: true
-        //     },
-        //     {
-        //         id: 13,
-        //         source: "supervisors",
-        //         title: "Safety Drill Scheduled",
-        //         content: "A safety drill has been scheduled for next week across all departments.",
-        //         detailedContent: "The quarterly safety drill will take place on Wednesday at 10:30 AM. All supervisors must ensure their departments are prepared. Emergency procedures should be reviewed with all staff members. The drill will be evaluated for response times and compliance with safety protocols.",
-        //         time: "2 days ago",
-        //         priority: "medium",
-        //         read: true,
-        //         date: "2023-10-13",
-        //         category: "Safety",
-        //         actionRequired: true
-        //     },
-        //     {
-        //         id: 14,
-        //         source: "staff-applications",
-        //         title: "New Staff Application Received",
-        //         content: "David Wilson has applied for the IT Support Specialist position.",
-        //         detailedContent: "David Wilson has submitted an application for the IT Support Specialist role. He has 7 years of experience in educational technology support and holds certifications in network administration and cybersecurity.",
-        //         time: "5 days ago",
-        //         priority: "high",
-        //         read: false,
-        //         date: "2023-10-10",
-        //         category: "Staff Application",
-        //         actionRequired: true,
-        //         applicantName: "David Wilson",
-        //         applicantEmail: "david.wilson@example.com",
-        //         applicantPhone: "(555) 987-6543",
-        //         position: "IT Support Specialist",
-        //         applicationId: "STAFF-APP-2023-0451",
-        //         status: "Under Review",
-        //         submissionDate: "2023-10-09",
-        //         experience: "7 years",
-        //         documents: ["Resume", "Cover Letter", "Certifications", "References"]
-        //     },
-        //     {
-        //         id: 15,
-        //         source: "staff",
-        //         title: "New Staff Member",
-        //         content: "Jennifer Lee has joined as the new Administrative Assistant.",
-        //         detailedContent: "Jennifer Lee has joined the administration department as an Administrative Assistant. She brings 5 years of experience in office administration and will be supporting the principal's office. Her orientation is scheduled for next Monday.",
-        //         time: "6 days ago",
-        //         priority: "medium",
-        //         read: true,
-        //         date: "2023-10-09",
-        //         category: "New Hire",
-        //         actionRequired: false
-        //     },
-        //     {
-        //         id: 16,
-        //         source: "principal",
-        //         title: "Parent-Teacher Conference",
-        //         content: "The principal has scheduled a parent-teacher conference for next week.",
-        //         detailedContent: "The school-wide parent-teacher conference is scheduled for October 23-25. Each teacher has been allocated 15-minute slots with parents. The online scheduling system is now open for parents to book appointments. Teachers should prepare progress reports for each student before the conferences.",
-        //         time: "1 week ago",
-        //         priority: "medium",
-        //         read: true,
-        //         date: "2023-10-08",
-        //         category: "Conference",
-        //         actionRequired: true
-        //     },
-        //     {
-        //         id: 17,
-        //         source: "vice-principal",
-        //         title: "Budget Review Meeting",
-        //         content: "Department budget reviews are scheduled for next Monday.",
-        //         detailedContent: "All department heads must submit their budget proposals by Friday. The review meeting will be held on Monday at 2:00 PM in the conference room. Please ensure all supporting documents are prepared for discussion.",
-        //         time: "3 days ago",
-        //         priority: "medium",
-        //         read: false,
-        //         date: "2023-10-12",
-        //         category: "Budget",
-        //         actionRequired: true
-        //     },
-        //     {
-        //         id: 18,
-        //         source: "supervisors",
-        //         title: "Supervisor Monthly Report",
-        //         content: "Monthly supervisor reports are due by the end of this week.",
-        //         detailedContent: "All supervisors must submit their monthly activity reports by Friday 5:00 PM. The reports should include department performance metrics, staff evaluations, and any incidents that occurred during the month. Use the updated template available in the shared drive.",
-        //         time: "4 days ago",
-        //         priority: "medium",
-        //         read: false,
-        //         date: "2023-10-11",
-        //         category: "Report",
-        //         actionRequired: true
-        //     }
-        // ];
+        // ===========================================
+        // CONFIGURATION AND STATE MANAGEMENT
+        // ===========================================
 
-        // // Source mapping for display
-        // const sourceMap = {
-        //     "main": { name: "Main Dashboard", icon: "fas fa-home" },
-        //     "teachers": { name: "Teachers", icon: "fas fa-chalkboard-teacher" },
-        //     "students": { name: "Students", icon: "fas fa-user-graduate" },
-        //     "principal": { name: "Principal", icon: "fas fa-user-tie" },
-        //     "vice-principal": { name: "Vice Principal", icon: "fas fa-user-shield" },
-        //     "supervisors": { name: "Supervisors", icon: "fas fa-clipboard-check" },
-        //     "student-applications": { name: "Student Applications", icon: "fas fa-file-alt" },
-        //     "staff-applications": { name: "Staff Applications", icon: "fas fa-briefcase" },
-        //     "staff": { name: "Staff", icon: "fas fa-users" }
-        // };
+        // API Endpoints configuration - REPLACE WITH YOUR ACTUAL API ENDPOINTS
+        const API_ENDPOINTS = {
+            // Individual category endpoints
+            GET_ALL_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/all',
+            GET_MAIN_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/main-dashboard',
+            GET_TEACHERS_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/teachers',
+            GET_STUDENTS_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/students',
+            GET_PRINCIPAL_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/principal',
+            GET_VICE_PRINCIPAL_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/vice-principal',
+            GET_SUPERVISORS_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/supervisors',
+            GET_STUDENT_APPS_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/student-applications',
+            GET_STAFF_APPS_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/staff-applications',
+            GET_STAFF_NOTIFICATIONS: 'https://api.yourdomain.com/notifications/staff',
+            
+            // Common endpoints
+            MARK_READ: 'https://api.yourdomain.com/notifications/mark-read',
+            MARK_ALL_READ: 'https://api.yourdomain.com/notifications/mark-all-read',
+            SEND_MESSAGE: 'https://api.yourdomain.com/messages/send',
+            GET_NOTIFICATION_DETAILS: 'https://api.yourdomain.com/notifications'
+        };
+
+        // Source mapping for display
+        const SOURCE_MAP = {
+            "main": { name: "Main Dashboard", icon: "fas fa-home", color: "#4dabf7" },
+            "teachers": { name: "Teachers", icon: "fas fa-chalkboard-teacher", color: "#20c997" },
+            "students": { name: "Students", icon: "fas fa-user-graduate", color: "#ffa502" },
+            "principal": { name: "Principal", icon: "fas fa-user-tie", color: "#9c88ff" },
+            "vice-principal": { name: "Vice Principal", icon: "fas fa-user-shield", color: "#fd79a8" },
+            "supervisors": { name: "Supervisors", icon: "fas fa-clipboard-check", color: "#00cec9" },
+            "student-applications": { name: "Student Applications", icon: "fas fa-file-alt", color: "#ff6b81" },
+            "staff-applications": { name: "Staff Applications", icon: "fas fa-briefcase", color: "#a55eea" },
+            "staff": { name: "Staff", icon: "fas fa-users", color: "#a55eea" }
+        };
 
         // DOM Elements
-        const notificationsContainer = document.getElementById('notificationsContainer');
+        const categoryContainers = {
+            all: document.getElementById('category-all'),
+            main: document.getElementById('category-main'),
+            teachers: document.getElementById('category-teachers'),
+            students: document.getElementById('category-students'),
+            principal: document.getElementById('category-principal'),
+            vicePrincipal: document.getElementById('category-vice-principal'),
+            supervisors: document.getElementById('category-supervisors'),
+            studentApplications: document.getElementById('category-student-applications'),
+            staffApplications: document.getElementById('category-staff-applications'),
+            staff: document.getElementById('category-staff')
+        };
+
         const filterButtons = document.querySelectorAll('.filter-btn');
         const navLinks = document.querySelectorAll('.nav-links li');
         const unreadCountElement = document.getElementById('unreadCount');
@@ -1263,474 +1434,821 @@
         const closeSidebar = document.getElementById('closeSidebar');
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
-        const container = document.querySelector('.container');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const modalSpinner = document.getElementById('modalSpinner');
+        const globalStatusContainer = document.getElementById('globalStatusContainer');
 
-        // Current filter
-        let currentFilter = 'all';
+        // Application state
+        let currentCategory = 'all';
         let currentNotificationId = null;
         let openMessageFormId = null;
         let isMobile = window.innerWidth <= 768;
+        
+        // Store notifications by category
+        let notificationsByCategory = {
+            all: [],
+            main: [],
+            teachers: [],
+            students: [],
+            principal: [],
+            'vice-principal': [],
+            supervisors: [],
+            'student-applications': [],
+            'staff-applications': [],
+            staff: []
+        };
 
-        // Initialize the dashboard
+        // ===========================================
+        // INITIALIZATION
+        // ===========================================
+
         function initDashboard() {
-            renderNotifications();
-            updateUnreadCount();
-            
-            // Add event listeners to filter buttons
+            setupEventListeners();
+            loadAllNotifications();
+        }
+
+        function setupEventListeners() {
+            // Filter buttons - Switch between categories
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {
+                    const category = button.getAttribute('data-filter');
+                    
                     // Update active button
                     filterButtons.forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
                     
-                    // Update current filter
-                    currentFilter = button.getAttribute('data-filter');
-                    
-                    // Update sidebar active item
+                    // Update sidebar
                     navLinks.forEach(link => {
-                        if (link.getAttribute('data-filter') === currentFilter) {
-                            navLinks.forEach(l => l.classList.remove('active'));
+                        link.classList.remove('active');
+                        if (link.getAttribute('data-filter') === category) {
                             link.classList.add('active');
                         }
                     });
                     
-                    // Re-render notifications
-                    renderNotifications();
+                    // Switch category
+                    switchCategory(category);
                     
-                    // Close sidebar on mobile after selection
-                    if (isMobile) {
-                        closeMobileSidebar();
-                    }
+                    // Close sidebar on mobile
+                    if (isMobile) closeMobileSidebar();
                 });
             });
             
-            // Add event listeners to sidebar navigation
+            // Sidebar navigation
             navLinks.forEach(link => {
                 link.addEventListener('click', () => {
+                    const category = link.getAttribute('data-filter');
+                    
                     // Update active nav link
                     navLinks.forEach(l => l.classList.remove('active'));
                     link.classList.add('active');
                     
-                    // Update current filter
-                    currentFilter = link.getAttribute('data-filter');
-                    
                     // Update filter buttons
                     filterButtons.forEach(btn => {
-                        if (btn.getAttribute('data-filter') === currentFilter) {
-                            filterButtons.forEach(b => b.classList.remove('active'));
+                        btn.classList.remove('active');
+                        if (btn.getAttribute('data-filter') === category) {
                             btn.classList.add('active');
                         }
                     });
                     
-                    // Re-render notifications
-                    renderNotifications();
+                    // Switch category
+                    switchCategory(category);
                     
-                    // Close sidebar on mobile after selection
-                    if (isMobile) {
-                        closeMobileSidebar();
-                    }
+                    // Close sidebar on mobile
+                    if (isMobile) closeMobileSidebar();
                 });
             });
             
-            // Add event listener to mark all as read button
+            // Setup refresh buttons for each category
+            setupRefreshButtons();
+            
+            // Setup mark all read buttons for each category
+            setupMarkReadButtons();
+            
+            // Global mark all read
             markAllReadButton.addEventListener('click', markAllAsRead);
             
-            // Add event listener to close modal button
+            // Modal controls
             closeModalButton.addEventListener('click', closeModal);
-            
-            // Add event listener to close modal when clicking outside
             modalOverlay.addEventListener('click', (e) => {
-                if (e.target === modalOverlay) {
-                    closeModal();
-                }
+                if (e.target === modalOverlay) closeModal();
             });
             
-            // Add keyboard listener for closing modal with ESC key
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
                     closeModal();
                 }
             });
             
-            // Mobile sidebar functionality
+            // Mobile sidebar
             mobileMenuBtn.addEventListener('click', openMobileSidebar);
             closeSidebar.addEventListener('click', closeMobileSidebar);
             sidebarOverlay.addEventListener('click', closeMobileSidebar);
             
-            // Detect window resize
+            // Window resize
             window.addEventListener('resize', handleResize);
         }
 
-        // Handle window resize
-        function handleResize() {
-            isMobile = window.innerWidth <= 768;
+        function setupRefreshButtons() {
+            // Setup refresh buttons for each category
+            document.getElementById('refresh-all').addEventListener('click', () => loadAllNotifications());
+            document.getElementById('refresh-main').addEventListener('click', () => loadMainDashboardNotifications());
+            document.getElementById('refresh-teachers').addEventListener('click', () => loadTeachersNotifications());
+            document.getElementById('refresh-students').addEventListener('click', () => loadStudentsNotifications());
+            document.getElementById('refresh-principal').addEventListener('click', () => loadPrincipalNotifications());
+            document.getElementById('refresh-vice-principal').addEventListener('click', () => loadVicePrincipalNotifications());
+            document.getElementById('refresh-supervisors').addEventListener('click', () => loadSupervisorsNotifications());
+            document.getElementById('refresh-student-apps').addEventListener('click', () => loadStudentApplicationsNotifications());
+            document.getElementById('refresh-staff-apps').addEventListener('click', () => loadStaffApplicationsNotifications());
+            document.getElementById('refresh-staff').addEventListener('click', () => loadStaffNotifications());
+        }
+
+        function setupMarkReadButtons() {
+            // Setup mark all read buttons for each category
+            document.getElementById('mark-all-category-read').addEventListener('click', () => markAllInCategoryAsRead('all'));
+            document.getElementById('mark-main-read').addEventListener('click', () => markAllInCategoryAsRead('main'));
+            document.getElementById('mark-teachers-read').addEventListener('click', () => markAllInCategoryAsRead('teachers'));
+            document.getElementById('mark-students-read').addEventListener('click', () => markAllInCategoryAsRead('students'));
+            document.getElementById('mark-principal-read').addEventListener('click', () => markAllInCategoryAsRead('principal'));
+            document.getElementById('mark-vice-principal-read').addEventListener('click', () => markAllInCategoryAsRead('vice-principal'));
+            document.getElementById('mark-supervisors-read').addEventListener('click', () => markAllInCategoryAsRead('supervisors'));
+            document.getElementById('mark-student-apps-read').addEventListener('click', () => markAllInCategoryAsRead('student-applications'));
+            document.getElementById('mark-staff-apps-read').addEventListener('click', () => markAllInCategoryAsRead('staff-applications'));
+            document.getElementById('mark-staff-read').addEventListener('click', () => markAllInCategoryAsRead('staff'));
+        }
+
+        // ===========================================
+        // CATEGORY SWITCHING FUNCTIONS
+        // ===========================================
+
+        function switchCategory(category) {
+            // Hide all category containers
+            Object.values(categoryContainers).forEach(container => {
+                container.classList.remove('active');
+            });
             
-            // If resizing to desktop, ensure sidebar is visible
-            if (!isMobile && sidebar.classList.contains('active')) {
-                closeMobileSidebar();
+            // Show selected category container
+            categoryContainers[category].classList.add('active');
+            currentCategory = category;
+            
+            // Load category data if not loaded
+            if (notificationsByCategory[category].length === 0 && category !== 'all') {
+                loadCategoryNotifications(category);
+            }
+            
+            // Update statistics for current category
+            updateCategoryStats(category);
+        }
+
+        // ===========================================
+        // INDIVIDUAL CATEGORY API FUNCTIONS
+        // ===========================================
+
+        // Load all notifications
+        async function loadAllNotifications() {
+            try {
+                loadingSpinner.classList.add('active');
+                
+                // API CALL: Get all notifications
+                // Replace with your actual API call
+                const response = await fetch(API_ENDPOINTS.GET_ALL_NOTIFICATIONS);
+                if (!response.ok) throw new Error('Failed to fetch all notifications');
+                
+                const data = await response.json();
+                notificationsByCategory.all = data.notifications || [];
+                
+                // Display notifications
+                displayNotifications('all', notificationsByCategory.all);
+                updateCategoryStats('all');
+                updateGlobalUnreadCount();
+                
+                showGlobalStatus('All notifications loaded successfully', 'success');
+                
+            } catch (error) {
+                console.error('Error loading all notifications:', error);
+                showGlobalStatus('Failed to load all notifications', 'error');
+                showEmptyState('all');
+            } finally {
+                loadingSpinner.classList.remove('active');
             }
         }
 
-        // Open mobile sidebar
+        // Load main dashboard notifications
+        async function loadMainDashboardNotifications() {
+            try {
+                loadingSpinner.classList.add('active');
+                
+                // API CALL: Get main dashboard notifications
+                const response = await fetch(API_ENDPOINTS.GET_MAIN_NOTIFICATIONS);
+                if (!response.ok) throw new Error('Failed to fetch main dashboard notifications');
+                
+                const data = await response.json();
+                notificationsByCategory.main = data.notifications || [];
+                
+                displayNotifications('main', notificationsByCategory.main);
+                updateCategoryStats('main');
+                updateGlobalUnreadCount();
+                
+                showGlobalStatus('Main dashboard notifications loaded', 'success');
+                
+            } catch (error) {
+                console.error('Error loading main notifications:', error);
+                showGlobalStatus('Failed to load main dashboard notifications', 'error');
+                showEmptyState('main');
+            } finally {
+                loadingSpinner.classList.remove('active');
+            }
+        }
+
+        // Load teachers notifications
+        async function loadTeachersNotifications() {
+            try {
+                loadingSpinner.classList.add('active');
+                
+                // API CALL: Get teachers notifications
+                const response = await fetch(API_ENDPOINTS.GET_TEACHERS_NOTIFICATIONS);
+                if (!response.ok) throw new Error('Failed to fetch teachers notifications');
+                
+                const data = await response.json();
+                notificationsByCategory.teachers = data.notifications || [];
+                
+                displayNotifications('teachers', notificationsByCategory.teachers);
+                updateCategoryStats('teachers');
+                updateGlobalUnreadCount();
+                
+                showGlobalStatus('Teachers notifications loaded', 'success');
+                
+            } catch (error) {
+                console.error('Error loading teachers notifications:', error);
+                showGlobalStatus('Failed to load teachers notifications', 'error');
+                showEmptyState('teachers');
+            } finally {
+                loadingSpinner.classList.remove('active');
+            }
+        }
+
+        // Load students notifications
+        async function loadStudentsNotifications() {
+            try {
+                loadingSpinner.classList.add('active');
+                
+                // API CALL: Get students notifications
+                const response = await fetch(API_ENDPOINTS.GET_STUDENTS_NOTIFICATIONS);
+                if (!response.ok) throw new Error('Failed to fetch students notifications');
+                
+                const data = await response.json();
+                notificationsByCategory.students = data.notifications || [];
+                
+                displayNotifications('students', notificationsByCategory.students);
+                updateCategoryStats('students');
+                updateGlobalUnreadCount();
+                
+                showGlobalStatus('Students notifications loaded', 'success');
+                
+            } catch (error) {
+                console.error('Error loading students notifications:', error);
+                showGlobalStatus('Failed to load students notifications', 'error');
+                showEmptyState('students');
+            } finally {
+                loadingSpinner.classList.remove('active');
+            }
+        }
+
+        // Load principal notifications
+        async function loadPrincipalNotifications() {
+            try {
+                loadingSpinner.classList.add('active');
+                
+                // API CALL: Get principal notifications
+                const response = await fetch(API_ENDPOINTS.GET_PRINCIPAL_NOTIFICATIONS);
+                if (!response.ok) throw new Error('Failed to fetch principal notifications');
+                
+                const data = await response.json();
+                notificationsByCategory.principal = data.notifications || [];
+                
+                displayNotifications('principal', notificationsByCategory.principal);
+                updateCategoryStats('principal');
+                updateGlobalUnreadCount();
+                
+                showGlobalStatus('Principal notifications loaded', 'success');
+                
+            } catch (error) {
+                console.error('Error loading principal notifications:', error);
+                showGlobalStatus('Failed to load principal notifications', 'error');
+                showEmptyState('principal');
+            } finally {
+                loadingSpinner.classList.remove('active');
+            }
+        }
+
+        // Load vice principal notifications
+        async function loadVicePrincipalNotifications() {
+            try {
+                loadingSpinner.classList.add('active');
+                
+                // API CALL: Get vice principal notifications
+                const response = await fetch(API_ENDPOINTS.GET_VICE_PRINCIPAL_NOTIFICATIONS);
+                if (!response.ok) throw new Error('Failed to fetch vice principal notifications');
+                
+                const data = await response.json();
+                notificationsByCategory['vice-principal'] = data.notifications || [];
+                
+                displayNotifications('vice-principal', notificationsByCategory['vice-principal']);
+                updateCategoryStats('vice-principal');
+                updateGlobalUnreadCount();
+                
+                showGlobalStatus('Vice principal notifications loaded', 'success');
+                
+            } catch (error) {
+                console.error('Error loading vice principal notifications:', error);
+                showGlobalStatus('Failed to load vice principal notifications', 'error');
+                showEmptyState('vice-principal');
+            } finally {
+                loadingSpinner.classList.remove('active');
+            }
+        }
+
+        // Load supervisors notifications
+        async function loadSupervisorsNotifications() {
+            try {
+                loadingSpinner.classList.add('active');
+                
+                // API CALL: Get supervisors notifications
+                const response = await fetch(API_ENDPOINTS.GET_SUPERVISORS_NOTIFICATIONS);
+                if (!response.ok) throw new Error('Failed to fetch supervisors notifications');
+                
+                const data = await response.json();
+                notificationsByCategory.supervisors = data.notifications || [];
+                
+                displayNotifications('supervisors', notificationsByCategory.supervisors);
+                updateCategoryStats('supervisors');
+                updateGlobalUnreadCount();
+                
+                showGlobalStatus('Supervisors notifications loaded', 'success');
+                
+            } catch (error) {
+                console.error('Error loading supervisors notifications:', error);
+                showGlobalStatus('Failed to load supervisors notifications', 'error');
+                showEmptyState('supervisors');
+            } finally {
+                loadingSpinner.classList.remove('active');
+            }
+        }
+
+        // Load student applications notifications
+        async function loadStudentApplicationsNotifications() {
+            try {
+                loadingSpinner.classList.add('active');
+                
+                // API CALL: Get student applications notifications
+                const response = await fetch(API_ENDPOINTS.GET_STUDENT_APPS_NOTIFICATIONS);
+                if (!response.ok) throw new Error('Failed to fetch student applications notifications');
+                
+                const data = await response.json();
+                notificationsByCategory['student-applications'] = data.notifications || [];
+                
+                displayNotifications('student-applications', notificationsByCategory['student-applications']);
+                updateCategoryStats('student-applications');
+                updateGlobalUnreadCount();
+                
+                showGlobalStatus('Student applications notifications loaded', 'success');
+                
+            } catch (error) {
+                console.error('Error loading student applications notifications:', error);
+                showGlobalStatus('Failed to load student applications notifications', 'error');
+                showEmptyState('student-applications');
+            } finally {
+                loadingSpinner.classList.remove('active');
+            }
+        }
+
+        // Load staff applications notifications
+        async function loadStaffApplicationsNotifications() {
+            try {
+                loadingSpinner.classList.add('active');
+                
+                // API CALL: Get staff applications notifications
+                const response = await fetch(API_ENDPOINTS.GET_STAFF_APPS_NOTIFICATIONS);
+                if (!response.ok) throw new Error('Failed to fetch staff applications notifications');
+                
+                const data = await response.json();
+                notificationsByCategory['staff-applications'] = data.notifications || [];
+                
+                displayNotifications('staff-applications', notificationsByCategory['staff-applications']);
+                updateCategoryStats('staff-applications');
+                updateGlobalUnreadCount();
+                
+                showGlobalStatus('Staff applications notifications loaded', 'success');
+                
+            } catch (error) {
+                console.error('Error loading staff applications notifications:', error);
+                showGlobalStatus('Failed to load staff applications notifications', 'error');
+                showEmptyState('staff-applications');
+            } finally {
+                loadingSpinner.classList.remove('active');
+            }
+        }
+
+        // Load staff notifications
+        async function loadStaffNotifications() {
+            try {
+                loadingSpinner.classList.add('active');
+                
+                // API CALL: Get staff notifications
+                const response = await fetch(API_ENDPOINTS.GET_STAFF_NOTIFICATIONS);
+                if (!response.ok) throw new Error('Failed to fetch staff notifications');
+                
+                const data = await response.json();
+                notificationsByCategory.staff = data.notifications || [];
+                
+                displayNotifications('staff', notificationsByCategory.staff);
+                updateCategoryStats('staff');
+                updateGlobalUnreadCount();
+                
+                showGlobalStatus('Staff notifications loaded', 'success');
+                
+            } catch (error) {
+                console.error('Error loading staff notifications:', error);
+                showGlobalStatus('Failed to load staff notifications', 'error');
+                showEmptyState('staff');
+            } finally {
+                loadingSpinner.classList.remove('active');
+            }
+        }
+
+        // Generic function to load any category
+        async function loadCategoryNotifications(category) {
+            switch(category) {
+                case 'main':
+                    await loadMainDashboardNotifications();
+                    break;
+                case 'teachers':
+                    await loadTeachersNotifications();
+                    break;
+                case 'students':
+                    await loadStudentsNotifications();
+                    break;
+                case 'principal':
+                    await loadPrincipalNotifications();
+                    break;
+                case 'vice-principal':
+                    await loadVicePrincipalNotifications();
+                    break;
+                case 'supervisors':
+                    await loadSupervisorsNotifications();
+                    break;
+                case 'student-applications':
+                    await loadStudentApplicationsNotifications();
+                    break;
+                case 'staff-applications':
+                    await loadStaffApplicationsNotifications();
+                    break;
+                case 'staff':
+                    await loadStaffNotifications();
+                    break;
+                default:
+                    await loadAllNotifications();
+            }
+        }
+
+        // ===========================================
+        // NOTIFICATION DISPLAY FUNCTIONS
+        // ===========================================
+
+        function displayNotifications(category, notifications) {
+            const container = document.getElementById(`notifications-${category}`);
+            container.innerHTML = '';
+            
+            if (!notifications || notifications.length === 0) {
+                showEmptyState(category);
+                return;
+            }
+            
+            notifications.forEach(notification => {
+                const card = createNotificationCard(notification, category);
+                container.appendChild(card);
+            });
+            
+            // Attach event listeners to the new cards
+            attachNotificationEventListeners(category);
+        }
+
+        function createNotificationCard(notification, category) {
+            const sourceInfo = SOURCE_MAP[notification.source || category];
+            const isUnread = !notification.read;
+            const cardClass = isUnread ? 'notification-card unread' : 'notification-card';
+            
+            const card = document.createElement('div');
+            card.className = `${cardClass} ${category}`;
+            card.dataset.id = notification.id;
+            
+            card.innerHTML = `
+                <div class="notification-header">
+                    <div class="source">
+                        <div class="source-icon" style="background-color: ${sourceInfo.color}">
+                            <i class="${sourceInfo.icon}"></i>
+                        </div>
+                        <div class="source-name">${sourceInfo.name}</div>
+                    </div>
+                    <div class="time">${notification.time || 'Recently'}</div>
+                </div>
+                <h3 class="notification-title">${notification.title}</h3>
+                <p class="notification-content">${notification.content}</p>
+                <div class="notification-footer">
+                    <span class="priority ${notification.priority || 'medium'}">
+                        ${(notification.priority || 'medium').toUpperCase()}
+                    </span>
+                    <div class="card-buttons">
+                        ${(category === 'student-applications' || category === 'staff-applications') 
+                            ? `<button class="message-btn" data-id="${notification.id}">
+                                <i class="fas fa-comment"></i> ${isMobile ? '' : 'Message'}
+                               </button>` 
+                            : ''}
+                        <button class="view-btn" data-id="${notification.id}">
+                            <i class="fas fa-eye"></i> ${isMobile ? '' : 'Details'}
+                        </button>
+                        <button class="mark-read" data-id="${notification.id}">
+                            ${notification.read 
+                                ? '<i class="fas fa-check"></i>' + (isMobile ? '' : ' Read') 
+                                : '<i class="fas fa-envelope"></i>' + (isMobile ? '' : ' Mark Read')}
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function attachNotificationEventListeners(category) {
+            const container = document.getElementById(`notifications-${category}`);
+            
+            // View button
+            container.querySelectorAll('.view-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const notificationId = button.getAttribute('data-id');
+                    const notification = notificationsByCategory[category].find(n => n.id == notificationId);
+                    if (notification) {
+                        showNotificationDetails(notification);
+                    }
+                });
+            });
+            
+            // Mark as read button
+            container.querySelectorAll('.mark-read').forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const notificationId = button.getAttribute('data-id');
+                    await markSingleAsRead(notificationId, category);
+                });
+            });
+            
+            // Message button (for applications)
+            container.querySelectorAll('.message-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const notificationId = button.getAttribute('data-id');
+                    toggleMessageForm(notificationId, category);
+                });
+            });
+        }
+
+        // ===========================================
+        // NOTIFICATION ACTION FUNCTIONS
+        // ===========================================
+
+        async function markSingleAsRead(notificationId, category) {
+            try {
+                // API CALL: Mark single notification as read
+                const response = await fetch(API_ENDPOINTS.MARK_READ, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ notificationId, category })
+                });
+                
+                if (!response.ok) throw new Error('Failed to mark as read');
+                
+                // Update local state
+                const notification = notificationsByCategory[category].find(n => n.id == notificationId);
+                if (notification) {
+                    notification.read = true;
+                }
+                
+                // Update display
+                displayNotifications(category, notificationsByCategory[category]);
+                updateCategoryStats(category);
+                updateGlobalUnreadCount();
+                
+                showGlobalStatus('Notification marked as read', 'success');
+                
+            } catch (error) {
+                console.error('Error marking notification as read:', error);
+                showGlobalStatus('Failed to mark notification as read', 'error');
+            }
+        }
+
+        async function markAllInCategoryAsRead(category) {
+            try {
+                // API CALL: Mark all notifications in category as read
+                const response = await fetch(API_ENDPOINTS.MARK_ALL_READ, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ category })
+                });
+                
+                if (!response.ok) throw new Error('Failed to mark all as read');
+                
+                // Update local state
+                notificationsByCategory[category].forEach(notification => {
+                    notification.read = true;
+                });
+                
+                // Update display
+                displayNotifications(category, notificationsByCategory[category]);
+                updateCategoryStats(category);
+                updateGlobalUnreadCount();
+                
+                showGlobalStatus(`All ${category} notifications marked as read`, 'success');
+                
+            } catch (error) {
+                console.error('Error marking all as read:', error);
+                showGlobalStatus('Failed to mark all notifications as read', 'error');
+            }
+        }
+
+        async function markAllAsRead() {
+            try {
+                // API CALL: Mark all notifications across all categories as read
+                const response = await fetch(API_ENDPOINTS.MARK_ALL_READ, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ all: true })
+                });
+                
+                if (!response.ok) throw new Error('Failed to mark all as read');
+                
+                // Update all categories
+                Object.keys(notificationsByCategory).forEach(category => {
+                    notificationsByCategory[category].forEach(notification => {
+                        notification.read = true;
+                    });
+                    displayNotifications(category, notificationsByCategory[category]);
+                    updateCategoryStats(category);
+                });
+                
+                updateGlobalUnreadCount();
+                
+                showGlobalStatus('All notifications marked as read', 'success');
+                
+            } catch (error) {
+                console.error('Error marking all as read:', error);
+                showGlobalStatus('Failed to mark all notifications as read', 'error');
+            }
+        }
+
+        // ===========================================
+        // HELPER FUNCTIONS
+        // ===========================================
+
+        function updateCategoryStats(category) {
+            const notifications = notificationsByCategory[category];
+            const total = notifications.length;
+            const unread = notifications.filter(n => !n.read).length;
+            
+            // Update stats display
+            const totalElement = document.getElementById(`${category}-total`);
+            const unreadElement = document.getElementById(`${category}-unread`);
+            
+            if (totalElement) totalElement.textContent = `Total: ${total}`;
+            if (unreadElement) unreadElement.textContent = `Unread: ${unread}`;
+        }
+
+        function updateGlobalUnreadCount() {
+            let totalUnread = 0;
+            Object.values(notificationsByCategory).forEach(notifications => {
+                totalUnread += notifications.filter(n => !n.read).length;
+            });
+            
+            unreadCountElement.textContent = totalUnread;
+            unreadCountElement.style.display = totalUnread > 0 ? 'flex' : 'none';
+        }
+
+        function showEmptyState(category) {
+            const container = document.getElementById(`notifications-${category}`);
+            container.innerHTML = `
+                <div class="category-empty">
+                    <i class="fas fa-bell-slash"></i>
+                    <h3>No notifications found</h3>
+                    <p>There are no notifications in this category.</p>
+                </div>
+            `;
+        }
+
+        function showGlobalStatus(message, type) {
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `global-status ${type}`;
+            statusDiv.textContent = message;
+            
+            globalStatusContainer.appendChild(statusDiv);
+            
+            // Show the status
+            setTimeout(() => {
+                statusDiv.classList.add('show');
+            }, 10);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                statusDiv.classList.remove('show');
+                setTimeout(() => {
+                    statusDiv.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        function showNotificationDetails(notification) {
+            modalSpinner.classList.add('active');
+            notificationDetail.style.display = 'none';
+            
+            try {
+                const sourceInfo = SOURCE_MAP[notification.source];
+                modalTitle.textContent = notification.title;
+                
+                notificationDetail.innerHTML = `
+                    <div class="detail-item">
+                        <div class="detail-label">Source</div>
+                        <div class="detail-value">
+                            <i class="${sourceInfo.icon}"></i> ${sourceInfo.name}
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Category</div>
+                        <div class="detail-value">${notification.category || 'General'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Priority</div>
+                        <div class="detail-value">
+                            <span class="priority ${notification.priority || 'medium'}">
+                                ${(notification.priority || 'medium').toUpperCase()}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Date & Time</div>
+                        <div class="detail-value">${notification.date || 'Today'} • ${notification.time || 'Recently'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Action Required</div>
+                        <div class="detail-value">${notification.actionRequired ? 'Yes' : 'No'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Detailed Information</div>
+                        <div class="detail-value">${notification.detailedContent || notification.content}</div>
+                    </div>
+                `;
+                
+                // Show modal
+                modalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+            } catch (error) {
+                console.error('Error showing details:', error);
+                showGlobalStatus('Failed to load notification details', 'error');
+            } finally {
+                modalSpinner.classList.remove('active');
+                notificationDetail.style.display = 'block';
+            }
+        }
+
+        function toggleMessageForm(notificationId, category) {
+            // Implementation for message forms
+            showGlobalStatus('Message feature would open here', 'success');
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            notificationDetail.innerHTML = '';
+        }
+
         function openMobileSidebar() {
             sidebar.classList.add('active');
             sidebarOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
-        // Close mobile sidebar
         function closeMobileSidebar() {
             sidebar.classList.remove('active');
             sidebarOverlay.classList.remove('active');
             document.body.style.overflow = 'auto';
         }
 
-        // Render notifications based on current filter
-        function renderNotifications() {
-            // Filter notifications based on current filter
-            let filteredNotifications = notifications;
-            if (currentFilter !== 'all') {
-                filteredNotifications = notifications.filter(notification => 
-                    notification.source === currentFilter
-                );
-            }
-            
-            // Clear the container
-            notificationsContainer.innerHTML = '';
-            
-            // If no notifications, show empty state
-            if (filteredNotifications.length === 0) {
-                notificationsContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-bell-slash"></i>
-                        <h3>No notifications found</h3>
-                        <p>There are no notifications for the selected filter.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Render each notification
-            filteredNotifications.forEach(notification => {
-                const sourceInfo = sourceMap[notification.source];
-                const card = document.createElement('div');
-                card.className = `notification-card ${notification.source}`;
-                card.innerHTML = `
-                    <div class="notification-header">
-                        <div class="source">
-                            <div class="source-icon">
-                                <i class="${sourceInfo.icon}"></i>
-                            </div>
-                            <div class="source-name">${sourceInfo.name}</div>
-                        </div>
-                        <div class="time">${notification.time}</div>
-                    </div>
-                    <h3 class="notification-title">${notification.title}</h3>
-                    <p class="notification-content">${notification.content}</p>
-                    <div class="notification-footer">
-                        <span class="priority ${notification.priority}">${notification.priority.toUpperCase()}</span>
-                        <div class="card-buttons">
-                            ${(notification.source === 'student-applications' || notification.source === 'staff-applications') 
-                                ? `<button class="message-btn" data-id="${notification.id}">
-                                    <i class="fas fa-comment"></i> ${isMobile ? '' : 'Message'}
-                                   </button>` 
-                                : ''}
-                            <button class="view-btn" data-id="${notification.id}">
-                                <i class="fas fa-eye"></i> ${isMobile ? '' : 'Details'}
-                            </button>
-                            <button class="mark-read" data-id="${notification.id}">
-                                ${notification.read 
-                                    ? '<i class="fas fa-check"></i>' + (isMobile ? '' : ' Read') 
-                                    : '<i class="fas fa-envelope"></i>' + (isMobile ? '' : ' Mark Read')}
-                            </button>
-                        </div>
-                    </div>
-                `;
-                
-                // Add visual indicator for unread notifications
-                if (!notification.read) {
-                    card.style.borderLeft = '4px solid #ff4757';
-                }
-                
-                // Add message form for application notifications
-                if (notification.source === 'student-applications' || notification.source === 'staff-applications') {
-                    const messageForm = document.createElement('div');
-                    messageForm.className = `message-form-container ${openMessageFormId === notification.id ? 'active' : ''}`;
-                    messageForm.id = `messageForm-${notification.id}`;
-                    messageForm.innerHTML = createMessageForm(notification);
-                    card.appendChild(messageForm);
-                }
-                
-                notificationsContainer.appendChild(card);
-                
-                // Add event listener to view button
-                const viewButton = card.querySelector('.view-btn');
-                viewButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    showNotificationDetails(notification.id);
-                });
-                
-                // Add event listener to mark as read button
-                const markReadButton = card.querySelector('.mark-read');
-                markReadButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    markAsRead(notification.id);
-                });
-                
-                // Add event listener to message button (for applications)
-                if (notification.source === 'student-applications' || notification.source === 'staff-applications') {
-                    const messageButton = card.querySelector('.message-btn');
-                    messageButton.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        toggleMessageForm(notification.id);
-                    });
-                }
-            });
-            
-            // Reattach form event listeners
-            attachFormEventListeners();
-        }
-
-        // Create message form for application notifications
-        function createMessageForm(notification) {
-            const isStudentApp = notification.source === 'student-applications';
-            const formType = isStudentApp ? 'Student' : 'Staff';
-            
-            return `
-                <h3 class="form-title">
-                    <i class="fas fa-paper-plane"></i> Send Message to ${formType} Applicant
-                </h3>
-                <div class="status-message" id="status-${notification.id}"></div>
-                <form id="messageForm-${notification.id}" class="message-form">
-                    <div class="form-group">
-                        <label for="applicantName-${notification.id}">Applicant Name</label>
-                        <input type="text" id="applicantName-${notification.id}" value="${notification.applicantName}" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="applicantEmail-${notification.id}">Applicant Email</label>
-                        <input type="email" id="applicantEmail-${notification.id}" value="${notification.applicantEmail}" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="applicationId-${notification.id}">Application ID</label>
-                        <input type="text" id="applicationId-${notification.id}" value="${notification.applicationId}" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="subject-${notification.id}">Subject</label>
-                        <input type="text" id="subject-${notification.id}" value="Regarding your ${isStudentApp ? notification.program : notification.position} application" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="messageType-${notification.id}">Message Type</label>
-                        <select id="messageType-${notification.id}" required>
-                            <option value="">Select message type</option>
-                            <option value="request_info">Request Additional Information</option>
-                            <option value="interview">Schedule Interview</option>
-                            <option value="acceptance">Application Acceptance</option>
-                            <option value="rejection">Application Rejection</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="message-${notification.id}">Message</label>
-                        <textarea id="message-${notification.id}" placeholder="Type your message to the applicant..." required></textarea>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" data-cancel="${notification.id}">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
-                    </div>
-                </form>
-            `;
-        }
-
-        // Attach event listeners to forms
-        function attachFormEventListeners() {
-            // Attach form submit listeners
-            document.querySelectorAll('.message-form').forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const notificationId = this.id.split('-')[1];
-                    handleFormSubmit(notificationId);
-                });
-            });
-            
-            // Attach cancel button listeners
-            document.querySelectorAll('[data-cancel]').forEach(button => {
-                button.addEventListener('click', function() {
-                    const notificationId = this.getAttribute('data-cancel');
-                    toggleMessageForm(notificationId);
-                });
-            });
-        }
-
-        // Toggle message form visibility
-        function toggleMessageForm(notificationId) {
-            if (openMessageFormId === notificationId) {
-                openMessageFormId = null;
-            } else {
-                openMessageFormId = notificationId;
-            }
-            renderNotifications();
-        }
-
-        // Handle form submission
-        function handleFormSubmit(notificationId) {
-            const notification = notifications.find(n => n.id == notificationId);
-            if (!notification) return;
-            
-            const subject = document.getElementById(`subject-${notificationId}`).value;
-            const messageType = document.getElementById(`messageType-${notificationId}`).value;
-            const message = document.getElementById(`message-${notificationId}`).value;
-            const statusElement = document.getElementById(`status-${notificationId}`);
-            
-            // Validate form
-            if (!subject || !messageType || !message) {
-                statusElement.textContent = "Please fill in all required fields.";
-                statusElement.className = "status-message error";
-                return;
-            }
-            
-            // Simulate sending message (in real app, this would be an API call)
-            statusElement.textContent = `Message sent successfully to ${notification.applicantName}.`;
-            statusElement.className = "status-message success";
-            
-            // Reset form after 3 seconds
-            setTimeout(() => {
-                statusElement.className = "status-message";
-                document.getElementById(`subject-${notificationId}`).value = `Regarding your ${notification.source === 'student-applications' ? notification.program : notification.position} application`;
-                document.getElementById(`messageType-${notificationId}`).value = "";
-                document.getElementById(`message-${notificationId}`).value = "";
-            }, 3000);
-        }
-
-        // Show notification details in modal
-        function showNotificationDetails(id) {
-            const notification = notifications.find(n => n.id === id);
-            if (!notification) return;
-            
-            currentNotificationId = id;
-            
-            // Update modal title
-            modalTitle.textContent = notification.title;
-            
-            // Update notification details
-            const sourceInfo = sourceMap[notification.source];
-            notificationDetail.innerHTML = `
-                <div class="detail-item">
-                    <div class="detail-label">Source</div>
-                    <div class="detail-value">
-                        <i class="${sourceInfo.icon}"></i> ${sourceInfo.name}
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Category</div>
-                    <div class="detail-value">${notification.category}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Priority</div>
-                    <div class="detail-value">
-                        <span class="priority ${notification.priority}">${notification.priority.toUpperCase()}</span>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Date & Time</div>
-                    <div class="detail-value">${notification.date} • ${notification.time}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Action Required</div>
-                    <div class="detail-value">${notification.actionRequired ? 'Yes' : 'No'}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Detailed Information</div>
-                    <div class="detail-value">${notification.detailedContent}</div>
-                </div>
-            `;
-            
-            // Add application details if it's an application notification
-            if (notification.source === 'student-applications' || notification.source === 'staff-applications') {
-                const appType = notification.source === 'student-applications' ? 'Student' : 'Staff';
-                notificationDetail.innerHTML += `
-                    <div class="application-details">
-                        <h4>${appType} Application Details</h4>
-                        <div class="detail-row">
-                            <div class="detail-label">Applicant Name:</div>
-                            <div class="detail-value">${notification.applicantName}</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-label">Email:</div>
-                            <div class="detail-value">${notification.applicantEmail}</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-label">Phone:</div>
-                            <div class="detail-value">${notification.applicantPhone}</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-label">${appType === 'Student' ? 'Program' : 'Position'}:</div>
-                            <div class="detail-value">${appType === 'Student' ? notification.program : notification.position}</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-label">Application ID:</div>
-                            <div class="detail-value">${notification.applicationId}</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-label">Status:</div>
-                            <div class="detail-value">${notification.status}</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-label">Submission Date:</div>
-                            <div class="detail-value">${notification.submissionDate}</div>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            // Show the modal
-            modalOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            
-            // Mark as read when viewing details
-            if (!notification.read) {
-                markAsRead(id);
+        function handleResize() {
+            isMobile = window.innerWidth <= 768;
+            if (!isMobile && sidebar.classList.contains('active')) {
+                closeMobileSidebar();
             }
         }
 
-        // Close the modal
-        function closeModal() {
-            modalOverlay.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Mark a single notification as read
-        function markAsRead(id) {
-            const notification = notifications.find(n => n.id === id);
-            if (notification && !notification.read) {
-                notification.read = true;
-                renderNotifications();
-                updateUnreadCount();
-            }
-        }
-
-        // Mark all notifications as read
-        function markAllAsRead() {
-            notifications.forEach(notification => {
-                notification.read = true;
-            });
-            renderNotifications();
-            updateUnreadCount();
-        }
-
-        // Update unread count badge
-        function updateUnreadCount() {
-            const unreadCount = notifications.filter(n => !n.read).length;
-            unreadCountElement.textContent = unreadCount;
-            
-            // Hide badge if no unread notifications
-            if (unreadCount === 0) {
-                unreadCountElement.style.display = 'none';
-            } else {
-                unreadCountElement.style.display = 'flex';
-            }
-        }
-
-        // Initialize dashboard when DOM is loaded
+        // Initialize the dashboard
         document.addEventListener('DOMContentLoaded', initDashboard);
     </script>
 </body>
